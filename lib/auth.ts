@@ -1,0 +1,68 @@
+import NextAuth from "next-auth"
+import Google from "next-auth/providers/google"
+import GitHub from "next-auth/providers/github"
+import Credentials from "next-auth/providers/credentials"
+import { env } from "@/lib/env"
+
+export const { handlers, auth, signIn, signOut } = NextAuth({
+  providers: [
+    // Development credentials provider
+    Credentials({
+      name: "credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" }
+      },
+      async authorize(credentials) {
+        // For development only - accept any credentials
+        if (credentials?.email && credentials?.password) {
+          // Determine role based on email for development
+          let role = "reviewer" // default role
+          const email = credentials.email as string
+          if (email.includes("admin")) role = "admin"
+          else if (email.includes("ceo")) role = "ceo"
+          else if (email.includes("director")) role = "technical_director"
+          else if (email.includes("member")) role = "member_firm"
+          
+          return {
+            id: "1",
+            email: credentials.email as string,
+            name: "Development User",
+            role: role,
+          }
+        }
+        return null
+      }
+    }),
+    ...(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET ? [
+      Google({
+        clientId: env.GOOGLE_CLIENT_ID,
+        clientSecret: env.GOOGLE_CLIENT_SECRET,
+      })
+    ] : []),
+    ...(env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET ? [
+      GitHub({
+        clientId: env.GITHUB_CLIENT_ID,
+        clientSecret: env.GITHUB_CLIENT_SECRET,
+      })
+    ] : []),
+  ],
+  secret: env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: '/login',
+  },
+  callbacks: {
+    jwt({ token, user }) {
+      if (user) {
+        token.role = user.role
+      }
+      return token
+    },
+    session({ session, token }) {
+      if (token.role) {
+        session.user.role = token.role as string
+      }
+      return session
+    },
+  },
+})
