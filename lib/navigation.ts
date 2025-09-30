@@ -64,22 +64,22 @@ export const navigationData = {
         roles: ["admin"],
       },
       {
-        title: "User Management",
-        url: "/admin/users",
+        title: "Manage Reviewers",
+        url: "/admin/reviewers",
         icon: Users,
         roles: ["admin"],
         items: [
           {
-            title: "All Users",
-            url: "/admin/users",
+            title: "All Reviewers",
+            url: "/admin/reviewers",
           },
           {
-            title: "Add User",
-            url: "/admin/users/add",
+            title: "Add Reviewer",
+            url: "/admin/reviewers/add",
           },
           {
-            title: "User Roles",
-            url: "/admin/users/roles",
+            title: "Reviewer Roles",
+            url: "/admin/reviewers/roles",
           },
         ],
       },
