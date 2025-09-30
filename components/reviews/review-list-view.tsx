@@ -11,7 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { Eye, Edit, MoreHorizontal, Calendar, MapPin, User, Building, UserPlus, Clock } from "lucide-react"
+import { Eye, Edit, MoreHorizontal, MapPin, User, UserPlus, Clock, Calendar } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -28,7 +28,7 @@ interface ReviewListViewProps {
   onAssign?: (review: Review) => void
 }
 
-export function ReviewListView({ reviews, onView, onEdit, onAssign }: ReviewListViewProps) {
+export function ReviewListView({ reviews, onEdit, onAssign }: ReviewListViewProps) {
   const [selectedReview, setSelectedReview] = useState<Review | null>(null)
 
   const handleViewDetails = (review: Review) => {

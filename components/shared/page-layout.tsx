@@ -14,17 +14,13 @@ interface PageLayoutProps {
   description: string
   children: ReactNode
   headerActions?: ReactNode
-  statsCards?: ReactNode
-  maxHeight?: string
 }
 
 export function PageLayout({ 
   title, 
   description, 
   children, 
-  headerActions,
-  statsCards,
-  maxHeight = "h-[calc(100vh-6rem)]"
+  headerActions
 }: PageLayoutProps) {
   return (
     <SidebarProvider>

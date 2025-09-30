@@ -11,13 +11,9 @@ import {
 } from "@/components/ui/select"
 import { 
   Plus, 
-  Building,
-  Settings,
-  Star,
-  AlertTriangle
+  Settings
 } from "lucide-react"
 import { PageLayout } from "@/components/shared/page-layout"
-import { StatsCard } from "@/components/shared/stats-card"
 import { FilterSection } from "@/components/shared/filter-section"
 import { UnifiedView } from "@/components/shared/unified-view"
 import { MemberFirmItem } from "@/components/member-firms/member-firm-item"
@@ -118,11 +114,11 @@ export default function AdminMemberFirmsPage() {
   }
 
   // Calculate stats
-  const totalFirms = memberFirms.length
-  const activeFirms = memberFirms.filter(firm => firm.status === 'active').length
-  const pendingFirms = memberFirms.filter(firm => firm.status === 'pending').length
-  const highRiskFirms = memberFirms.filter(firm => firm.riskLevel === 'high').length
-  const averageCompliance = memberFirms.reduce((sum, firm) => sum + firm.complianceScore, 0) / memberFirms.length
+  // const totalFirms = memberFirms.length
+  // const activeFirms = memberFirms.filter(firm => firm.status === 'active').length
+  // const pendingFirms = memberFirms.filter(firm => firm.status === 'pending').length
+  // const highRiskFirms = memberFirms.filter(firm => firm.riskLevel === 'high').length
+  // const averageCompliance = memberFirms.reduce((sum, firm) => sum + firm.complianceScore, 0) / memberFirms.length
 
   const headerActions = (
     <>
@@ -144,38 +140,38 @@ export default function AdminMemberFirmsPage() {
     </>
   )
 
-  const statsCards = (
-    <>
-      <StatsCard
-        icon={Building}
-        label="Total Firms"
-        value={totalFirms}
-        color="blue"
-        compact={true}
-      />
-      <StatsCard
-        icon={Building}
-        label="Active"
-        value={activeFirms}
-        color="green"
-        compact={true}
-      />
-      <StatsCard
-        icon={AlertTriangle}
-        label="High Risk"
-        value={highRiskFirms}
-        color="yellow"
-        compact={true}
-      />
-      <StatsCard
-        icon={Star}
-        label="Avg Compliance"
-        value={`${Math.round(averageCompliance)}%`}
-        color="purple"
-        compact={true}
-      />
-    </>
-  )
+  // const statsCards = (
+  //   <>
+  //     <StatsCard
+  //       icon={Building}
+  //       label="Total Firms"
+  //       value={totalFirms}
+  //       color="blue"
+  //       compact={true}
+  //     />
+  //     <StatsCard
+  //       icon={Building}
+  //       label="Active"
+  //       value={activeFirms}
+  //       color="green"
+  //       compact={true}
+  //     />
+  //     <StatsCard
+  //       icon={AlertTriangle}
+  //       label="High Risk"
+  //       value={highRiskFirms}
+  //       color="yellow"
+  //       compact={true}
+  //     />
+  //     <StatsCard
+  //       icon={Star}
+  //       label="Avg Compliance"
+  //       value={`${Math.round(averageCompliance)}%`}
+  //       color="purple"
+  //       compact={true}
+  //     />
+  //   </>
+  // )
 
   return (
     <PageLayout
@@ -257,7 +253,7 @@ export default function AdminMemberFirmsPage() {
       <UnifiedView
         viewMode={viewMode}
         items={filteredMemberFirms}
-        renderItem={(memberFirm, index) => (
+        renderItem={(memberFirm) => (
           <MemberFirmItem
             memberFirm={memberFirm}
             viewMode={viewMode}

@@ -10,16 +10,10 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { 
-  Plus, 
   UserPlus,
-  Settings,
-  Users,
-  CheckCircle,
-  Clock,
-  AlertTriangle
+  Settings
 } from "lucide-react"
 import { PageLayout } from "@/components/shared/page-layout"
-import { StatsCard } from "@/components/shared/stats-card"
 import { FilterSection } from "@/components/shared/filter-section"
 import { UnifiedView } from "@/components/shared/unified-view"
 import { ReviewerItem } from "@/components/reviewers/reviewer-item"
@@ -71,7 +65,7 @@ export default function AdminReviewersPage() {
     setFilteredReviewers(reviewers)
   }
 
-  const hasActiveFilters = searchTerm || roleFilter !== "all" || statusFilter !== "all"
+  const hasActiveFilters = Boolean(searchTerm || roleFilter !== "all" || statusFilter !== "all")
 
   // Get unique values for filters
   const uniqueRoles = Array.from(new Set(reviewers.map((reviewer) => reviewer.role))).sort()
@@ -103,10 +97,10 @@ export default function AdminReviewersPage() {
   }
 
   // Calculate stats
-  const totalReviewers = reviewers.length
-  const activeReviewers = reviewers.filter(reviewer => reviewer.status === "Active").length
-  const availableReviewers = reviewers.filter(reviewer => reviewer.workload === "Available").length
-  const busyReviewers = reviewers.filter(reviewer => reviewer.workload === "Busy").length
+  // const totalReviewers = reviewers.length
+  // const activeReviewers = reviewers.filter(reviewer => reviewer.status === "Active").length
+  // const availableReviewers = reviewers.filter(reviewer => reviewer.workload === "Available").length
+  // const busyReviewers = reviewers.filter(reviewer => reviewer.workload === "Busy").length
 
   const headerActions = (
     <>
@@ -128,38 +122,38 @@ export default function AdminReviewersPage() {
     </>
   )
 
-  const statsCards = (
-    <>
-      <StatsCard
-        icon={Users}
-        label="Total Reviewers"
-        value={totalReviewers}
-        color="blue"
-        compact={true}
-      />
-      <StatsCard
-        icon={CheckCircle}
-        label="Active"
-        value={activeReviewers}
-        color="green"
-        compact={true}
-      />
-      <StatsCard
-        icon={Clock}
-        label="Available"
-        value={availableReviewers}
-        color="yellow"
-        compact={true}
-      />
-      <StatsCard
-        icon={AlertTriangle}
-        label="Busy"
-        value={busyReviewers}
-        color="red"
-        compact={true}
-      />
-    </>
-  )
+  // const statsCards = (
+  //   <>
+  //     <StatsCard
+  //       icon={Users}
+  //       label="Total Reviewers"
+  //       value={totalReviewers}
+  //       color="blue"
+  //       compact={true}
+  //     />
+  //     <StatsCard
+  //       icon={CheckCircle}
+  //       label="Active"
+  //       value={activeReviewers}
+  //       color="green"
+  //       compact={true}
+  //     />
+  //     <StatsCard
+  //       icon={Clock}
+  //       label="Available"
+  //       value={availableReviewers}
+  //       color="yellow"
+  //       compact={true}
+  //     />
+  //     <StatsCard
+  //       icon={AlertTriangle}
+  //       label="Busy"
+  //       value={busyReviewers}
+  //       color="red"
+  //       compact={true}
+  //     />
+  //   </>
+  // )
 
   return (
     <PageLayout
@@ -213,7 +207,7 @@ export default function AdminReviewersPage() {
       <UnifiedView
         viewMode={viewMode}
         items={filteredReviewers}
-        renderItem={(reviewer, index) => (
+        renderItem={(reviewer) => (
           <ReviewerItem
             reviewer={reviewer}
             viewMode={viewMode}

@@ -8,14 +8,20 @@ import { GridForm } from "./grid-form"
 import { FormSelect } from "./form-select"
 import { FormDatePicker } from "./form-date-picker"
 import { FormTextarea } from "./form-textarea"
-import { Save, UserPlus } from "lucide-react"
+import { UserPlus } from "lucide-react"
 
 interface AssignDrawerProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   title: string
   description?: string
-  onSubmit: (data: any) => void
+  onSubmit: (data: {
+    reviewerId: string
+    priority: string
+    type: string
+    dueDate: string
+    notes: string
+  }) => void
   isLoading?: boolean
   reviewers?: Array<{ id: string; name: string; role: string; status: string }>
   priorities?: Array<{ value: string; label: string }>

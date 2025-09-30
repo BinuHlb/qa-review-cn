@@ -29,7 +29,6 @@ import {
   X,
   Shield,
   Users,
-  Star,
   Settings
 } from "lucide-react"
 import Link from "next/link"

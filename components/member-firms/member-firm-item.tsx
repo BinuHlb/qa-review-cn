@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { 
   MoreHorizontal, 
-  MapPin, 
   Calendar,
   Star,
   Users,
@@ -13,10 +12,8 @@ import {
   Edit,
   Eye,
   Trash2,
-  Globe,
   Phone,
-  Mail,
-  AlertTriangle
+  Mail
 } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {

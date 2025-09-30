@@ -2,9 +2,8 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Plus, Download, Upload, FileText, CheckCircle, Clock, AlertTriangle } from "lucide-react"
+import { Plus, Download, Upload } from "lucide-react"
 import { PageLayout } from "@/components/shared/page-layout"
-import { StatsCard } from "@/components/shared/stats-card"
 import { FilterSection } from "@/components/shared/filter-section"
 import { ReviewView } from "@/components/reviews/review-view"
 import { AssignDrawer } from "@/components/shared/assign-drawer"
@@ -45,7 +44,13 @@ export default function AdminReviewsPage() {
     setAssignDrawerOpen(true)
   }
 
-  const handleAssignSubmit = (data: any) => {
+  const handleAssignSubmit = (data: {
+    reviewerId: string
+    priority: string
+    type: string
+    dueDate: string
+    notes: string
+  }) => {
     console.log("Assigning review:", selectedReview, "with data:", data)
     // TODO: Implement assign review functionality
     setAssignDrawerOpen(false)
@@ -122,10 +127,10 @@ export default function AdminReviewsPage() {
   const uniquePriorities = Array.from(new Set(reviews.map((review) => review.priority))).sort()
 
   // Calculate stats
-  const totalReviews = reviews.length
-  const completedReviews = reviews.filter(review => review.status === "Completed").length
-  const inProgressReviews = reviews.filter(review => review.status === "In Progress").length
-  const overdueReviews = reviews.filter(review => review.status === "Overdue").length
+  // const totalReviews = reviews.length
+  // const completedReviews = reviews.filter(review => review.status === "Completed").length
+  // const inProgressReviews = reviews.filter(review => review.status === "In Progress").length
+  // const overdueReviews = reviews.filter(review => review.status === "Overdue").length
 
   const headerActions = (
     <>
@@ -156,38 +161,38 @@ export default function AdminReviewsPage() {
     </>
   )
 
-  const statsCards = (
-    <>
-      <StatsCard
-        icon={FileText}
-        label="Total Reviews"
-        value={totalReviews}
-        color="blue"
-        compact={true}
-      />
-      <StatsCard
-        icon={CheckCircle}
-        label="Completed"
-        value={completedReviews}
-        color="green"
-        compact={true}
-      />
-      <StatsCard
-        icon={Clock}
-        label="In Progress"
-        value={inProgressReviews}
-        color="yellow"
-        compact={true}
-      />
-      <StatsCard
-        icon={AlertTriangle}
-        label="Overdue"
-        value={overdueReviews}
-        color="red"
-        compact={true}
-      />
-    </>
-  )
+  // const statsCards = (
+  //   <>
+  //     <StatsCard
+  //       icon={FileText}
+  //       label="Total Reviews"
+  //       value={totalReviews}
+  //       color="blue"
+  //       compact={true}
+  //     />
+  //     <StatsCard
+  //       icon={CheckCircle}
+  //       label="Completed"
+  //       value={completedReviews}
+  //       color="green"
+  //       compact={true}
+  //     />
+  //     <StatsCard
+  //       icon={Clock}
+  //       label="In Progress"
+  //       value={inProgressReviews}
+  //       color="yellow"
+  //       compact={true}
+  //     />
+  //     <StatsCard
+  //       icon={AlertTriangle}
+  //       label="Overdue"
+  //       value={overdueReviews}
+  //       color="red"
+  //       compact={true}
+  //     />
+  //   </>
+  // )
 
   return (
     <PageLayout

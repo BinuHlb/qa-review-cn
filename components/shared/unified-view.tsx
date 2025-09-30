@@ -2,13 +2,13 @@
 
 import { ReactNode } from "react"
 
-interface UnifiedViewProps {
+interface UnifiedViewProps<T extends { id: string } = { id: string }> {
   viewMode: "list" | "card"
-  items: any[]
-  renderItem: (item: any, index: number) => ReactNode
+  items: T[]
+  renderItem: (item: T, index: number) => ReactNode
 }
 
-export function UnifiedView({ viewMode, items, renderItem }: UnifiedViewProps) {
+export function UnifiedView<T extends { id: string } = { id: string }>({ viewMode, items, renderItem }: UnifiedViewProps<T>) {
   if (viewMode === "list") {
     return (
       <div className="space-y-1 animate-in fade-in-0 slide-in-from-bottom-2 duration-300">
