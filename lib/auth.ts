@@ -1,6 +1,4 @@
 import NextAuth from "next-auth"
-import Google from "next-auth/providers/google"
-import GitHub from "next-auth/providers/github"
 import Credentials from "next-auth/providers/credentials"
 import { env } from "@/lib/env"
 
@@ -34,18 +32,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         return null
       }
     }),
-    ...(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET ? [
-      Google({
-        clientId: env.GOOGLE_CLIENT_ID,
-        clientSecret: env.GOOGLE_CLIENT_SECRET,
-      })
-    ] : []),
-    ...(env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET ? [
-      GitHub({
-        clientId: env.GITHUB_CLIENT_ID,
-        clientSecret: env.GITHUB_CLIENT_SECRET,
-      })
-    ] : []),
   ],
   secret: env.NEXTAUTH_SECRET,
   pages: {
@@ -65,4 +51,5 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return session
     },
   },
+  debug: process.env.NODE_ENV === "development",
 })
