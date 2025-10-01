@@ -11,6 +11,7 @@ import {
   TrendingUp,
   Database,
   Globe,
+  Star,
   type LucideIcon,
 } from "lucide-react"
 
@@ -104,6 +105,10 @@ export const navigationData = {
             url: "/admin/reviews",
           },
           {
+            title: "Final Reviews",
+            url: "/admin/final-reviews",
+          },
+          {
             title: "Review Templates",
             url: "/admin/reviews/templates",
           },
@@ -139,6 +144,12 @@ export const navigationData = {
       },
     ],
     projects: [
+      {
+        name: "Final Reviews",
+        url: "/admin/final-reviews",
+        icon: Star,
+        roles: ["admin"],
+      },
       {
         name: "Active Reviews",
         url: "/admin/reviews/active",
@@ -229,6 +240,10 @@ export const navigationData = {
         roles: ["ceo"],
         items: [
           {
+            title: "Final Reviews",
+            url: "/ceo/final-reviews",
+          },
+          {
             title: "Quality Metrics",
             url: "/ceo/quality/metrics",
           },
@@ -244,6 +259,12 @@ export const navigationData = {
       },
     ],
     projects: [
+      {
+        name: "Final Reviews",
+        url: "/ceo/final-reviews",
+        icon: Star,
+        roles: ["ceo"],
+      },
       {
         name: "Executive Reports",
         url: "/ceo/reports",

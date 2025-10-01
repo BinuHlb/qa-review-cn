@@ -21,8 +21,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { generateReviewerInitials, generateReviewerAvatarColor } from "@/lib/reviewers-mock-data"
 import { type Review } from "@/lib/mock-data"
+import { 
+  generateInitials,
+  generateAvatarColor,
+  getFileIcon
+} from "@/lib/utils/review-utils"
 
 interface Comment {
   id: string
@@ -154,13 +158,6 @@ export function ReviewActionPanel({ review, reviewers = [], onSubmit, onAssignRe
     setAttachments(attachments.filter(att => att.id !== id))
   }
 
-  const getFileIcon = (type: string) => {
-    if (type.includes('pdf')) return '📄'
-    if (type.includes('excel') || type.includes('spreadsheet')) return '📊'
-    if (type.includes('word') || type.includes('document')) return '📝'
-    if (type.includes('image')) return '🖼️'
-    return '📎'
-  }
 
   const handleReviewerChange = (reviewerId: string) => {
     setSelectedReviewer(reviewerId)
@@ -210,35 +207,6 @@ export function ReviewActionPanel({ review, reviewers = [], onSubmit, onAssignRe
     )
   }
 
-  const generateFirmInitials = (firmName: string) => {
-    return firmName
-      .split(' ')
-      .map(word => word.charAt(0).toUpperCase())
-      .slice(0, 2)
-      .join('')
-  }
-
-  const generateFirmAvatarColor = (firmName: string) => {
-    const colors = [
-      'bg-blue-500',
-      'bg-green-500', 
-      'bg-purple-500',
-      'bg-orange-500',
-      'bg-pink-500',
-      'bg-indigo-500',
-      'bg-teal-500',
-      'bg-red-500',
-      'bg-yellow-500',
-      'bg-cyan-500'
-    ]
-    
-    let hash = 0
-    for (let i = 0; i < firmName.length; i++) {
-      hash = firmName.charCodeAt(i) + ((hash << 5) - hash)
-    }
-    
-    return colors[Math.abs(hash) % colors.length]
-  }
 
   return (
     <div className="h-full flex flex-col bg-white overflow-hidden">
@@ -246,8 +214,8 @@ export function ReviewActionPanel({ review, reviewers = [], onSubmit, onAssignRe
       <div className="flex-shrink-0 pb-4 border-b">
         <div className="flex items-center gap-3">
           <Avatar className="h-12 w-12 flex-shrink-0">
-            <AvatarFallback className={`${generateFirmAvatarColor(review.memberFirm)} text-white text-sm font-semibold`}>
-              {generateFirmInitials(review.memberFirm)}
+            <AvatarFallback className={`${generateAvatarColor(review.memberFirm)} text-white text-sm font-semibold`}>
+              {generateInitials(review.memberFirm)}
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
@@ -262,7 +230,7 @@ export function ReviewActionPanel({ review, reviewers = [], onSubmit, onAssignRe
       </div>
 
       {/* Scrollable Content */}
-      <div className="flex-1 overflow-y-auto space-y-4 pt-4">
+      <div className="flex-1 overflow-y-auto space-y-4 pt-4 min-h-0">
         {/* Assign Reviewer Section */}
         <Card className="shadow-none border-none p-0">
           <CardHeader className="pb-3">
@@ -316,7 +284,7 @@ export function ReviewActionPanel({ review, reviewers = [], onSubmit, onAssignRe
             </label>
           </div>
         </CardHeader>
-        <CardContent className="space-y-3 max-h-[300px] overflow-y-auto">
+        <CardContent className="space-y-3 max-h-[250px] overflow-y-auto">
           {/* Drop Zone */}
           <div
             onDragOver={handleDragOver}
@@ -384,8 +352,8 @@ export function ReviewActionPanel({ review, reviewers = [], onSubmit, onAssignRe
             {comments.map((comment) => (
               <div key={comment.id} className="flex gap-3">
                 <Avatar className="h-8 w-8 flex-shrink-0">
-                  <AvatarFallback className={`${generateReviewerAvatarColor(comment.author)} text-white text-xs`}>
-                    {generateReviewerInitials(comment.author)}
+                  <AvatarFallback className={`${generateAvatarColor(comment.author)} text-white text-xs`}>
+                    {generateInitials(comment.author)}
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1 space-y-1">

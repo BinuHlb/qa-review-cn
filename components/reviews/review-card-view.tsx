@@ -11,7 +11,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { type Review, getGradeColor, getStatusColor, getPriorityColor, getReviewerStatusColor } from "@/lib/mock-data"
+import { type Review } from "@/lib/mock-data"
+import { 
+  getGradeColor, 
+  getStatusColor, 
+  getPriorityColor, 
+  getReviewerStatusColor,
+  generateInitials,
+  generateAvatarColor,
+  formatDateRange,
+  calculateDuration
+} from "@/lib/utils/review-utils"
 
 interface ReviewCardViewProps {
   reviews: Review[]
@@ -21,55 +31,7 @@ interface ReviewCardViewProps {
 }
 
 export function ReviewCardView({ reviews, onView, onEdit, onAssign }: ReviewCardViewProps) {
-  const calculateDuration = (startDate: string, endDate: string) => {
-    const start = new Date(startDate)
-    const end = new Date(endDate)
-    const diffTime = Math.abs(end.getTime() - start.getTime())
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-    return diffDays
-  }
 
-  const formatDateRange = (startDate: string, endDate: string) => {
-    const start = new Date(startDate)
-    const end = new Date(endDate)
-    const duration = calculateDuration(startDate, endDate)
-    
-    return {
-      start: start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-      end: end.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-      duration: `${duration} days`
-    }
-  }
-
-  const generateFirmInitials = (firmName: string) => {
-    return firmName
-      .split(' ')
-      .map(word => word.charAt(0).toUpperCase())
-      .slice(0, 2)
-      .join('')
-  }
-
-  const generateFirmAvatarColor = (firmName: string) => {
-    const colors = [
-      'bg-blue-500',
-      'bg-green-500', 
-      'bg-purple-500',
-      'bg-orange-500',
-      'bg-pink-500',
-      'bg-indigo-500',
-      'bg-teal-500',
-      'bg-red-500',
-      'bg-yellow-500',
-      'bg-cyan-500'
-    ]
-    
-    let hash = 0
-    for (let i = 0; i < firmName.length; i++) {
-      hash = firmName.charCodeAt(i) + ((hash << 5) - hash)
-    }
-    
-    return colors[Math.abs(hash) % colors.length]
-  }
 
   return (
     <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
@@ -83,8 +45,8 @@ export function ReviewCardView({ reviews, onView, onEdit, onAssign }: ReviewCard
                 <div className="flex items-center gap-3 flex-1 min-w-0">
                   <Avatar className="h-10 w-10 flex-shrink-0">
                     <AvatarImage src="" alt={review.memberFirm} />
-                    <AvatarFallback className={`${generateFirmAvatarColor(review.memberFirm)} text-white text-sm font-semibold`}>
-                      {generateFirmInitials(review.memberFirm)}
+                    <AvatarFallback className={`${generateAvatarColor(review.memberFirm)} text-white text-sm font-semibold`}>
+                      {generateInitials(review.memberFirm)}
                     </AvatarFallback>
                   </Avatar>
                   <div className="min-w-0 flex-1">

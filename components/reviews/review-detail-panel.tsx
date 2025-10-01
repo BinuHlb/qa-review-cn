@@ -23,8 +23,17 @@ import {
   Award,
   Flag
 } from "lucide-react"
-import { type Review, getGradeColor, getStatusColor, getPriorityColor, getReviewerStatusColor } from "@/lib/mock-data"
-import { generateReviewerInitials, generateReviewerAvatarColor } from "@/lib/reviewers-mock-data"
+import { type Review } from "@/lib/mock-data"
+import { 
+  getGradeColor, 
+  getStatusColor, 
+  getPriorityColor, 
+  getReviewerStatusColor,
+  generateInitials,
+  generateAvatarColor,
+  formatDateRange,
+  getFileIcon
+} from "@/lib/utils/review-utils"
 
 interface Comment {
   id: string
@@ -167,29 +176,13 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
     setAttachments(attachments.filter(att => att.id !== id))
   }
 
-  const getFileIcon = (type: string) => {
-    if (type.includes('pdf')) return '📄'
-    if (type.includes('excel') || type.includes('spreadsheet')) return '📊'
-    if (type.includes('word') || type.includes('document')) return '📝'
-    if (type.includes('image')) return '🖼️'
-    return '📎'
-  }
-
-  const formatDateRange = (startDate: string, endDate: string) => {
-    const start = new Date(startDate)
-    const end = new Date(endDate)
-    return {
-      start: start.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-      end: end.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-    }
-  }
 
   const dateRange = formatDateRange(review.startDate, review.endDate)
 
   return (
     <div className="h-full flex flex-col bg-white">
       {/* Header */}
-      <div className="p-6 border-b space-y-4">
+      <div className="flex-shrink-0 p-6 border-b space-y-4">
         <div className="flex items-start justify-between">
           <div className="space-y-1 flex-1">
             <h2 className="text-2xl font-bold text-neutral-900">{review.memberFirm}</h2>
@@ -222,7 +215,7 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
       </div>
 
       {/* Scrollable Content */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-6">
+      <div className="flex-1 overflow-y-auto p-6 space-y-6 min-h-0">
         {/* Quick Info Cards */}
         <div className="grid grid-cols-2 gap-4">
           <Card className="shadow-sm">
@@ -424,12 +417,12 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
           </CardHeader>
           <CardContent className="space-y-4">
             {/* Comments List */}
-            <div className="space-y-4 max-h-96 overflow-y-auto">
+            <div className="space-y-4 max-h-80 overflow-y-auto">
               {comments.map((comment) => (
                 <div key={comment.id} className="flex gap-3">
                   <Avatar className="h-8 w-8 flex-shrink-0">
-                    <AvatarFallback className={`${generateReviewerAvatarColor(comment.author)} text-white text-xs`}>
-                      {generateReviewerInitials(comment.author)}
+                    <AvatarFallback className={`${generateAvatarColor(comment.author)} text-white text-xs`}>
+                      {generateInitials(comment.author)}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 space-y-1">
