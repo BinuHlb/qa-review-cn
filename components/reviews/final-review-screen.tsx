@@ -12,7 +12,6 @@ import { Separator } from "@/components/ui/separator"
 import { 
   Clock, 
   FileText, 
-  MessageSquare, 
   User, 
   Calendar,
   Star,
@@ -28,10 +27,7 @@ import { CommentsSection } from "@/components/shared/comments-section"
 import { 
   getGradeColor, 
   getStatusColor, 
-  formatFileSize, 
-  getFileIcon,
-  generateInitials,
-  generateAvatarColor 
+  formatFileSize
 } from "@/lib/utils/review-utils"
 
 interface FinalReviewScreenProps {
@@ -117,7 +113,7 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
         title: "Success",
         description: "Review confirmed successfully"
       })
-    } catch (error) {
+    } catch {
       toast({
         title: "Error",
         description: "Failed to confirm review",
@@ -145,7 +141,7 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
         title: "Review Rejected",
         description: "Review has been rejected and sent back for revision"
       })
-    } catch (error) {
+    } catch {
       toast({
         title: "Error",
         description: "Failed to reject review",

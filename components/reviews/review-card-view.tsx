@@ -19,8 +19,7 @@ import {
   getReviewerStatusColor,
   generateInitials,
   generateAvatarColor,
-  formatDateRange,
-  calculateDuration
+  formatDateRange
 } from "@/lib/utils/review-utils"
 
 interface ReviewCardViewProps {

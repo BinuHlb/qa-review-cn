@@ -3,7 +3,12 @@
 import { useState, useEffect, useMemo, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Plus, Download, Upload } from "lucide-react"
-import { PageLayout } from "@/components/shared/page-layout"
+import { AppSidebar } from "@/components/app-sidebar"
+import {
+  SidebarInset,
+  SidebarProvider,
+} from "@/components/ui/sidebar"
+import { DashboardHeader } from "@/components/dashboard-header"
 import { FilterSection } from "@/components/shared/filter-section"
 import { ReviewView } from "@/components/reviews/review-view"
 import { ReviewActionPanel } from "@/components/reviews/review-action-panel"
@@ -199,12 +204,25 @@ export default function AdminReviewsPage() {
   ), [handleCreateReview, handleExportReviews, handleImportReviews])
 
   return (
-    <PageLayout
-      headerActions={headerActions}
-    >
-      <div className="h-[calc(100vh-200px)]">
-        {/* Split View Layout */}
-        <div className="grid gap-6 h-full grid-cols-1 lg:grid-cols-3">
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <DashboardHeader />
+        <div className="p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight">Reviews Management</h1>
+              <p className="text-muted-foreground">
+                Manage and track quality assurance reviews
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              {headerActions}
+            </div>
+          </div>
+          <div className="h-[calc(100vh-300px)]">
+            {/* Split View Layout */}
+            <div className="grid gap-6 h-full grid-cols-1 lg:grid-cols-3">
           {/* Left Side - Review List with Filters */}
           <div className="flex flex-col h-full overflow-hidden lg:col-span-2">
             {/* Filters */}
@@ -337,8 +355,10 @@ export default function AdminReviewsPage() {
               </div>
             )}
           </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </PageLayout>
+      </SidebarInset>
+    </SidebarProvider>
   )
 }
