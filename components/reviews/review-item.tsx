@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Eye, Edit, MoreHorizontal, MapPin, User, UserPlus, Clock, ChevronDown, ChevronUp } from "lucide-react"
+import { Edit, MoreHorizontal, MapPin, User, UserPlus, Clock, ChevronDown, ChevronUp } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -17,12 +17,13 @@ import { type Review, getGradeColor, getStatusColor, getPriorityColor, getReview
 interface ReviewItemProps {
   review: Review
   viewMode: "list" | "card"
+  isSelected?: boolean
   onView?: (review: Review) => void
   onEdit?: (review: Review) => void
   onAssign?: (review: Review) => void
 }
 
-export function ReviewItem({ review, viewMode, onView, onEdit, onAssign }: ReviewItemProps) {
+export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdit, onAssign }: ReviewItemProps) {
   const [isExpanded, setIsExpanded] = useState(false)
   const calculateDuration = (startDate: string, endDate: string) => {
     const start = new Date(startDate)
@@ -78,7 +79,14 @@ export function ReviewItem({ review, viewMode, onView, onEdit, onAssign }: Revie
 
   if (viewMode === "list") {
     return (
-      <Card className="shadow-none border-none bg-neutral-50 hover:bg-neutral-100 transition-all duration-300">
+      <Card 
+        className={`shadow-none border-none transition-all duration-300 cursor-pointer ${
+          isSelected 
+            ? 'bg-blue-100 hover:bg-blue-100 border-l-4 border-l-blue-500' 
+            : 'bg-neutral-50 hover:bg-neutral-100'
+        }`}
+        onClick={() => onView?.(review)}
+      >
         <CardContent className="p-3">
           <div className="space-y-3">
             {/* Main Row - Mobile Responsive */}
@@ -97,12 +105,15 @@ export function ReviewItem({ review, viewMode, onView, onEdit, onAssign }: Revie
                       <h3 className="font-semibold text-sm text-neutral-900 truncate" title={review.memberFirm}>
                         {review.memberFirm}
                       </h3>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setIsExpanded(!isExpanded)}
-                        className="text-neutral-500 hover:text-neutral-700 h-5 w-5 p-0 flex-shrink-0"
-                      >
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setIsExpanded(!isExpanded)
+                  }}
+                  className="text-neutral-500 hover:text-neutral-700 h-5 w-5 p-0 flex-shrink-0"
+                >
                         {isExpanded ? (
                           <ChevronUp className="h-3 w-3" />
                         ) : (
@@ -146,20 +157,14 @@ export function ReviewItem({ review, viewMode, onView, onEdit, onAssign }: Revie
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => onAssign?.(review)}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    onAssign?.(review)
+                  }}
                   className="text-xs h-7 px-2"
                 >
                   <UserPlus className="h-3 w-3 mr-1" />
                   <span className="hidden sm:inline">Assign</span>
-                </Button>
-                
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => onView?.(review)}
-                  className="text-neutral-600 hover:text-neutral-900 h-7 w-7 p-0"
-                >
-                  <Eye className="h-3 w-3" />
                 </Button>
 
                 <DropdownMenu>
@@ -167,21 +172,24 @@ export function ReviewItem({ review, viewMode, onView, onEdit, onAssign }: Revie
                     <Button
                       variant="ghost"
                       size="sm"
+                      onClick={(e) => e.stopPropagation()}
                       className="text-neutral-600 hover:text-neutral-900 h-7 w-7 p-0"
                     >
                       <MoreHorizontal className="h-3 w-3" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-48">
-                    <DropdownMenuItem onClick={() => onView?.(review)}>
-                      <Eye className="mr-2 h-4 w-4" />
-                      View Details
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => onEdit?.(review)}>
+                    <DropdownMenuItem onClick={(e) => {
+                      e.stopPropagation()
+                      onEdit?.(review)
+                    }}>
                       <Edit className="mr-2 h-4 w-4" />
                       Edit Review
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => onAssign?.(review)}>
+                    <DropdownMenuItem onClick={(e) => {
+                      e.stopPropagation()
+                      onAssign?.(review)
+                    }}>
                       <UserPlus className="mr-2 h-4 w-4" />
                       Assign Reviewer
                     </DropdownMenuItem>
@@ -272,7 +280,10 @@ export function ReviewItem({ review, viewMode, onView, onEdit, onAssign }: Revie
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => onEdit?.(review)}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      onEdit?.(review)
+                    }}
                     className="text-neutral-600 hover:text-neutral-900 h-7 w-7 p-0"
                   >
                     <Edit className="h-3 w-3" />
@@ -289,7 +300,14 @@ export function ReviewItem({ review, viewMode, onView, onEdit, onAssign }: Revie
 
   // Card view
   return (
-    <Card className="shadow-none border-none bg-neutral-50 hover:bg-neutral-100 transition-all duration-300">
+    <Card 
+      className={`shadow-none border-none transition-all duration-300 cursor-pointer ${
+        isSelected 
+          ? 'bg-blue-100 hover:bg-blue-100 border-l-4 border-l-blue-500' 
+          : 'bg-neutral-50 hover:bg-neutral-100'
+      }`}
+      onClick={() => onView?.(review)}
+    >
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -310,20 +328,27 @@ export function ReviewItem({ review, viewMode, onView, onEdit, onAssign }: Revie
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="h-7 w-7 p-0">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="h-7 w-7 p-0"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <MoreHorizontal className="h-3 w-3" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem onClick={() => onView?.(review)}>
-                <Eye className="mr-2 h-4 w-4" />
-                View Details
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onEdit?.(review)}>
+              <DropdownMenuItem onClick={(e) => {
+                e.stopPropagation()
+                onEdit?.(review)
+              }}>
                 <Edit className="mr-2 h-4 w-4" />
                 Edit Review
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onAssign?.(review)}>
+              <DropdownMenuItem onClick={(e) => {
+                e.stopPropagation()
+                onAssign?.(review)
+              }}>
                 <UserPlus className="mr-2 h-4 w-4" />
                 Assign Reviewer
               </DropdownMenuItem>
@@ -358,7 +383,10 @@ export function ReviewItem({ review, viewMode, onView, onEdit, onAssign }: Revie
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => setIsExpanded(!isExpanded)}
+            onClick={(e) => {
+              e.stopPropagation()
+              setIsExpanded(!isExpanded)
+            }}
             className="text-neutral-500 hover:text-neutral-700 h-6 px-2 text-xs"
           >
             {isExpanded ? (
@@ -376,7 +404,10 @@ export function ReviewItem({ review, viewMode, onView, onEdit, onAssign }: Revie
           <Button
             variant="outline"
             size="sm"
-            onClick={() => onAssign?.(review)}
+            onClick={(e) => {
+              e.stopPropagation()
+              onAssign?.(review)
+            }}
             className="text-xs h-7 px-3"
           >
             <UserPlus className="h-3 w-3 mr-1" />
@@ -440,15 +471,10 @@ export function ReviewItem({ review, viewMode, onView, onEdit, onAssign }: Revie
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => onView?.(review)}
-                className="text-neutral-600 hover:text-neutral-900 h-7 w-7 p-0"
-              >
-                <Eye className="h-3 w-3" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => onEdit?.(review)}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onEdit?.(review)
+                }}
                 className="text-neutral-600 hover:text-neutral-900 h-7 w-7 p-0"
               >
                 <Edit className="h-3 w-3" />

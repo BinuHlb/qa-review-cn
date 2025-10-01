@@ -1,12 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useMemo, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Plus, Download, Upload } from "lucide-react"
 import { PageLayout } from "@/components/shared/page-layout"
 import { FilterSection } from "@/components/shared/filter-section"
 import { ReviewView } from "@/components/reviews/review-view"
-import { AssignDrawer } from "@/components/shared/assign-drawer"
+import { ReviewActionPanel } from "@/components/reviews/review-action-panel"
 import { 
   Select,
   SelectContent,
@@ -19,70 +19,27 @@ import { mockReviewers } from "@/lib/reviewers-mock-data"
 
 export default function AdminReviewsPage() {
   const [reviews] = useState<Review[]>(mockReviews)
-  const [filteredReviews, setFilteredReviews] = useState<Review[]>(mockReviews)
   const [viewMode, setViewMode] = useState<"list" | "card">("list")
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("all")
   const [gradeFilter, setGradeFilter] = useState<string>("all")
   const [priorityFilter, setPriorityFilter] = useState<string>("all")
   const [countryFilter, setCountryFilter] = useState<string>("all")
-  const [assignDrawerOpen, setAssignDrawerOpen] = useState(false)
   const [selectedReview, setSelectedReview] = useState<Review | null>(null)
 
-  const handleViewReview = (review: Review) => {
-    console.log("View review:", review)
-    // TODO: Implement view review functionality
-  }
-
-  const handleEditReview = (review: Review) => {
-    console.log("Edit review:", review)
-    // TODO: Implement edit review functionality
-  }
-
-  const handleAssignReview = (review: Review) => {
-    setSelectedReview(review)
-    setAssignDrawerOpen(true)
-  }
-
-  const handleAssignSubmit = (data: {
-    reviewerId: string
-    priority: string
-    type: string
-    dueDate: string
-    notes: string
-  }) => {
-    console.log("Assigning review:", selectedReview, "with data:", data)
-    // TODO: Implement assign review functionality
-    setAssignDrawerOpen(false)
-    setSelectedReview(null)
-  }
-
-  const handleCreateReview = () => {
-    console.log("Create new review")
-    // TODO: Implement create review functionality
-  }
-
-  const handleExportReviews = () => {
-    console.log("Export reviews")
-    // TODO: Implement export functionality
-  }
-
-  const handleImportReviews = () => {
-    console.log("Import reviews")
-    // TODO: Implement import functionality
-  }
-
-  const handleFilter = () => {
+  // Memoized filtered reviews based on all filter criteria
+  const filteredReviews = useMemo(() => {
     let filtered = reviews
 
     // Search filter
     if (searchTerm) {
+      const searchLower = searchTerm.toLowerCase()
       filtered = filtered.filter(
         (review) =>
-          review.memberFirm.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          review.reviewer.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          review.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          review.country.toLowerCase().includes(searchTerm.toLowerCase())
+          review.memberFirm.toLowerCase().includes(searchLower) ||
+          review.reviewer.toLowerCase().includes(searchLower) ||
+          review.type.toLowerCase().includes(searchLower) ||
+          review.country.toLowerCase().includes(searchLower)
       )
     }
 
@@ -106,33 +63,113 @@ export default function AdminReviewsPage() {
       filtered = filtered.filter((review) => review.country === countryFilter)
     }
 
-    setFilteredReviews(filtered)
-  }
+    return filtered
+  }, [reviews, searchTerm, statusFilter, gradeFilter, priorityFilter, countryFilter])
 
-  const clearFilters = () => {
+  // Clear selection if filtered reviews change and selected review is no longer in the list
+  useEffect(() => {
+    if (filteredReviews.length === 0) {
+      setSelectedReview(null)
+    } else if (selectedReview && !filteredReviews.find(r => r.id === selectedReview.id)) {
+      setSelectedReview(null)
+    }
+  }, [filteredReviews, selectedReview])
+
+  // Memoized unique filter values
+  const uniqueCountries = useMemo(() => 
+    Array.from(new Set(reviews.map((review) => review.country))).sort(),
+    [reviews]
+  )
+  
+  const uniqueStatuses = useMemo(() => 
+    Array.from(new Set(reviews.map((review) => review.status))).sort(),
+    [reviews]
+  )
+  
+  const uniqueGrades = useMemo(() => 
+    Array.from(new Set(reviews.map((review) => review.currentGrade))).sort(),
+    [reviews]
+  )
+  
+  const uniquePriorities = useMemo(() => 
+    Array.from(new Set(reviews.map((review) => review.priority))).sort(),
+    [reviews]
+  )
+
+  const hasActiveFilters = useMemo(() => 
+    Boolean(searchTerm || statusFilter !== "all" || gradeFilter !== "all" || priorityFilter !== "all" || countryFilter !== "all"),
+    [searchTerm, statusFilter, gradeFilter, priorityFilter, countryFilter]
+  )
+
+  // Handlers
+  const handleViewReview = useCallback((review: Review) => {
+    setSelectedReview(prev => prev?.id === review.id ? null : review)
+  }, [])
+
+  const handleEditReview = useCallback((review: Review) => {
+    // TODO: Implement edit review functionality
+    if (process.env.NODE_ENV === 'development') {
+      console.log("Edit review:", review)
+    }
+  }, [])
+
+  const handleAssignReview = useCallback((review: Review) => {
+    // TODO: Implement assign review functionality
+    if (process.env.NODE_ENV === 'development') {
+      console.log("Assign review:", review)
+    }
+  }, [])
+
+  const handleAssignReviewer = useCallback((reviewerId: string) => {
+    // TODO: Implement reviewer assignment to selected review
+    if (process.env.NODE_ENV === 'development') {
+      console.log("Assign reviewer:", reviewerId, "to review:", selectedReview?.id)
+    }
+  }, [selectedReview])
+
+  const handleSubmitReview = useCallback(() => {
+    // TODO: Implement submit review functionality
+    if (process.env.NODE_ENV === 'development') {
+      console.log("Submit review:", selectedReview)
+    }
+  }, [selectedReview])
+
+  const handleCreateReview = useCallback(() => {
+    // TODO: Implement create review functionality
+    if (process.env.NODE_ENV === 'development') {
+      console.log("Create new review")
+    }
+  }, [])
+
+  const handleExportReviews = useCallback(() => {
+    // TODO: Implement export functionality
+    if (process.env.NODE_ENV === 'development') {
+      console.log("Export reviews")
+    }
+  }, [])
+
+  const handleImportReviews = useCallback(() => {
+    // TODO: Implement import functionality
+    if (process.env.NODE_ENV === 'development') {
+      console.log("Import reviews")
+    }
+  }, [])
+
+  const handleFilter = useCallback(() => {
+    // Filter logic is now handled by the filteredReviews useMemo
+    // This function is kept for compatibility with FilterSection component
+  }, [])
+
+  const clearFilters = useCallback(() => {
     setSearchTerm("")
     setStatusFilter("all")
     setGradeFilter("all")
     setPriorityFilter("all")
     setCountryFilter("all")
-    setFilteredReviews(reviews)
-  }
+  }, [])
 
-  const hasActiveFilters = Boolean(searchTerm || statusFilter !== "all" || gradeFilter !== "all" || priorityFilter !== "all" || countryFilter !== "all")
-
-  // Get unique values for filters
-  const uniqueCountries = Array.from(new Set(reviews.map((review) => review.country))).sort()
-  const uniqueStatuses = Array.from(new Set(reviews.map((review) => review.status))).sort()
-  const uniqueGrades = Array.from(new Set(reviews.map((review) => review.currentGrade))).sort()
-  const uniquePriorities = Array.from(new Set(reviews.map((review) => review.priority))).sort()
-
-  // Calculate stats
-  // const totalReviews = reviews.length
-  // const completedReviews = reviews.filter(review => review.status === "Completed").length
-  // const inProgressReviews = reviews.filter(review => review.status === "In Progress").length
-  // const overdueReviews = reviews.filter(review => review.status === "Overdue").length
-
-  const headerActions = (
+  // Memoized header actions
+  const headerActions = useMemo(() => (
     <>
       <Button
         variant="outline"
@@ -159,138 +196,149 @@ export default function AdminReviewsPage() {
         Import
       </Button>
     </>
-  )
-
-  // const statsCards = (
-  //   <>
-  //     <StatsCard
-  //       icon={FileText}
-  //       label="Total Reviews"
-  //       value={totalReviews}
-  //       color="blue"
-  //       compact={true}
-  //     />
-  //     <StatsCard
-  //       icon={CheckCircle}
-  //       label="Completed"
-  //       value={completedReviews}
-  //       color="green"
-  //       compact={true}
-  //     />
-  //     <StatsCard
-  //       icon={Clock}
-  //       label="In Progress"
-  //       value={inProgressReviews}
-  //       color="yellow"
-  //       compact={true}
-  //     />
-  //     <StatsCard
-  //       icon={AlertTriangle}
-  //       label="Overdue"
-  //       value={overdueReviews}
-  //       color="red"
-  //       compact={true}
-  //     />
-  //   </>
-  // )
+  ), [handleCreateReview, handleExportReviews, handleImportReviews])
 
   return (
     <PageLayout
-      title="QA Reviews"
-      description="Manage quality assurance reviews for member firms"
       headerActions={headerActions}
     >
-      <FilterSection
-        searchTerm={searchTerm}
-        onSearchChange={setSearchTerm}
-        onFilter={handleFilter}
-        onClearFilters={clearFilters}
-        hasActiveFilters={hasActiveFilters}
-        resultsCount={filteredReviews.length}
-        viewMode={viewMode}
-        onViewModeChange={setViewMode}
-        searchPlaceholder="Search reviews..."
-        compact={true}
-      >
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="h-8 text-xs w-32">
-            <SelectValue placeholder="Status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Statuses</SelectItem>
-            {uniqueStatuses.map((status) => (
-              <SelectItem key={status} value={status}>
-                {status}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      <div className="h-[calc(100vh-200px)]">
+        {/* Split View Layout */}
+        <div className="grid gap-6 h-full grid-cols-1 lg:grid-cols-3">
+          {/* Left Side - Review List with Filters */}
+          <div className="flex flex-col h-full overflow-hidden lg:col-span-2">
+            {/* Filters */}
+            <div className="flex-shrink-0 mb-4">
+              <FilterSection
+                searchTerm={searchTerm}
+                onSearchChange={setSearchTerm}
+                onFilter={handleFilter}
+                onClearFilters={clearFilters}
+                hasActiveFilters={hasActiveFilters}
+                resultsCount={filteredReviews.length}
+                viewMode={viewMode}
+                onViewModeChange={setViewMode}
+                searchPlaceholder="Search reviews..."
+                compact={true}
+              >
+                <Select value={statusFilter} onValueChange={setStatusFilter}>
+                  <SelectTrigger className="h-8 text-xs w-32">
+                    <SelectValue placeholder="Status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Statuses</SelectItem>
+                    {uniqueStatuses.map((status) => (
+                      <SelectItem key={status} value={status}>
+                        {status}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
 
-        <Select value={gradeFilter} onValueChange={setGradeFilter}>
-          <SelectTrigger className="h-8 text-xs w-28">
-            <SelectValue placeholder="Grade" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Grades</SelectItem>
-            {uniqueGrades.map((grade) => (
-              <SelectItem key={grade} value={grade}>
-                {grade}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+                <Select value={gradeFilter} onValueChange={setGradeFilter}>
+                  <SelectTrigger className="h-8 text-xs w-28">
+                    <SelectValue placeholder="Grade" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Grades</SelectItem>
+                    {uniqueGrades.map((grade) => (
+                      <SelectItem key={grade} value={grade}>
+                        {grade}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
 
-        <Select value={priorityFilter} onValueChange={setPriorityFilter}>
-          <SelectTrigger className="h-8 text-xs w-28">
-            <SelectValue placeholder="Priority" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Priorities</SelectItem>
-            {uniquePriorities.map((priority) => (
-              <SelectItem key={priority} value={priority}>
-                {priority}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+                <Select value={priorityFilter} onValueChange={setPriorityFilter}>
+                  <SelectTrigger className="h-8 text-xs w-28">
+                    <SelectValue placeholder="Priority" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Priorities</SelectItem>
+                    {uniquePriorities.map((priority) => (
+                      <SelectItem key={priority} value={priority}>
+                        {priority}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
 
-        <Select value={countryFilter} onValueChange={setCountryFilter}>
-          <SelectTrigger className="h-8 text-xs w-32">
-            <SelectValue placeholder="Country" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Countries</SelectItem>
-            {uniqueCountries.map((country) => (
-              <SelectItem key={country} value={country}>
-                {country}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </FilterSection>
-      
-      <ReviewView
-        reviews={filteredReviews}
-        viewMode={viewMode}
-        onView={handleViewReview}
-        onEdit={handleEditReview}
-        onAssign={handleAssignReview}
-      />
+                <Select value={countryFilter} onValueChange={setCountryFilter}>
+                  <SelectTrigger className="h-8 text-xs w-32">
+                    <SelectValue placeholder="Country" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Countries</SelectItem>
+                    {uniqueCountries.map((country) => (
+                      <SelectItem key={country} value={country}>
+                        {country}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FilterSection>
+            </div>
 
-      {/* Assign Drawer */}
-      <AssignDrawer
-        open={assignDrawerOpen}
-        onOpenChange={setAssignDrawerOpen}
-        title="Assign Review"
-        description={`Assign review for ${selectedReview?.memberFirm}`}
-        onSubmit={handleAssignSubmit}
-        reviewers={mockReviewers.map(reviewer => ({
-          id: reviewer.id,
-          name: reviewer.name,
-          role: reviewer.role,
-          status: reviewer.status
-        }))}
-      />
+            {/* Review List */}
+            <div className="flex-1 overflow-y-auto">
+              <ReviewView
+                reviews={filteredReviews}
+                viewMode={viewMode}
+                selectedReview={selectedReview}
+                onView={handleViewReview}
+                onEdit={handleEditReview}
+                onAssign={handleAssignReview}
+              />
+            </div>
+          </div>
+
+          {/* Right Side - Action Panel or Empty State */}
+          <div className="lg:col-span-1 overflow-hidden pl-2 border-l h-full">
+            {selectedReview ? (
+              <ReviewActionPanel
+                key={selectedReview.id}
+                review={selectedReview}
+                reviewers={mockReviewers.map(reviewer => ({
+                  id: reviewer.id,
+                  name: reviewer.name,
+                  role: reviewer.role,
+                  status: reviewer.status
+                }))}
+                onSubmit={handleSubmitReview}
+                onAssignReviewer={handleAssignReviewer}
+              />
+            ) : (
+              <div className="h-full flex items-center justify-center">
+                <div className="text-center space-y-3 px-6">
+                  <div className="mx-auto w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="text-neutral-400"
+                    >
+                      <path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+                      <path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-neutral-700">No Review Selected</p>
+                    <p className="text-xs text-neutral-500 mt-1">
+                      Select a review from the list to view attachments, comments, and actions
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     </PageLayout>
   )
 }

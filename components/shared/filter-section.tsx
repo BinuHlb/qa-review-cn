@@ -14,11 +14,12 @@ interface FilterSectionProps {
   onClearFilters: () => void
   hasActiveFilters: boolean
   resultsCount?: number
-  viewMode: "list" | "card"
-  onViewModeChange: (mode: "list" | "card") => void
+  viewMode?: "list" | "card"
+  onViewModeChange?: (mode: "list" | "card") => void
   children: ReactNode
   searchPlaceholder?: string
   compact?: boolean
+  hideViewToggle?: boolean
 }
 
 export function FilterSection({
@@ -32,7 +33,8 @@ export function FilterSection({
   onViewModeChange,
   children,
   searchPlaceholder = "Search...",
-  compact = false
+  compact = false,
+  hideViewToggle = false
 }: FilterSectionProps) {
   if (compact) {
     return (
@@ -60,7 +62,9 @@ export function FilterSection({
 
             {/* View Toggle and Action Buttons */}
             <div className="flex gap-2 items-center">
-              <ViewToggle viewMode={viewMode} onViewModeChange={onViewModeChange} />
+              {!hideViewToggle && viewMode && onViewModeChange && (
+                <ViewToggle viewMode={viewMode} onViewModeChange={onViewModeChange} />
+              )}
               <Button onClick={onFilter} size="sm" className="h-8 px-3 text-xs">
                 <Filter className="h-3 w-3 mr-1" />
                 Filter
@@ -95,7 +99,9 @@ export function FilterSection({
           />
         </div>
         <div className="flex gap-2">
-          <ViewToggle viewMode={viewMode} onViewModeChange={onViewModeChange} />
+          {!hideViewToggle && viewMode && onViewModeChange && (
+            <ViewToggle viewMode={viewMode} onViewModeChange={onViewModeChange} />
+          )}
           
           <Button onClick={onFilter} size="sm" className="h-9">
             <Filter className="mr-2 h-4 w-4" />
