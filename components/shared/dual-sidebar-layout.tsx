@@ -53,9 +53,6 @@ interface DualSidebarLayoutProps {
 }
 
 export function DualSidebarLayout({
-  title,
-  description,
-  headerActions,
   children,
   className = "",
   rightSidebarProps = {}
@@ -66,17 +63,6 @@ export function DualSidebarLayout({
       <SidebarInset>
         <DashboardHeader />
         <div className={`p-6 ${className}`}>
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
-              <p className="text-muted-foreground">{description}</p>
-            </div>
-            {headerActions && (
-              <div className="flex items-center gap-2">
-                {headerActions}
-              </div>
-            )}
-          </div>
           {children}
         </div>
       </SidebarInset>
