@@ -9,22 +9,18 @@ import {
   Upload, 
   Plus,
   BarChart3,
-  Calendar,
   Users,
   FileText,
   CheckCircle,
   AlertCircle,
   Clock,
   Search,
-  X,
   List,
   Grid3X3,
   RotateCcw,
   Building2,
   ClipboardList,
   Star,
-  TrendingUp,
-  Shield,
   UserPlus,
   Globe
 } from "lucide-react"
@@ -42,13 +38,11 @@ import {
 } from "@/components/ui/sidebar"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 // Define quick filters based on current page
-function getQuickFiltersForPage(pathname: string, filters?: any) {
+function getQuickFiltersForPage(pathname: string, filters?: ReviewsSidebarProps['filters']) {
   if (pathname.includes('/admin/reviews') || pathname.includes('/admin/final-reviews')) {
     return [
       { icon: AlertCircle, label: "High Priority", action: () => filters?.onPriorityChange && filters.onPriorityChange('High') },
@@ -135,7 +129,6 @@ interface ReviewsSidebarProps {
     pending: number
     overdue: number
   }
-  onNewReview?: () => void
   onExport?: () => void
   onImport?: () => void
   onSettings?: () => void
@@ -167,7 +160,6 @@ interface ReviewsSidebarProps {
 
 export function ReviewsSidebar({ 
   stats,
-  onNewReview,
   onExport,
   onImport,
   onSettings,

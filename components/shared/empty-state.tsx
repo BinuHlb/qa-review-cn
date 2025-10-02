@@ -1,6 +1,6 @@
 "use client"
 
-import { ReactNode, LucideIcon } from "lucide-react"
+import { LucideIcon } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 
 interface EmptyStateProps {

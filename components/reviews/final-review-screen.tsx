@@ -4,16 +4,12 @@ import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { 
   Clock, 
-  FileText, 
-  User, 
-  Calendar,
   Star,
   AlertCircle,
   ThumbsUp,
@@ -23,7 +19,6 @@ import { type Review, type Comment, type Attachment } from "@/lib/schemas/review
 import { useToast } from "@/hooks/use-toast"
 import { ScrollablePanel } from "@/components/shared/scrollable-panel"
 import { AttachmentsSection } from "@/components/shared/attachments-section"
-import { CommentsSection } from "@/components/shared/comments-section"
 import { 
   getGradeColor, 
   getStatusColor, 
@@ -44,14 +39,14 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
   const [isConfirming, setIsConfirming] = useState(false)
   const [isRejecting, setIsRejecting] = useState(false)
   const [showRejectForm, setShowRejectForm] = useState(false)
-  const [comments, setComments] = useState<Comment[]>([])
+  const [_comments, _setComments] = useState<Comment[]>([])
   const [attachments, setAttachments] = useState<Attachment[]>([])
   const { toast } = useToast()
 
   // Mock data - replace with actual API calls
   useEffect(() => {
     // Simulate loading comments and attachments
-    setComments([
+    _setComments([
       {
         id: "1",
         reviewId: review.id,
@@ -162,16 +157,16 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
     setAttachments(prev => prev.filter(att => att.id !== id))
   }
 
-  const handleAddComment = (content: string) => {
+  const _handleAddComment = (_content: string) => {
     const newComment: Comment = {
       id: `comment-${Date.now()}`,
       reviewId: review.id,
       author: "Current User",
       authorId: "current-user",
-      content,
+      content: _content,
       timestamp: new Date().toISOString()
     }
-    setComments(prev => [...prev, newComment])
+    _setComments(prev => [...prev, newComment])
   }
 
   const header = (

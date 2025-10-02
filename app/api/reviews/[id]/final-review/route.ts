@@ -12,7 +12,7 @@ export async function POST(
     const { id } = await context.params
     const body = await request.json()
     
-    const { finalGrade, adminNotes } = body
+    const { finalGrade, adminNotes: _adminNotes } = body
     
     if (!finalGrade) {
       return NextResponse.json(

@@ -4,13 +4,6 @@ import { useState, useEffect, useMemo, useCallback } from "react"
 import { DualSidebarLayout } from "@/components/shared/dual-sidebar-layout"
 import { ReviewView } from "@/components/reviews/review-view"
 import { ReviewActionPanel } from "@/components/reviews/review-action-panel"
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { mockReviews, type Review } from "@/lib/mock-data"
 import { mockReviewers } from "@/lib/reviewers-mock-data"
 

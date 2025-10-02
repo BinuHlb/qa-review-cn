@@ -5,11 +5,11 @@ import { NextResponse } from "next/server"
  */
 export async function DELETE(
   _request: Request,
-  context: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // TODO: Replace with actual database delete
-    // const { id } = await context.params
+    const { id: _id } = await params
     // await db.comment.delete({ where: { id } })
     
     return NextResponse.json({ success: true })

@@ -16,7 +16,6 @@ import {
   Clock, 
   TrendingUp,
   Plus,
-  Download,
   Star,
   Award,
   AlertCircle

@@ -5,11 +5,11 @@ import { NextResponse } from "next/server"
  */
 export async function GET(
   _request: Request,
-  context: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // TODO: Fetch attachment from database
-    // const { id } = await context.params
+    const { id: _id } = await params
     // const attachment = await db.attachment.findUnique({ where: { id } })
     // const fileBuffer = await fetchFromStorage(attachment.url)
     

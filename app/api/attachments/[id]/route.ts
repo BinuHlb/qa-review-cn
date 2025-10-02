@@ -5,11 +5,11 @@ import { NextResponse } from "next/server"
  */
 export async function DELETE(
   _request: Request,
-  context: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // TODO: Delete file from storage
-    // const { id } = await context.params
+    const { id: _id } = await params
     // const attachment = await db.attachment.findUnique({ where: { id } })
     // await deleteFromStorage(attachment.url)
     // await db.attachment.delete({ where: { id } })

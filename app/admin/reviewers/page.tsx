@@ -1,18 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { 
-  UserPlus,
-  Settings
-} from "lucide-react"
 import { DualSidebarLayout } from "@/components/shared/dual-sidebar-layout"
 import { UnifiedView } from "@/components/shared/unified-view"
 import { ReviewerItem } from "@/components/reviewers/reviewer-item"
@@ -98,10 +86,10 @@ export default function AdminReviewersPage() {
   // Calculate stats for sidebar
   const sidebarStats = {
     total: reviewers.length,
-    completed: reviewers.filter(reviewer => reviewer.status === "Active").length,
-    inProgress: reviewers.filter(reviewer => reviewer.workload === "Busy").length,
-    pending: reviewers.filter(reviewer => reviewer.workload === "Available").length,
-    overdue: reviewers.filter(reviewer => reviewer.status === "Inactive").length
+    completed: reviewers.filter(reviewer => reviewer.status === "active").length,
+    inProgress: reviewers.filter(reviewer => reviewer.currentWorkload >= reviewer.maxWorkload).length,
+    pending: reviewers.filter(reviewer => reviewer.currentWorkload < reviewer.maxWorkload).length,
+    overdue: reviewers.filter(reviewer => reviewer.status === "inactive").length
   }
 
 

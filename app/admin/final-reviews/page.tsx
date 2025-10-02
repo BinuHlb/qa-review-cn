@@ -5,23 +5,8 @@ import { DualSidebarLayout } from "@/components/shared/dual-sidebar-layout"
 import { EmptyState } from "@/components/shared/empty-state"
 import { ReviewView } from "@/components/reviews/review-view"
 import { FinalReviewScreen } from "@/components/reviews/final-review-screen"
+import { Star } from "lucide-react"
 
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { 
-  CheckCircle, 
-  Clock, 
-  AlertCircle, 
-  FileText,
-  Star,
-  TrendingUp,
-  Download
-} from "lucide-react"
 import { mockReviews } from "@/lib/mock-data"
 import { type Review } from "@/lib/schemas/review.schema"
 import { useFinalReview } from "@/hooks/use-final-review"

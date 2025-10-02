@@ -1,18 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { 
-  Plus, 
-  Settings
-} from "lucide-react"
 import { DualSidebarLayout } from "@/components/shared/dual-sidebar-layout"
 import { UnifiedView } from "@/components/shared/unified-view"
 import { MemberFirmItem } from "@/components/member-firms/member-firm-item"
@@ -117,7 +105,7 @@ export default function AdminMemberFirmsPage() {
     total: memberFirms.length,
     completed: memberFirms.filter(firm => firm.status === 'active').length,
     inProgress: memberFirms.filter(firm => firm.status === 'pending').length,
-    pending: memberFirms.filter(firm => firm.status === 'under_review').length,
+    pending: memberFirms.filter(firm => firm.status === 'inactive').length,
     overdue: memberFirms.filter(firm => firm.riskLevel === 'high').length
   }
 
