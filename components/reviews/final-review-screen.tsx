@@ -196,13 +196,11 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
   return (
     <ScrollablePanel
       header={header}
-      contentClassName="p-4"
+      contentClassName="p-3"
     >
-        <div className="space-y-4">
-       
-
+        <div className="space-y-3">
           {/* Attachments */}
-          <AttachmentsSection className="shadow-none border-none bg-neutral-50 hover:bg-neutral-100 transition-colors"
+          <AttachmentsSection className="shadow-none border-none bg-slate-50/50 rounded-lg"
             attachments={attachments.map(att => ({
               ...att,
               size: typeof att.size === 'number' ? formatFileSize(att.size) : att.size,
@@ -212,27 +210,28 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
             onRemove={handleFileRemove}
             title="Attachments"
             showUpload={false}
-            maxHeight="max-h-60"
+            maxHeight="max-h-48"
           />
 
+          {/* Final Review Actions - Optimized Layout */}
+          <div className="bg-gradient-to-br from-slate-50/80 to-white rounded-lg border border-slate-200/60 p-4">
+            {/* Section Header */}
+            <div className="flex items-center gap-2 mb-4 pb-2 border-b border-slate-200/60">
+              <div className="p-1.5 bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg">
+                <Star className="h-4 w-4 text-white" />
+              </div>
+              <h3 className="font-semibold text-slate-900">Final Review & Grading</h3>
+            </div>
 
-          {/* Final Review Actions */}
-          <Card className="shadow-none border-none bg-neutral-50 hover:bg-neutral-100 transition-colors">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Star className="h-5 w-5" />
-                Final Review & Grading
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {/* Final Grade Selection */}
-              <div className="space-y-3">
-                <Label htmlFor="finalGrade" className="text-sm font-medium">
+            <div className="space-y-4">
+              {/* Compact Grade Selection */}
+              <div className="space-y-2">
+                <Label htmlFor="finalGrade" className="text-xs font-medium text-slate-600">
                   Final Grade *
                 </Label>
                 <Select value={finalGrade} onValueChange={(value) => setFinalGrade(value)}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select final grade" />
+                  <SelectTrigger className="h-9 text-sm bg-white border-slate-300">
+                    <SelectValue placeholder="Select grade" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="A+">A+ (Excellent)</SelectItem>
@@ -250,40 +249,39 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
                 </Select>
               </div>
 
-              {/* Admin Notes */}
+              {/* Compact Admin Notes */}
               <div className="space-y-2">
-                <Label htmlFor="adminNotes" className="text-sm font-medium">
+                <Label htmlFor="adminNotes" className="text-xs font-medium text-slate-600">
                   Admin Notes (Optional)
                 </Label>
                 <Textarea
                   id="adminNotes"
-                  placeholder="Add any additional notes or comments for this review..."
+                  placeholder="Add notes or comments..."
                   value={adminNotes}
                   onChange={(e) => setAdminNotes(e.target.value)}
-                  rows={3}
-                  className="text-sm"
+                  rows={2}
+                  className="text-sm resize-none bg-white border-slate-300"
                 />
               </div>
 
-              <Separator />
+              <div className="border-t border-slate-200/60 pt-3 mt-3" />
 
-              {/* Action Buttons */}
+              {/* Compact Action Buttons */}
               <div className="flex gap-2">
                 <Button
                   onClick={handleConfirm}
                   disabled={isConfirming || !finalGrade}
-                  className="flex-1 bg-green-600 hover:bg-green-700 text-sm"
-                  size="sm"
+                  className="flex-1 h-9 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-sm font-medium shadow-sm"
                 >
                   {isConfirming ? (
                     <>
-                      <Clock className="h-3 w-3 mr-1 animate-spin" />
+                      <Clock className="h-3.5 w-3.5 mr-1.5 animate-spin" />
                       Confirming...
                     </>
                   ) : (
                     <>
-                      <ThumbsUp className="h-3 w-3 mr-1" />
-                      Confirm
+                      <ThumbsUp className="h-3.5 w-3.5 mr-1.5" />
+                      Confirm Review
                     </>
                   )}
                 </Button>
@@ -291,33 +289,34 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
                 <Button
                   variant="outline"
                   onClick={() => setShowRejectForm(!showRejectForm)}
-                  className="flex-1 text-sm"
-                  size="sm"
+                  className="flex-1 h-9 text-sm font-medium border-slate-300 hover:bg-red-50 hover:border-red-300 hover:text-red-700"
                 >
-                  <ThumbsDown className="h-3 w-3 mr-1" />
+                  <ThumbsDown className="h-3.5 w-3.5 mr-1.5" />
                   Reject
                 </Button>
               </div>
 
-              {/* Rejection Form */}
+              {/* Compact Rejection Form */}
               {showRejectForm && (
-                <div className="space-y-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <div className="space-y-3 p-3 bg-gradient-to-br from-red-50 to-red-100/50 border border-red-200/60 rounded-lg">
                   <div className="flex items-center gap-2 text-red-800">
-                    <AlertCircle className="h-4 w-4" />
+                    <div className="p-1 bg-red-500 rounded">
+                      <AlertCircle className="h-3 w-3 text-white" />
+                    </div>
                     <span className="font-medium text-sm">Reject Review</span>
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="rejectionReason" className="text-sm font-medium text-red-800">
+                    <Label htmlFor="rejectionReason" className="text-xs font-medium text-red-800">
                       Reason for Rejection *
                     </Label>
                     <Textarea
                       id="rejectionReason"
-                      placeholder="Please provide a detailed reason for rejecting this review..."
+                      placeholder="Provide reason for rejection..."
                       value={rejectionReason}
                       onChange={(e) => setRejectionReason(e.target.value)}
                       rows={2}
-                      className="border-red-300 focus:border-red-500 text-sm"
+                      className="border-red-300 focus:border-red-500 text-sm resize-none bg-white"
                     />
                   </div>
 
@@ -327,7 +326,7 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
                       disabled={isRejecting || !rejectionReason.trim()}
                       variant="destructive"
                       size="sm"
-                      className="text-xs"
+                      className="h-8 text-xs font-medium"
                     >
                       {isRejecting ? (
                         <>
@@ -337,14 +336,14 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
                       ) : (
                         <>
                           <ThumbsDown className="h-3 w-3 mr-1" />
-                          Reject
+                          Confirm Rejection
                         </>
                       )}
                     </Button>
                     <Button
                       variant="outline"
                       size="sm"
-                      className="text-xs"
+                      className="h-8 text-xs"
                       onClick={() => {
                         setShowRejectForm(false)
                         setRejectionReason("")
@@ -355,8 +354,8 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
                   </div>
                 </div>
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
     </ScrollablePanel>
   )
