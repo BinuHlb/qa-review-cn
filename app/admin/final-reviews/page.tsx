@@ -206,7 +206,6 @@ export default function FinalReviewsPage() {
       description=""
       rightSidebarProps={{
         stats: sidebarStats,
-        onNewReview: () => console.log("New final review"),
         onExport: handleExportReviews,
         onImport: () => console.log("Import final reviews"),
         onSettings: () => console.log("Final review settings"),

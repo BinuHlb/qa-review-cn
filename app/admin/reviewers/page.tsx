@@ -132,7 +132,6 @@ export default function AdminReviewersPage() {
       description=""
       rightSidebarProps={{
         stats: sidebarStats,
-        onNewReview: handleAddReviewer,
         onExport: () => console.log("Export reviewers"),
         onImport: () => console.log("Import reviewers"),
         onSettings: () => console.log("Reviewer settings"),

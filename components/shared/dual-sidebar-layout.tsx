@@ -23,7 +23,6 @@ interface DualSidebarLayoutProps {
       pending: number
       overdue: number
     }
-    onNewReview?: () => void
     onExport?: () => void
     onImport?: () => void
     onSettings?: () => void

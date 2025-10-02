@@ -47,7 +47,6 @@ export function FormLayout({
       description=""
       rightSidebarProps={{
         stats: sidebarStats,
-        onNewReview: () => console.log("New form action"),
         onExport: () => console.log("Export form data"),
         onImport: () => console.log("Import form data"),
         onSettings: () => console.log("Form settings"),

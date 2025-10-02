@@ -177,7 +177,6 @@ export default function AdminReviewsPage() {
       description=""
       rightSidebarProps={{
         stats: sidebarStats,
-        onNewReview: handleCreateReview,
         onExport: handleExportReviews,
         onImport: handleImportReviews,
         onSettings: () => console.log("Settings clicked"),

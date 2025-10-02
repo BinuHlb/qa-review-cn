@@ -149,7 +149,6 @@ export default function AdminMemberFirmsPage() {
       description=""
       rightSidebarProps={{
         stats: sidebarStats,
-        onNewReview: handleAddMemberFirm,
         onExport: () => console.log("Export member firms"),
         onImport: () => console.log("Import member firms"),
         onSettings: () => console.log("Member firm settings"),
