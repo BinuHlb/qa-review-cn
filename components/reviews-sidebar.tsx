@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { usePathname } from "next/navigation"
+import Link from "next/link"
 import { 
   Filter, 
   Settings, 
@@ -202,10 +203,10 @@ export function ReviewsSidebar({
                     <SidebarMenuButton asChild>
                       {action.href ? (
                         <Button variant="ghost" className="w-full justify-start" asChild>
-                          <a href={action.href}>
+                          <Link href={action.href}>
                             <action.icon className="mr-2 h-4 w-4" />
                             {action.label}
-                          </a>
+                          </Link>
                         </Button>
                       ) : (
                         <Button 

@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { useSession } from "next-auth/react"
+import { usePathname } from "next/navigation"
 import { Command } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -19,11 +20,25 @@ import {
 } from "@/components/ui/sidebar"
 import { getNavigationForRole, getRoleDisplayName, type UserRole } from "@/lib/navigation"
 
+// Function to determine role based on current path
+function getRoleFromPath(pathname: string): UserRole {
+  if (pathname.startsWith('/admin/')) return "admin"
+  if (pathname.startsWith('/ceo/')) return "ceo"
+  if (pathname.startsWith('/director/')) return "technical_director"
+  if (pathname.startsWith('/firm/')) return "member_firm"
+  if (pathname.startsWith('/reviewer/')) return "reviewer"
+  return "reviewer" // default fallback
+}
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: session } = useSession()
+  const pathname = usePathname()
   
-  // Get user role, default to reviewer if not available
-  const userRole = (session?.user?.role as UserRole) || "reviewer"
+  // Get user role from session first, then fallback to path-based detection
+  const sessionRole = session?.user?.role as UserRole
+  const pathRole = getRoleFromPath(pathname)
+  const userRole = sessionRole || pathRole
+  
   const navigationData = getNavigationForRole(userRole)
   
   // Create user data for NavUser
