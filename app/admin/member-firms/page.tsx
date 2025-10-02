@@ -13,8 +13,7 @@ import {
   Plus, 
   Settings
 } from "lucide-react"
-import { PageLayout } from "@/components/shared/page-layout"
-import { FilterSection } from "@/components/shared/filter-section"
+import { DualSidebarLayout } from "@/components/shared/dual-sidebar-layout"
 import { UnifiedView } from "@/components/shared/unified-view"
 import { MemberFirmItem } from "@/components/member-firms/member-firm-item"
 import { 
@@ -113,32 +112,15 @@ export default function AdminMemberFirmsPage() {
     // TODO: Implement review member firm functionality
   }
 
-  // Calculate stats
-  // const totalFirms = memberFirms.length
-  // const activeFirms = memberFirms.filter(firm => firm.status === 'active').length
-  // const pendingFirms = memberFirms.filter(firm => firm.status === 'pending').length
-  // const highRiskFirms = memberFirms.filter(firm => firm.riskLevel === 'high').length
-  // const averageCompliance = memberFirms.reduce((sum, firm) => sum + firm.complianceScore, 0) / memberFirms.length
+  // Calculate stats for sidebar
+  const sidebarStats = {
+    total: memberFirms.length,
+    completed: memberFirms.filter(firm => firm.status === 'active').length,
+    inProgress: memberFirms.filter(firm => firm.status === 'pending').length,
+    pending: memberFirms.filter(firm => firm.status === 'under_review').length,
+    overdue: memberFirms.filter(firm => firm.riskLevel === 'high').length
+  }
 
-  const headerActions = (
-    <>
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={handleAddMemberFirm}
-      >
-        <Plus className="h-4 w-4 mr-2" />
-        Add Firm
-      </Button>
-      <Button
-        variant="outline"
-        size="sm"
-      >
-        <Settings className="h-4 w-4 mr-2" />
-        Settings
-      </Button>
-    </>
-  )
 
   // const statsCards = (
   //   <>
@@ -174,96 +156,57 @@ export default function AdminMemberFirmsPage() {
   // )
 
   return (
-    <PageLayout
-      title="Member Firms"
-      description="Manage member firm accounts, compliance, and reviews"
-      headerActions={headerActions}
+    <DualSidebarLayout
+      title=""
+      description=""
+      rightSidebarProps={{
+        stats: sidebarStats,
+        onNewReview: handleAddMemberFirm,
+        onExport: () => console.log("Export member firms"),
+        onImport: () => console.log("Import member firms"),
+        onSettings: () => console.log("Member firm settings"),
+        filters: {
+          searchTerm,
+          statusFilter,
+          gradeFilter: typeFilter, // Using typeFilter as gradeFilter for consistency
+          priorityFilter: riskLevelFilter, // Using riskLevelFilter as priorityFilter
+          countryFilter: regionFilter, // Using regionFilter as countryFilter
+          onSearchChange: setSearchTerm,
+          onStatusChange: setStatusFilter,
+          onGradeChange: setTypeFilter,
+          onPriorityChange: setRiskLevelFilter,
+          onCountryChange: setRegionFilter,
+          onFilter: handleFilter,
+          onClearFilters: clearFilters,
+          hasActiveFilters,
+          resultsCount: filteredMemberFirms.length,
+          viewMode,
+          onViewModeChange: setViewMode,
+          statusOptions: uniqueStatuses,
+          gradeOptions: uniqueTypes,
+          priorityOptions: uniqueRiskLevels,
+          countryOptions: uniqueRegions
+        }
+      }}
+      className="!p-0"
     >
-      {/* Filters */}
-      <FilterSection
-        searchTerm={searchTerm}
-        onSearchChange={setSearchTerm}
-        onFilter={handleFilter}
-        onClearFilters={clearFilters}
-        hasActiveFilters={hasActiveFilters}
-        resultsCount={filteredMemberFirms.length}
-        viewMode={viewMode}
-        onViewModeChange={setViewMode}
-        searchPlaceholder="Search member firms..."
-        compact={true}
-      >
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="h-8 text-xs w-32">
-            <SelectValue placeholder="Status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Statuses</SelectItem>
-            {uniqueStatuses.map((status) => (
-              <SelectItem key={status} value={status}>
-                {status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <Select value={typeFilter} onValueChange={setTypeFilter}>
-          <SelectTrigger className="h-8 text-xs w-32">
-            <SelectValue placeholder="Type" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Types</SelectItem>
-            {uniqueTypes.map((type) => (
-              <SelectItem key={type} value={type}>
-                {type.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <Select value={regionFilter} onValueChange={setRegionFilter}>
-          <SelectTrigger className="h-8 text-xs w-36">
-            <SelectValue placeholder="Region" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Regions</SelectItem>
-            {uniqueRegions.map((region) => (
-              <SelectItem key={region} value={region}>
-                {region}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <Select value={riskLevelFilter} onValueChange={setRiskLevelFilter}>
-          <SelectTrigger className="h-8 text-xs w-32">
-            <SelectValue placeholder="Risk Level" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Risk Levels</SelectItem>
-            {uniqueRiskLevels.map((riskLevel) => (
-              <SelectItem key={riskLevel} value={riskLevel}>
-                {riskLevel.toUpperCase()}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </FilterSection>
-
-      {/* Member Firms View */}
-      <UnifiedView
-        viewMode={viewMode}
-        items={filteredMemberFirms}
-        renderItem={(memberFirm) => (
-          <MemberFirmItem
-            memberFirm={memberFirm}
-            viewMode={viewMode}
-            onView={handleViewMemberFirm}
-            onEdit={handleEditMemberFirm}
-            onDelete={handleDeleteMemberFirm}
-            onReview={handleReviewMemberFirm}
-          />
-        )}
-      />
-    </PageLayout>
+      <div className="h-[calc(100vh-120px)] p-6">
+        {/* Member Firms View */}
+        <UnifiedView
+          viewMode={viewMode}
+          items={filteredMemberFirms}
+          renderItem={(memberFirm) => (
+            <MemberFirmItem
+              memberFirm={memberFirm}
+              viewMode={viewMode}
+              onView={handleViewMemberFirm}
+              onEdit={handleEditMemberFirm}
+              onDelete={handleDeleteMemberFirm}
+              onReview={handleReviewMemberFirm}
+            />
+          )}
+        />
+      </div>
+    </DualSidebarLayout>
   )
 }

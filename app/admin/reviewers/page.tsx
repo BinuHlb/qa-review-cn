@@ -13,8 +13,7 @@ import {
   UserPlus,
   Settings
 } from "lucide-react"
-import { PageLayout } from "@/components/shared/page-layout"
-import { FilterSection } from "@/components/shared/filter-section"
+import { DualSidebarLayout } from "@/components/shared/dual-sidebar-layout"
 import { UnifiedView } from "@/components/shared/unified-view"
 import { ReviewerItem } from "@/components/reviewers/reviewer-item"
 import { 
@@ -96,31 +95,15 @@ export default function AdminReviewersPage() {
     // TODO: Implement assign review functionality
   }
 
-  // Calculate stats
-  // const totalReviewers = reviewers.length
-  // const activeReviewers = reviewers.filter(reviewer => reviewer.status === "Active").length
-  // const availableReviewers = reviewers.filter(reviewer => reviewer.workload === "Available").length
-  // const busyReviewers = reviewers.filter(reviewer => reviewer.workload === "Busy").length
+  // Calculate stats for sidebar
+  const sidebarStats = {
+    total: reviewers.length,
+    completed: reviewers.filter(reviewer => reviewer.status === "Active").length,
+    inProgress: reviewers.filter(reviewer => reviewer.workload === "Busy").length,
+    pending: reviewers.filter(reviewer => reviewer.workload === "Available").length,
+    overdue: reviewers.filter(reviewer => reviewer.status === "Inactive").length
+  }
 
-  const headerActions = (
-    <>
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={handleAddReviewer}
-      >
-        <UserPlus className="h-4 w-4 mr-2" />
-        Add Reviewer
-      </Button>
-      <Button
-        variant="outline"
-        size="sm"
-      >
-        <Settings className="h-4 w-4 mr-2" />
-        Roles
-      </Button>
-    </>
-  )
 
   // const statsCards = (
   //   <>
@@ -156,68 +139,57 @@ export default function AdminReviewersPage() {
   // )
 
   return (
-    <PageLayout
-      title="Manage Reviewers"
-      description="Manage reviewer accounts, roles, and assignments"
-      headerActions={headerActions}
+    <DualSidebarLayout
+      title=""
+      description=""
+      rightSidebarProps={{
+        stats: sidebarStats,
+        onNewReview: handleAddReviewer,
+        onExport: () => console.log("Export reviewers"),
+        onImport: () => console.log("Import reviewers"),
+        onSettings: () => console.log("Reviewer settings"),
+        filters: {
+          searchTerm,
+          statusFilter,
+          gradeFilter: roleFilter, // Using roleFilter as gradeFilter for consistency
+          priorityFilter: "all", // Not applicable for reviewers
+          countryFilter: "all", // Not applicable for reviewers
+          onSearchChange: setSearchTerm,
+          onStatusChange: setStatusFilter,
+          onGradeChange: setRoleFilter,
+          onPriorityChange: () => {}, // Not applicable
+          onCountryChange: () => {}, // Not applicable
+          onFilter: handleFilter,
+          onClearFilters: clearFilters,
+          hasActiveFilters,
+          resultsCount: filteredReviewers.length,
+          viewMode,
+          onViewModeChange: setViewMode,
+          statusOptions: uniqueStatuses,
+          gradeOptions: uniqueRoles,
+          priorityOptions: [],
+          countryOptions: []
+        }
+      }}
+      className="!p-0"
     >
-      {/* Filters */}
-      <FilterSection
-        searchTerm={searchTerm}
-        onSearchChange={setSearchTerm}
-        onFilter={handleFilter}
-        onClearFilters={clearFilters}
-        hasActiveFilters={hasActiveFilters}
-        resultsCount={filteredReviewers.length}
-        viewMode={viewMode}
-        onViewModeChange={setViewMode}
-        searchPlaceholder="Search reviewers..."
-        compact={true}
-      >
-        <Select value={roleFilter} onValueChange={setRoleFilter}>
-          <SelectTrigger className="h-8 text-xs w-36">
-            <SelectValue placeholder="Role" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Roles</SelectItem>
-            {uniqueRoles.map((role) => (
-              <SelectItem key={role} value={role}>
-                {role.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="h-8 text-xs w-32">
-            <SelectValue placeholder="Status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Statuses</SelectItem>
-            {uniqueStatuses.map((status) => (
-              <SelectItem key={status} value={status}>
-                {status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </FilterSection>
-
-      {/* Reviewers View */}
-      <UnifiedView
-        viewMode={viewMode}
-        items={filteredReviewers}
-        renderItem={(reviewer) => (
-          <ReviewerItem
-            reviewer={reviewer}
-            viewMode={viewMode}
-            onView={handleViewReviewer}
-            onEdit={handleEditReviewer}
-            onAssign={handleAssignReview}
-            onDelete={handleDeleteReviewer}
-          />
-        )}
-      />
-    </PageLayout>
+      <div className="h-[calc(100vh-120px)] p-6">
+        {/* Reviewers View */}
+        <UnifiedView
+          viewMode={viewMode}
+          items={filteredReviewers}
+          renderItem={(reviewer) => (
+            <ReviewerItem
+              reviewer={reviewer}
+              viewMode={viewMode}
+              onView={handleViewReviewer}
+              onEdit={handleEditReviewer}
+              onAssign={handleAssignReview}
+              onDelete={handleDeleteReviewer}
+            />
+          )}
+        />
+      </div>
+    </DualSidebarLayout>
   )
 }

@@ -1,0 +1,86 @@
+"use client"
+
+import { ReactNode } from "react"
+import { AppSidebar } from "@/components/app-sidebar"
+import { ReviewsSidebar } from "@/components/reviews-sidebar"
+import {
+  SidebarInset,
+  SidebarProvider,
+} from "@/components/ui/sidebar"
+import { DashboardHeader } from "@/components/dashboard-header"
+
+interface DualSidebarLayoutProps {
+  title: string
+  description: string
+  headerActions?: ReactNode
+  children: ReactNode
+  className?: string
+  rightSidebarProps?: {
+    stats?: {
+      total: number
+      completed: number
+      inProgress: number
+      pending: number
+      overdue: number
+    }
+    onNewReview?: () => void
+    onExport?: () => void
+    onImport?: () => void
+    onSettings?: () => void
+    filters?: {
+      searchTerm: string
+      statusFilter: string
+      gradeFilter: string
+      priorityFilter: string
+      countryFilter: string
+      onSearchChange: (value: string) => void
+      onStatusChange: (value: string) => void
+      onGradeChange: (value: string) => void
+      onPriorityChange: (value: string) => void
+      onCountryChange: (value: string) => void
+      onFilter: () => void
+      onClearFilters: () => void
+      hasActiveFilters: boolean
+      resultsCount: number
+      viewMode: "list" | "card"
+      onViewModeChange: (mode: "list" | "card") => void
+      statusOptions: string[]
+      gradeOptions: string[]
+      priorityOptions: string[]
+      countryOptions: string[]
+    }
+  }
+}
+
+export function DualSidebarLayout({
+  title,
+  description,
+  headerActions,
+  children,
+  className = "",
+  rightSidebarProps = {}
+}: DualSidebarLayoutProps) {
+  return (
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <DashboardHeader />
+        <div className={`p-6 ${className}`}>
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
+              <p className="text-muted-foreground">{description}</p>
+            </div>
+            {headerActions && (
+              <div className="flex items-center gap-2">
+                {headerActions}
+              </div>
+            )}
+          </div>
+          {children}
+        </div>
+      </SidebarInset>
+      <ReviewsSidebar {...rightSidebarProps} />
+    </SidebarProvider>
+  )
+}

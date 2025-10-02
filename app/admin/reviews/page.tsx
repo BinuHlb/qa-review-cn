@@ -1,15 +1,7 @@
 "use client"
 
 import { useState, useEffect, useMemo, useCallback } from "react"
-import { Button } from "@/components/ui/button"
-import { Plus, Download, Upload } from "lucide-react"
-import { AppSidebar } from "@/components/app-sidebar"
-import {
-  SidebarInset,
-  SidebarProvider,
-} from "@/components/ui/sidebar"
-import { DashboardHeader } from "@/components/dashboard-header"
-import { FilterSection } from "@/components/shared/filter-section"
+import { DualSidebarLayout } from "@/components/shared/dual-sidebar-layout"
 import { ReviewView } from "@/components/reviews/review-view"
 import { ReviewActionPanel } from "@/components/reviews/review-action-panel"
 import { 
@@ -174,128 +166,58 @@ export default function AdminReviewsPage() {
   }, [])
 
   // Memoized header actions
-  const headerActions = useMemo(() => (
-    <>
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={handleCreateReview}
-      >
-        <Plus className="h-4 w-4 mr-2" />
-        New Review
-      </Button>
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={handleExportReviews}
-      >
-        <Download className="h-4 w-4 mr-2" />
-        Export
-      </Button>
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={handleImportReviews}
-      >
-        <Upload className="h-4 w-4 mr-2" />
-        Import
-      </Button>
-    </>
-  ), [handleCreateReview, handleExportReviews, handleImportReviews])
+
+  // Statistics for right sidebar
+  const sidebarStats = useMemo(() => {
+    const total = reviews.length
+    const completed = reviews.filter(r => r.status === 'Completed').length
+    const inProgress = reviews.filter(r => r.status === 'In Progress').length
+    const pending = reviews.filter(r => r.status === 'Pending').length
+    const overdue = reviews.filter(r => r.status === 'Overdue').length
+
+    return { total, completed, inProgress, pending, overdue }
+  }, [reviews])
 
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <DashboardHeader />
-        <div className="p-6">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-3xl font-bold tracking-tight">Reviews Management</h1>
-              <p className="text-muted-foreground">
-                Manage and track quality assurance reviews
-              </p>
-            </div>
-            <div className="flex items-center gap-2">
-              {headerActions}
-            </div>
-          </div>
-          <div className="h-[calc(100vh-300px)]">
-            {/* Split View Layout */}
-            <div className="grid gap-6 h-full grid-cols-1 lg:grid-cols-3">
+    <DualSidebarLayout
+      title=""
+      description=""
+      rightSidebarProps={{
+        stats: sidebarStats,
+        onNewReview: handleCreateReview,
+        onExport: handleExportReviews,
+        onImport: handleImportReviews,
+        onSettings: () => console.log("Settings clicked"),
+        filters: {
+          searchTerm,
+          statusFilter,
+          gradeFilter,
+          priorityFilter,
+          countryFilter,
+          onSearchChange: setSearchTerm,
+          onStatusChange: setStatusFilter,
+          onGradeChange: setGradeFilter,
+          onPriorityChange: setPriorityFilter,
+          onCountryChange: setCountryFilter,
+          onFilter: handleFilter,
+          onClearFilters: clearFilters,
+          hasActiveFilters,
+          resultsCount: filteredReviews.length,
+          viewMode,
+          onViewModeChange: setViewMode,
+          statusOptions: uniqueStatuses,
+          gradeOptions: uniqueGrades,
+          priorityOptions: uniquePriorities,
+          countryOptions: uniqueCountries
+        }
+      }}
+      className="!p-0"
+    >
+      <div className="h-[calc(100vh-120px)] p-6">
+        {/* Split View Layout */}
+        <div className="grid gap-6 h-full grid-cols-1 lg:grid-cols-3">
           {/* Left Side - Review List with Filters */}
           <div className="flex flex-col h-full overflow-hidden lg:col-span-2">
-            {/* Filters */}
-            <div className="flex-shrink-0 mb-4">
-              <FilterSection
-                searchTerm={searchTerm}
-                onSearchChange={setSearchTerm}
-                onFilter={handleFilter}
-                onClearFilters={clearFilters}
-                hasActiveFilters={hasActiveFilters}
-                resultsCount={filteredReviews.length}
-                viewMode={viewMode}
-                onViewModeChange={setViewMode}
-                searchPlaceholder="Search reviews..."
-                compact={true}
-              >
-                <Select value={statusFilter} onValueChange={setStatusFilter}>
-                  <SelectTrigger className="h-8 text-xs w-32">
-                    <SelectValue placeholder="Status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Statuses</SelectItem>
-                    {uniqueStatuses.map((status) => (
-                      <SelectItem key={status} value={status}>
-                        {status}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                <Select value={gradeFilter} onValueChange={setGradeFilter}>
-                  <SelectTrigger className="h-8 text-xs w-28">
-                    <SelectValue placeholder="Grade" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Grades</SelectItem>
-                    {uniqueGrades.map((grade) => (
-                      <SelectItem key={grade} value={grade}>
-                        {grade}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                <Select value={priorityFilter} onValueChange={setPriorityFilter}>
-                  <SelectTrigger className="h-8 text-xs w-28">
-                    <SelectValue placeholder="Priority" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Priorities</SelectItem>
-                    {uniquePriorities.map((priority) => (
-                      <SelectItem key={priority} value={priority}>
-                        {priority}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                <Select value={countryFilter} onValueChange={setCountryFilter}>
-                  <SelectTrigger className="h-8 text-xs w-32">
-                    <SelectValue placeholder="Country" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Countries</SelectItem>
-                    {uniqueCountries.map((country) => (
-                      <SelectItem key={country} value={country}>
-                        {country}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FilterSection>
-            </div>
 
             {/* Review List */}
             <div className="flex-1 overflow-y-auto">
@@ -355,10 +277,8 @@ export default function AdminReviewsPage() {
               </div>
             )}
           </div>
-            </div>
-          </div>
         </div>
-      </SidebarInset>
-    </SidebarProvider>
+      </div>
+    </DualSidebarLayout>
   )
 }

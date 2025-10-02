@@ -204,91 +204,10 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
       contentClassName="p-4"
     >
         <div className="space-y-4">
-          {/* Review Overview */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <FileText className="h-5 w-5" />
-                Review Overview
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium text-gray-600">Member Firm</Label>
-                  <div className="flex items-center gap-2">
-                    <Avatar className="h-8 w-8">
-                      <AvatarFallback className="bg-blue-100 text-blue-800 text-sm">
-                        {review.memberFirm.charAt(0)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <span className="font-medium">{review.memberFirm}</span>
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium text-gray-600">Review Type</Label>
-                  <p className="font-medium">{review.type}</p>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium text-gray-600">Reviewer</Label>
-                  <div className="flex items-center gap-2">
-                    <User className="h-4 w-4 text-gray-500" />
-                    <span>{review.reviewer}</span>
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium text-gray-600">Country</Label>
-                  <p>{review.country}</p>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium text-gray-600">Start Date</Label>
-                  <div className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4 text-gray-500" />
-                    <span>{review.startDate}</span>
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium text-gray-600">End Date</Label>
-                  <div className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4 text-gray-500" />
-                    <span>{review.endDate}</span>
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium text-gray-600">Priority</Label>
-                  <Badge variant={review.priority === 'High' ? 'destructive' : review.priority === 'Medium' ? 'default' : 'secondary'}>
-                    {review.priority}
-                  </Badge>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium text-gray-600">Last Updated</Label>
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-gray-500" />
-                    <span>{review.lastUpdated}</span>
-                  </div>
-                </div>
-              </div>
-              
-              {review.description && (
-                <div className="mt-6 space-y-2">
-                  <Label className="text-sm font-medium text-gray-600">Description</Label>
-                  <p className="text-sm text-gray-700 bg-gray-50 p-3 rounded-md">
-                    {review.description}
-                  </p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
+       
 
           {/* Attachments */}
-          <AttachmentsSection
+          <AttachmentsSection className="shadow-none border-none bg-neutral-50 hover:bg-neutral-100 transition-colors"
             attachments={attachments.map(att => ({
               ...att,
               size: typeof att.size === 'number' ? formatFileSize(att.size) : att.size,
@@ -301,20 +220,9 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
             maxHeight="max-h-60"
           />
 
-          {/* Comments */}
-          <CommentsSection
-            comments={comments.map(comment => ({
-              ...comment,
-              timestamp: comment.timestamp
-            }))}
-            onAddComment={handleAddComment}
-            title="Comments"
-            maxHeight="max-h-60"
-            showAddComment={true}
-          />
 
           {/* Final Review Actions */}
-          <Card>
+          <Card className="shadow-none border-none bg-neutral-50 hover:bg-neutral-100 transition-colors">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Star className="h-5 w-5" />
