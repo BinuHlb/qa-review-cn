@@ -2,12 +2,13 @@
 
 import { ReactNode } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
-import { ReviewsSidebar } from "@/components/reviews-sidebar"
+import { ReduxReviewsSidebar } from "@/components/reviews/redux-reviews-sidebar"
 import {
   SidebarInset,
   SidebarProvider,
 } from "@/components/ui/sidebar"
 import { DashboardHeader } from "@/components/dashboard-header"
+// Redux imports removed for now - using original props-based approach
 
 interface DualSidebarLayoutProps {
   title: string
@@ -26,28 +27,7 @@ interface DualSidebarLayoutProps {
     onExport?: () => void
     onImport?: () => void
     onSettings?: () => void
-    filters?: {
-      searchTerm: string
-      statusFilter: string
-      gradeFilter: string
-      priorityFilter: string
-      countryFilter: string
-      onSearchChange: (value: string) => void
-      onStatusChange: (value: string) => void
-      onGradeChange: (value: string) => void
-      onPriorityChange: (value: string) => void
-      onCountryChange: (value: string) => void
-      onFilter: () => void
-      onClearFilters: () => void
-      hasActiveFilters: boolean
-      resultsCount: number
-      viewMode: "list" | "card"
-      onViewModeChange: (mode: "list" | "card") => void
-      statusOptions: string[]
-      gradeOptions: string[]
-      priorityOptions: string[]
-      countryOptions: string[]
-    }
+    filters?: Record<string, unknown> // For backward compatibility
   }
 }
 
@@ -65,7 +45,9 @@ export function DualSidebarLayout({
           {children}
         </div>
       </SidebarInset>
-      <ReviewsSidebar {...rightSidebarProps} />
+      <ReduxReviewsSidebar 
+        {...rightSidebarProps} 
+      />
     </SidebarProvider>
   )
 }

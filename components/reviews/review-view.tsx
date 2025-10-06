@@ -10,9 +10,11 @@ interface ReviewViewProps {
   onView?: (review: Review) => void
   onEdit?: (review: Review) => void
   onAssign?: (review: Review) => void
+  onViewModeChange?: (mode: "list" | "card") => void
+  onSelectReview?: (review: Review | null) => void
 }
 
-export function ReviewView({ reviews, viewMode, selectedReview, onView, onEdit, onAssign }: ReviewViewProps) {
+export function ReviewView({ reviews, viewMode, selectedReview, onView, onEdit, onAssign, onViewModeChange, onSelectReview }: ReviewViewProps) {
   if (viewMode === "list") {
     return (
       <div className="space-y-1 animate-in fade-in-0 slide-in-from-bottom-2 duration-300">
