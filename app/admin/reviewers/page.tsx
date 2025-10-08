@@ -176,7 +176,7 @@ export default function AdminReviewersPage() {
     // Update the review with new grade
     setReviews(prev => prev.map(r => 
       r.id === reviewId 
-        ? { ...r, currentGrade: grade as any, status: 'Submitted' as any }
+        ? { ...r, currentGrade: grade as Review['currentGrade'], status: 'Submitted' as Review['status'] }
         : r
     ))
     

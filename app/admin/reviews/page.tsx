@@ -141,7 +141,7 @@ export default function AdminReviewsPage() {
       if (selectedReviewer) {
         setReviews(prev => prev.map(r => 
           r.id === reviewId 
-            ? { ...r, reviewer: selectedReviewer.name, priority: data.priority as any }
+            ? { ...r, reviewer: selectedReviewer.name, priority: data.priority as Review['priority'] }
             : r
         ))
       }

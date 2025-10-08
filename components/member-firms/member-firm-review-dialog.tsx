@@ -523,7 +523,7 @@ export function MemberFirmReviewDialog({
                 <div className="text-center space-y-2">
                   <FileText className="h-12 w-12 mx-auto text-muted-foreground" />
                   <p className="text-sm text-muted-foreground">
-                    Click "View" on any document to preview it here
+                    Click &quot;View&quot; on any document to preview it here
                   </p>
                   <p className="text-xs text-muted-foreground">
                     Document viewer will display PDF and Excel files

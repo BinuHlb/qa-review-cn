@@ -42,7 +42,7 @@ export function GradeSelect({
         <SelectTrigger className="h-9 bg-white">
           {value ? (
             <div className="flex items-center gap-2">
-              <div className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-semibold ${getGradeColor(value)}`}>
+              <div className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-semibold ${getGradeColor(value as '1' | '2' | '3' | '4' | '5')}`}>
                 {value}
               </div>
               <span>{getGradeLabel(value)}</span>
@@ -55,7 +55,7 @@ export function GradeSelect({
           {grades.map((grade) => (
             <SelectItem key={grade.value} value={grade.value}>
               <div className="flex items-center gap-2">
-                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold ${getGradeColor(grade.value)}`}>
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold ${getGradeColor(grade.value as '1' | '2' | '3' | '4' | '5')}`}>
                   {grade.value}
                 </div>
                 <span>{grade.label}</span>
