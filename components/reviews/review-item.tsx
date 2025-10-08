@@ -55,16 +55,16 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
 
   const generateFirmAvatarColor = (firmName: string) => {
     const colors = [
-      'bg-blue-500',
-      'bg-green-500', 
-      'bg-purple-500',
-      'bg-orange-500',
-      'bg-pink-500',
-      'bg-indigo-500',
-      'bg-teal-500',
-      'bg-red-500',
-      'bg-yellow-500',
-      'bg-cyan-500'
+      'bg-blue-100 text-blue-600',
+      'bg-green-100 text-green-600', 
+      'bg-purple-100 text-purple-600',
+      'bg-orange-100 text-orange-600',
+      'bg-pink-100 text-pink-600',
+      'bg-indigo-100 text-indigo-600',
+      'bg-teal-100 text-teal-600',
+      'bg-red-100 text-red-600',
+      'bg-yellow-100 text-yellow-600',
+      'bg-cyan-100 text-cyan-600'
     ]
     
     let hash = 0
@@ -82,7 +82,7 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
       <Card 
         className={`shadow-none border-none transition-all duration-300 cursor-pointer ${
           isSelected 
-            ? 'bg-blue-100 hover:bg-blue-100 border-l-4 border-l-blue-500' 
+            ? 'bg-primary/10 hover:bg-primary/10 border-l-4 border-l-primary' 
             : 'bg-neutral-50 hover:bg-neutral-100'
         }`}
         onClick={() => onView?.(review)}
@@ -96,7 +96,7 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
                 <div className="flex items-center gap-2 min-w-0 flex-1">
                   <Avatar className="h-8 w-8 flex-shrink-0">
                     <AvatarImage src="" alt={review.memberFirm} />
-                    <AvatarFallback className={`${generateFirmAvatarColor(review.memberFirm)} text-white text-xs font-semibold`}>
+                    <AvatarFallback className={`${generateFirmAvatarColor(review.memberFirm)} text-xs font-semibold`}>
                       {generateFirmInitials(review.memberFirm)}
                     </AvatarFallback>
                   </Avatar>
@@ -143,58 +143,66 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
                 
                 {/* Status Badges */}
                 <div className="flex items-center gap-1">
-                  <Badge className={`${getGradeColor(review.currentGrade)} text-xs px-2 py-0.5`}>
-                    {review.currentGrade}
-                  </Badge>
                   <Badge className={`${getStatusColor(review.status)} text-xs px-2 py-0.5`}>
                     {review.status}
+                  </Badge>
+                  <Badge className={`${getGradeColor(review.currentGrade)} text-xs px-2 py-0.5`}>
+                    {review.currentGrade}
                   </Badge>
                 </div>
               </div>
 
               {/* Quick Actions */}
               <div className="flex items-center gap-1 flex-shrink-0">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    onAssign?.(review)
-                  }}
-                  className="text-xs h-7 px-2"
-                >
-                  <UserPlus className="h-3 w-3 mr-1" />
-                  <span className="hidden sm:inline">Assign</span>
-                </Button>
+                {onAssign && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      onAssign(review)
+                    }}
+                    className="text-xs h-7 px-2"
+                  >
+                    <UserPlus className="h-3 w-3 mr-1" />
+                    <span className="hidden sm:inline">Assign</span>
+                  </Button>
+                )}
 
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={(e) => e.stopPropagation()}
-                      className="text-neutral-600 hover:text-neutral-900 h-7 w-7 p-0"
-                    >
-                      <MoreHorizontal className="h-3 w-3" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-48">
-                    <DropdownMenuItem onClick={(e) => {
-                      e.stopPropagation()
-                      onEdit?.(review)
-                    }}>
-                      <Edit className="mr-2 h-4 w-4" />
-                      Edit Review
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={(e) => {
-                      e.stopPropagation()
-                      onAssign?.(review)
-                    }}>
-                      <UserPlus className="mr-2 h-4 w-4" />
-                      Assign Reviewer
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                {(onEdit || onAssign) && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-neutral-600 hover:text-neutral-900 h-7 w-7 p-0"
+                      >
+                        <MoreHorizontal className="h-3 w-3" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48">
+                      {onEdit && (
+                        <DropdownMenuItem onClick={(e) => {
+                          e.stopPropagation()
+                          onEdit(review)
+                        }}>
+                          <Edit className="mr-2 h-4 w-4" />
+                          Edit Review
+                        </DropdownMenuItem>
+                      )}
+                      {onAssign && (
+                        <DropdownMenuItem onClick={(e) => {
+                          e.stopPropagation()
+                          onAssign(review)
+                        }}>
+                          <UserPlus className="mr-2 h-4 w-4" />
+                          Assign Reviewer
+                        </DropdownMenuItem>
+                      )}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
               </div>
             </div>
 
@@ -213,11 +221,11 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
               
               {/* Status Badges */}
               <div className="flex items-center gap-1">
-                <Badge className={`${getGradeColor(review.currentGrade)} text-xs px-2 py-0.5`}>
-                  {review.currentGrade}
-                </Badge>
                 <Badge className={`${getStatusColor(review.status)} text-xs px-2 py-0.5`}>
                   {review.status}
+                </Badge>
+                <Badge className={`${getGradeColor(review.currentGrade)} text-xs px-2 py-0.5`}>
+                  {review.currentGrade}
                 </Badge>
               </div>
             </div>
@@ -303,7 +311,7 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
     <Card 
       className={`shadow-none border-none transition-all duration-300 cursor-pointer ${
         isSelected 
-          ? 'bg-blue-100 hover:bg-blue-100 border-l-4 border-l-blue-500' 
+          ? 'bg-primary/10 hover:bg-primary/10 border-l-4 border-l-primary' 
           : 'bg-neutral-50 hover:bg-neutral-100'
       }`}
       onClick={() => onView?.(review)}
@@ -313,7 +321,7 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
           <div className="flex items-center gap-3 flex-1 min-w-0">
             <Avatar className="h-10 w-10 flex-shrink-0">
               <AvatarImage src="" alt={review.memberFirm} />
-              <AvatarFallback className={`${generateFirmAvatarColor(review.memberFirm)} text-white text-sm font-semibold`}>
+              <AvatarFallback className={`${generateFirmAvatarColor(review.memberFirm)} text-sm font-semibold`}>
                 {generateFirmInitials(review.memberFirm)}
               </AvatarFallback>
             </Avatar>
@@ -326,34 +334,40 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
               </CardDescription>
             </div>
           </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="h-7 w-7 p-0"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <MoreHorizontal className="h-3 w-3" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem onClick={(e) => {
-                e.stopPropagation()
-                onEdit?.(review)
-              }}>
-                <Edit className="mr-2 h-4 w-4" />
-                Edit Review
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={(e) => {
-                e.stopPropagation()
-                onAssign?.(review)
-              }}>
-                <UserPlus className="mr-2 h-4 w-4" />
-                Assign Reviewer
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {(onEdit || onAssign) && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="h-7 w-7 p-0"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <MoreHorizontal className="h-3 w-3" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                {onEdit && (
+                  <DropdownMenuItem onClick={(e) => {
+                    e.stopPropagation()
+                    onEdit(review)
+                  }}>
+                    <Edit className="mr-2 h-4 w-4" />
+                    Edit Review
+                  </DropdownMenuItem>
+                )}
+                {onAssign && (
+                  <DropdownMenuItem onClick={(e) => {
+                    e.stopPropagation()
+                    onAssign(review)
+                  }}>
+                    <UserPlus className="mr-2 h-4 w-4" />
+                    Assign Reviewer
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
       </CardHeader>
       <CardContent className="space-y-3">
@@ -370,15 +384,15 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
 
         {/* Main Status Badges - Always Visible */}
         <div className="flex flex-wrap gap-1">
-          <Badge className={`${getGradeColor(review.currentGrade)} text-xs px-2 py-0.5`}>
-            {review.currentGrade}
-          </Badge>
           <Badge className={`${getStatusColor(review.status)} text-xs px-2 py-0.5`}>
             {review.status}
           </Badge>
+          <Badge className={`${getGradeColor(review.currentGrade)} text-xs px-2 py-0.5`}>
+            {review.currentGrade}
+          </Badge>
         </div>
 
-        {/* Assign Button and Show More in Same Row */}
+        {/* Show More and Assign Button in Same Row */}
         <div className="flex justify-between items-center pt-1">
           <Button
             variant="ghost"
@@ -401,18 +415,20 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
               </>
             )}
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={(e) => {
-              e.stopPropagation()
-              onAssign?.(review)
-            }}
-            className="text-xs h-7 px-3"
-          >
-            <UserPlus className="h-3 w-3 mr-1" />
-            Assign
-          </Button>
+          {onAssign && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation()
+                onAssign(review)
+              }}
+              className="text-xs h-7 px-3"
+            >
+              <UserPlus className="h-3 w-3 mr-1" />
+              Assign
+            </Button>
+          )}
         </div>
 
         {/* Expandable Content */}

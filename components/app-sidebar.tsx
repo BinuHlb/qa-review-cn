@@ -45,7 +45,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const userData = {
     name: session?.user?.name || "User",
     email: session?.user?.email || "user@example.com",
-    avatar: "/avatars/user.jpg",
+    avatar: session?.user?.image || "", // Use session image if available, otherwise empty to show fallback
     role: getRoleDisplayName(userRole),
   }
 

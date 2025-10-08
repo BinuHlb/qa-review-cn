@@ -4,6 +4,8 @@ import { useState } from "react"
 import { DualSidebarLayout } from "@/components/shared/dual-sidebar-layout"
 import { UnifiedView } from "@/components/shared/unified-view"
 import { MemberFirmItem } from "@/components/member-firms/member-firm-item"
+import { MemberFirmReviewDialog } from "@/components/member-firms/member-firm-review-dialog"
+import { useToast } from "@/hooks/use-toast"
 import { 
   mockMemberFirms, 
   type MemberFirm
@@ -18,6 +20,9 @@ export default function AdminMemberFirmsPage() {
   const [regionFilter, setRegionFilter] = useState<string>("all")
   const [riskLevelFilter, setRiskLevelFilter] = useState<string>("all")
   const [viewMode, setViewMode] = useState<"list" | "card">("list")
+  const [reviewDialogOpen, setReviewDialogOpen] = useState(false)
+  const [selectedFirmForReview, setSelectedFirmForReview] = useState<MemberFirm | null>(null)
+  const { toast } = useToast()
 
   const handleFilter = () => {
     let filtered = memberFirms
@@ -96,8 +101,27 @@ export default function AdminMemberFirmsPage() {
   }
 
   const handleReviewMemberFirm = (memberFirm: MemberFirm) => {
-    console.log("Review member firm:", memberFirm)
-    // TODO: Implement review member firm functionality
+    setSelectedFirmForReview(memberFirm)
+    setReviewDialogOpen(true)
+  }
+
+  const handleAcceptReview = async (firmId: string, notes: string) => {
+    console.log("Accept review for firm:", firmId, "Notes:", notes)
+    // TODO: Implement accept review API call
+    toast({
+      title: "Review Accepted",
+      description: `Successfully accepted the review for ${selectedFirmForReview?.name}`,
+    })
+  }
+
+  const handleRejectReview = async (firmId: string, notes: string) => {
+    console.log("Reject review for firm:", firmId, "Notes:", notes)
+    // TODO: Implement reject review API call
+    toast({
+      title: "Review Rejected",
+      description: `Review rejected for ${selectedFirmForReview?.name}`,
+      variant: "destructive"
+    })
   }
 
   // Calculate stats for sidebar
@@ -194,6 +218,15 @@ export default function AdminMemberFirmsPage() {
           )}
         />
       </div>
+
+      {/* Review Dialog */}
+      <MemberFirmReviewDialog
+        open={reviewDialogOpen}
+        onOpenChange={setReviewDialogOpen}
+        memberFirm={selectedFirmForReview}
+        onAccept={handleAcceptReview}
+        onReject={handleRejectReview}
+      />
     </DualSidebarLayout>
   )
 }

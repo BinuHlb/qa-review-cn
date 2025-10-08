@@ -1,9 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { 
@@ -11,12 +10,14 @@ import {
   Star,
   AlertCircle,
   ThumbsUp,
-  ThumbsDown
+  ThumbsDown,
+  
 } from "lucide-react"
 import { type Review, type Comment, type Attachment } from "@/lib/schemas/review.schema"
 import { useToast } from "@/hooks/use-toast"
 import { ScrollablePanel } from "@/components/shared/scrollable-panel"
 import { AttachmentsSection } from "@/components/shared/attachments-section"
+import { GradeSelect } from "@/components/shared/grade-select"
 import { 
   getGradeColor, 
   getStatusColor, 
@@ -37,9 +38,24 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
   const [isConfirming, setIsConfirming] = useState(false)
   const [isRejecting, setIsRejecting] = useState(false)
   const [showRejectForm, setShowRejectForm] = useState(false)
+
   const [_comments, _setComments] = useState<Comment[]>([])
   const [attachments, setAttachments] = useState<Attachment[]>([])
   const { toast } = useToast()
+  
+  const rejectFormRef = useRef<HTMLDivElement>(null)
+
+  // Auto-scroll to reject form when it becomes visible
+  useEffect(() => {
+    if (showRejectForm && rejectFormRef.current) {
+      setTimeout(() => {
+        rejectFormRef.current?.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'nearest' 
+        })
+      }, 100)
+    }
+  }, [showRejectForm])
 
   // Mock data - replace with actual API calls
   useEffect(() => {
@@ -155,6 +171,7 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
     setAttachments(prev => prev.filter(att => att.id !== id))
   }
 
+
   const _handleAddComment = (_content: string) => {
     const newComment: Comment = {
       id: `comment-${Date.now()}`,
@@ -175,8 +192,8 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
             ←
           </Button>
           <div>
-            <h2 className="text-lg font-bold text-gray-900">Final Review</h2>
-            <p className="text-xs text-gray-600">ID: {review.id}</p>
+            <h2 className="text-lg font-bold text-neutral-900">Final Review</h2>
+            <p className="text-xs text-muted-foreground">ID: {review.id}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -191,65 +208,77 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
     </div>
   )
 
+  // If assign form is shown, render the assign form
+
   return (
     <ScrollablePanel
       header={header}
       contentClassName="p-3"
     >
-        <div className="space-y-3">
-          {/* Attachments */}
-          <AttachmentsSection className="shadow-none border-none bg-slate-50/50 rounded-lg"
-            attachments={attachments.map(att => ({
-              ...att,
-              size: typeof att.size === 'number' ? formatFileSize(att.size) : att.size,
-              uploadedAt: new Date(att.uploadedAt).toISOString().split('T')[0]
-            }))}
-            onUpload={handleFileUpload}
-            onRemove={handleFileRemove}
-            title="Attachments"
-            showUpload={false}
-            maxHeight="max-h-48"
-          />
+      <div className="space-y-3">
+        {/* Attachments */}
+        <AttachmentsSection className="shadow-none border-none bg-muted/50 rounded-lg"
+          attachments={attachments.map(att => ({
+            ...att,
+            size: typeof att.size === 'number' ? formatFileSize(att.size) : att.size,
+            uploadedAt: new Date(att.uploadedAt).toISOString().split('T')[0]
+          }))}
+          onUpload={handleFileUpload}
+          onRemove={handleFileRemove}
+          showUpload={false}
+          maxHeight="max-h-48"
+        />
 
-          {/* Final Review Actions - Optimized Layout */}
-          <div className="bg-gradient-to-br from-slate-50/80 to-white rounded-lg border border-slate-200/60 p-4">
-            {/* Section Header */}
-            <div className="flex items-center gap-2 mb-4 pb-2 border-b border-slate-200/60">
-              <div className="p-1.5 bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg">
-                <Star className="h-4 w-4 text-white" />
+        {/* Current Grade - Highlighted */}
+        <div className="bg-muted/50 rounded-lg p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className={`${getGradeColor(review.currentGrade)} p-3 rounded-lg`}>
+                <Star className="h-6 w-6" />
               </div>
-              <h3 className="font-semibold text-slate-900">Final Review & Grading</h3>
+              <div>
+                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Current Rating</p>
+                <p className="text-2xl font-bold text-neutral-900 mt-0.5">Rating {review.currentGrade}</p>
+              </div>
             </div>
+            <div className="text-center">
+              <Badge className={`${getGradeColor(review.currentGrade)} text-base px-4 py-1.5 font-semibold`}>
+                {review.currentGrade}
+              </Badge>
+            <p className="text-xs text-muted-foreground mt-1">
+              {review.currentGrade === '1' ? 'Best' :
+               review.currentGrade === '2' ? 'Good' :
+               review.currentGrade === '3' ? 'Ok' :
+               review.currentGrade === '4' ? 'Bad' :
+               'Poor'}
+            </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Final Review Actions - Optimized Layout */}
+        <div className="bg-muted/50 rounded-lg p-4">
+          {/* Section Header */}
+          <div className="flex items-center gap-2 mb-4 pb-2 border-b border-muted">
+            <div className="p-1.5 bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg">
+              <Star className="h-4 w-4 text-white" />
+            </div>
+            <h3 className="font-semibold text-neutral-900">Final Review & Grading</h3>
+          </div>
 
             <div className="space-y-4">
               {/* Compact Grade Selection */}
-              <div className="space-y-2">
-                <Label htmlFor="finalGrade" className="text-xs font-medium text-slate-600">
-                  Final Grade *
-                </Label>
-                <Select value={finalGrade} onValueChange={(value) => setFinalGrade(value)}>
-                  <SelectTrigger className="h-9 text-sm bg-white border-slate-300">
-                    <SelectValue placeholder="Select grade" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="A+">A+ (Excellent)</SelectItem>
-                    <SelectItem value="A">A (Very Good)</SelectItem>
-                    <SelectItem value="A-">A- (Good)</SelectItem>
-                    <SelectItem value="B+">B+ (Above Average)</SelectItem>
-                    <SelectItem value="B">B (Average)</SelectItem>
-                    <SelectItem value="B-">B- (Below Average)</SelectItem>
-                    <SelectItem value="C+">C+ (Needs Improvement)</SelectItem>
-                    <SelectItem value="C">C (Poor)</SelectItem>
-                    <SelectItem value="C-">C- (Very Poor)</SelectItem>
-                    <SelectItem value="D">D (Unsatisfactory)</SelectItem>
-                    <SelectItem value="F">F (Failed)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              <GradeSelect
+                value={finalGrade}
+                onValueChange={setFinalGrade}
+                label="Final Grade"
+                placeholder="Select grade"
+                required={true}
+              />
 
               {/* Compact Admin Notes */}
               <div className="space-y-2">
-                <Label htmlFor="adminNotes" className="text-xs font-medium text-slate-600">
+                <Label htmlFor="adminNotes" className="text-xs font-medium text-muted-foreground">
                   Admin Notes (Optional)
                 </Label>
                 <Textarea
@@ -258,11 +287,11 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
                   value={adminNotes}
                   onChange={(e) => setAdminNotes(e.target.value)}
                   rows={2}
-                  className="text-sm resize-none bg-white border-slate-300"
+                  className="text-sm resize-none bg-white border-input"
                 />
               </div>
 
-              <div className="border-t border-slate-200/60 pt-3 mt-3" />
+              <div className="border-t border-muted pt-3 mt-3" />
 
               {/* Compact Action Buttons */}
               <div className="flex gap-2">
@@ -287,7 +316,7 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
                 <Button
                   variant="outline"
                   onClick={() => setShowRejectForm(!showRejectForm)}
-                  className="flex-1 h-9 text-sm font-medium border-slate-300 hover:bg-red-50 hover:border-red-300 hover:text-red-700"
+                  className="flex-1 h-9 text-sm font-medium border-input hover:bg-red-50 hover:border-red-300 hover:text-red-700"
                 >
                   <ThumbsDown className="h-3.5 w-3.5 mr-1.5" />
                   Reject
@@ -296,7 +325,7 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
 
               {/* Compact Rejection Form */}
               {showRejectForm && (
-                <div className="space-y-3 p-3 bg-gradient-to-br from-red-50 to-red-100/50 border border-red-200/60 rounded-lg">
+                <div ref={rejectFormRef} className="space-y-3 p-3 bg-gradient-to-br from-red-50 to-red-100/50 border border-red-200/60 rounded-lg">
                   <div className="flex items-center gap-2 text-red-800">
                     <div className="p-1 bg-red-500 rounded">
                       <AlertCircle className="h-3 w-3 text-white" />

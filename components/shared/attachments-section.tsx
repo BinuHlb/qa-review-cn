@@ -3,42 +3,54 @@
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Upload, X, Download, Paperclip } from "lucide-react"
-import { formatFileSize, getFileIcon } from "@/lib/utils/review-utils"
+import { 
+  Upload,
+  X,
+  Paperclip,
+  Download,
+  FileText,
+  Image,
+  File,
+  Video,
+  Music,
+  Archive
+} from "lucide-react"
+import { getFileIcon } from "@/lib/utils/review-utils"
 
-interface Attachment {
+export interface Attachment {
   id: string
   name: string
-  size: number | string
+  size: string
   uploadedBy: string
   uploadedAt: string
   type: string
+  url?: string
 }
 
 interface AttachmentsSectionProps {
   attachments: Attachment[]
   onUpload?: (files: File[]) => void
-  onRemove?: (id: string) => void
-  onDownload?: (id: string) => void
-  title?: string
-  showUpload?: boolean
+  onRemove?: (attachmentId: string) => void
+  onDownload?: (attachment: Attachment) => void
   maxHeight?: string
+  showUpload?: boolean
+  showDownload?: boolean
+  showRemove?: boolean
   className?: string
+  title?: string
 }
 
-/**
- * Reusable attachments section component
- * Handles file display, upload, and management
- */
 export function AttachmentsSection({
-  attachments,
+  attachments = [],
   onUpload,
   onRemove,
   onDownload,
-  title = "Attachments",
+  maxHeight = "fit-content",
   showUpload = true,
-  maxHeight = "max-h-80",
-  className = ""
+  showDownload = true,
+  showRemove = true,
+  className = "",
+  title = "Documents"
 }: AttachmentsSectionProps) {
   const [isDragging, setIsDragging] = useState(false)
 
@@ -69,20 +81,47 @@ export function AttachmentsSection({
     }
   }
 
-  const getFileSize = (size: number | string) => {
-    return typeof size === 'number' ? formatFileSize(size) : size
+  const handleRemove = (attachmentId: string) => {
+    if (onRemove) {
+      onRemove(attachmentId)
+    }
+  }
+
+  const handleDownload = (attachment: Attachment) => {
+    if (onDownload) {
+      onDownload(attachment)
+    } else if (attachment.url) {
+      // Fallback to direct download if no handler provided
+      const link = document.createElement('a')
+      link.href = attachment.url
+      link.download = attachment.name
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    }
+  }
+
+  const getFileTypeIcon = (type: string) => {
+    if (type.startsWith('image/')) return <Image className="h-4 w-4" />
+    if (type.startsWith('video/')) return <Video className="h-4 w-4" />
+    if (type.startsWith('audio/')) return <Music className="h-4 w-4" />
+    if (type.includes('pdf')) return <FileText className="h-4 w-4" />
+    if (type.includes('zip') || type.includes('rar') || type.includes('tar')) return <Archive className="h-4 w-4" />
+    return <File className="h-4 w-4" />
   }
 
   return (
-    <Card className={`shadow-sm ${className}`}>
+    <Card className={`shadow-none border-none p-0 ${className}`}>
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-base">{title} ({attachments.length})</CardTitle>
+          <CardTitle className="text-base">
+            {title} ({attachments.length})
+          </CardTitle>
           {showUpload && onUpload && (
-            <label htmlFor="file-upload">
+            <label htmlFor="file-upload" className="flex-shrink-0">
               <Button size="sm" variant="outline" asChild>
                 <span className="cursor-pointer">
-                  <Upload className="h-3 w-3 mr-2" />
+                  <Upload className="h-4 w-4 mr-2" />
                   Upload
                 </span>
               </Button>
@@ -97,7 +136,7 @@ export function AttachmentsSection({
           )}
         </div>
       </CardHeader>
-      <CardContent className={`space-y-3 ${maxHeight} overflow-y-auto`}>
+      <CardContent className={`space-y-3 overflow-y-auto`} style={{ maxHeight }}>
         {/* Drop Zone */}
         {showUpload && onUpload && (
           <div
@@ -106,60 +145,85 @@ export function AttachmentsSection({
             onDrop={handleDrop}
             className={`border-2 border-dashed rounded-lg p-4 text-center transition-colors ${
               isDragging 
-                ? 'border-blue-500 bg-blue-50' 
-                : 'border-neutral-200 bg-neutral-50 hover:bg-neutral-100'
+                ? 'border-primary bg-primary/5' 
+                : 'border-muted-foreground/25 hover:border-muted-foreground/50'
             }`}
           >
-            <Paperclip className="h-6 w-6 mx-auto text-neutral-400 mb-2" />
-            <p className="text-xs text-neutral-500">
-              Drag and drop files here, or click Upload button
+            <Paperclip className="h-6 w-6 mx-auto text-muted-foreground mb-2" />
+            <p className="text-sm text-muted-foreground">
+              <span className="hidden sm:inline">Drag and drop files here or click to browse</span>
+              <span className="sm:hidden">Tap to add files</span>
             </p>
           </div>
         )}
 
-        {/* Attachments List */}
-        {attachments.length > 0 && (
-          <div className="space-y-2">
+        {/* Documents/Files List */}
+        {attachments.length > 0 ? (
+          <div className="space-y-1">
             {attachments.map((attachment) => (
               <div
                 key={attachment.id}
-                className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg hover:bg-neutral-100 transition-colors"
+                className="group flex items-center gap-3 p-2 rounded-md hover:bg-accent/50 transition-colors"
               >
-                <div className="flex items-center gap-3 flex-1 min-w-0">
-                  <span className="text-2xl flex-shrink-0">{getFileIcon(attachment.type)}</span>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-neutral-900 truncate" title={attachment.name}>
-                      {attachment.name}
-                    </p>
-                    <p className="text-xs text-neutral-500">
-                      {getFileSize(attachment.size)} • {attachment.uploadedBy} • {new Date(attachment.uploadedAt).toLocaleDateString()}
-                    </p>
+                {/* File Icon */}
+                <div className="flex-shrink-0">
+                  <div className="flex items-center justify-center w-8 h-8 rounded bg-muted">
+                    <span className="text-sm">{getFileIcon(attachment.type)}</span>
                   </div>
                 </div>
-                <div className="flex items-center gap-1 flex-shrink-0">
-                  {onDownload && (
+
+                {/* File Info */}
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium truncate" title={attachment.name}>
+                    {attachment.name}
+                  </p>
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <span>{attachment.size}</span>
+                    <span>•</span>
+                    <span className="truncate">{attachment.uploadedBy}</span>
+                    <span className="hidden sm:inline">•</span>
+                    <span className="hidden sm:inline">{new Date(attachment.uploadedAt).toLocaleDateString()}</span>
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  {showDownload && (
                     <Button 
                       variant="ghost" 
                       size="sm" 
-                      className="h-7 w-7 p-0"
-                      onClick={() => onDownload(attachment.id)}
+                      className="h-8 w-8 p-0"
+                      onClick={() => handleDownload(attachment)}
+                      title="Download"
                     >
-                      <Download className="h-3 w-3" />
+                      <Download className="h-4 w-4" />
                     </Button>
                   )}
-                  {onRemove && (
+                  {showRemove && onRemove && (
                     <Button 
                       variant="ghost" 
                       size="sm" 
-                      className="h-7 w-7 p-0 text-red-500 hover:text-red-600"
-                      onClick={() => onRemove(attachment.id)}
+                      className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                      onClick={() => handleRemove(attachment.id)}
+                      title="Remove"
                     >
-                      <X className="h-3 w-3" />
+                      <X className="h-4 w-4" />
                     </Button>
                   )}
                 </div>
               </div>
             ))}
+          </div>
+        ) : (
+          <div className="text-center py-8">
+            <Paperclip className="h-8 w-8 mx-auto mb-3 text-muted-foreground/50" />
+            <p className="text-sm text-muted-foreground">No attachments yet</p>
+            {showUpload && onUpload && (
+              <p className="text-xs text-muted-foreground/70 mt-1">
+                <span className="hidden sm:inline">Upload files to get started</span>
+                <span className="sm:hidden">Tap upload to add files</span>
+              </p>
+            )}
           </div>
         )}
       </CardContent>

@@ -89,6 +89,7 @@ export default function LoginPage() {
               </label>
               <Input
                 id="email"
+                name="email"
                 type="email"
                 placeholder="Enter any email"
                 value={email}
@@ -103,6 +104,7 @@ export default function LoginPage() {
               </label>
               <Input
                 id="password"
+                name="password"
                 type="password"
                 placeholder="Enter any password"
                 value={password}

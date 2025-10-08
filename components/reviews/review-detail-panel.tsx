@@ -209,13 +209,13 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
 
           {/* Enhanced Badges */}
           <div className="flex flex-wrap gap-2">
-            <Badge className={`${getGradeColor(review.currentGrade)} shadow-sm border-0 px-3 py-1`}>
-              <Award className="h-3 w-3 mr-1.5" />
-              {review.currentGrade}
-            </Badge>
             <Badge className={`${getStatusColor(review.status)} shadow-sm border-0 px-3 py-1`}>
               <CheckCircle className="h-3 w-3 mr-1.5" />
               {review.status}
+            </Badge>
+            <Badge className={`${getGradeColor(review.currentGrade)} shadow-sm border-0 px-3 py-1`}>
+              <Award className="h-3 w-3 mr-1.5" />
+              {review.currentGrade}
             </Badge>
             <Badge className={`${getPriorityColor(review.priority)} shadow-sm border-0 px-3 py-1`}>
               <Flag className="h-3 w-3 mr-1.5" />
@@ -229,7 +229,7 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
       <div className="flex-1 overflow-y-auto p-6 space-y-6 min-h-0">
         {/* Enhanced Quick Info Cards */}
         <div className="grid grid-cols-2 gap-4">
-          <Card className="border-slate-200/60 bg-white/60 backdrop-blur-sm shadow-sm hover:shadow-md transition-all duration-200 hover:border-blue-300/40">
+          <Card className="border-slate-200/60 bg-white/60 backdrop-blur-sm shadow-sm">
             <CardContent className="p-4">
               <div className="flex items-start gap-3">
                 <div className="p-2.5 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-sm">
@@ -245,7 +245,7 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
             </CardContent>
           </Card>
 
-          <Card className="border-slate-200/60 bg-white/60 backdrop-blur-sm shadow-sm hover:shadow-md transition-all duration-200 hover:border-emerald-300/40">
+          <Card className="border-slate-200/60 bg-white/60 backdrop-blur-sm shadow-sm">
             <CardContent className="p-4">
               <div className="flex items-start gap-3">
                 <div className="p-2.5 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl shadow-sm">
@@ -263,7 +263,7 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
         </div>
 
         {/* Enhanced Review Details */}
-        <Card className="border-slate-200/60 bg-white/60 backdrop-blur-sm shadow-sm hover:shadow-md transition-all duration-200">
+        <Card className="border-slate-200/60 bg-white/60 backdrop-blur-sm shadow-sm">
           <CardHeader className="pb-4 bg-gradient-to-r from-slate-50/80 to-slate-100/50 rounded-t-lg">
             <CardTitle className="text-base font-semibold text-slate-900 flex items-center gap-2">
               <div className="p-1.5 bg-gradient-to-br from-slate-600 to-slate-700 rounded-lg">
@@ -364,7 +364,7 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
         </Card>
 
         {/* Enhanced File Attachments */}
-        <Card className="border-slate-200/60 bg-white/60 backdrop-blur-sm shadow-sm hover:shadow-md transition-all duration-200">
+        <Card className="border-slate-200/60 bg-white/60 backdrop-blur-sm shadow-sm">
           <CardHeader className="pb-4 bg-gradient-to-r from-emerald-50/80 to-emerald-100/50 rounded-t-lg">
             <div className="flex items-center justify-between">
               <CardTitle className="text-base font-semibold text-slate-900 flex items-center gap-2">
@@ -421,7 +421,7 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
                 {attachments.map((attachment) => (
                   <div
                     key={attachment.id}
-                    className="flex items-center justify-between p-4 bg-gradient-to-r from-slate-50/80 to-white rounded-xl border border-slate-200/60 hover:shadow-md hover:border-slate-300/60 transition-all duration-200"
+                    className="flex items-center justify-between p-4 bg-gradient-to-r from-slate-50/80 to-white rounded-xl border border-slate-200/60"
                   >
                     <div className="flex items-center gap-4 flex-1 min-w-0">
                       <div className="flex-shrink-0 p-2 bg-gradient-to-br from-slate-200 to-slate-300 rounded-lg">
@@ -441,7 +441,7 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
                       </div>
                     </div>
                     <div className="flex items-center gap-1.5 flex-shrink-0">
-                      <Button variant="outline" size="sm" className="h-8 w-8 p-0 border-slate-300 hover:bg-blue-50 hover:border-blue-300">
+                      <Button variant="outline" size="sm" className="h-8 w-8 p-0 border-slate-300 hover:bg-primary/10 hover:border-primary/30">
                         <Download className="h-3.5 w-3.5 text-slate-600" />
                       </Button>
                       <Button 
@@ -471,7 +471,7 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
               {comments.map((comment) => (
                 <div key={comment.id} className="flex gap-3">
                   <Avatar className="h-8 w-8 flex-shrink-0">
-                    <AvatarFallback className={`${generateAvatarColor(comment.author)} text-white text-xs`}>
+                    <AvatarFallback className={`${generateAvatarColor(comment.author)} text-xs`}>
                       {generateInitials(comment.author)}
                     </AvatarFallback>
                   </Avatar>

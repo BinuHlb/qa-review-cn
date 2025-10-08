@@ -1,3 +1,13 @@
+export interface Document {
+  id: string
+  name: string
+  size: string
+  uploadedBy: string
+  uploadedAt: string
+  type: string
+  url?: string
+}
+
 export interface Review {
   id: string
   memberFirm: string
@@ -8,11 +18,12 @@ export interface Review {
   partnerStatus: 'Active' | 'Inactive' | 'Pending'
   startDate: string
   endDate: string
-  currentGrade: 'A+' | 'A' | 'A-' | 'B+' | 'B' | 'B-' | 'C+' | 'C' | 'C-' | 'D' | 'F'
-  status: 'Completed' | 'In Progress' | 'Pending' | 'Overdue' | 'Cancelled'
+  currentGrade: '1' | '2' | '3' | '4' | '5'
+  status: 'Completed' | 'Submitted' | 'In Progress' | 'Pending' | 'Overdue' | 'Cancelled' | 'Rejected'
   description?: string
   priority: 'High' | 'Medium' | 'Low'
   lastUpdated: string
+  documents?: Document[]
 }
 
 export const mockReviews: Review[] = [
@@ -26,11 +37,45 @@ export const mockReviews: Review[] = [
     partnerStatus: 'Active',
     startDate: '2024-01-15',
     endDate: '2024-03-15',
-    currentGrade: 'A',
+    currentGrade: '1',
     status: 'In Progress',
     description: 'Comprehensive annual quality assurance review',
     priority: 'High',
-    lastUpdated: '2024-01-20'
+    lastUpdated: '2024-01-20',
+    documents: [
+      {
+        id: 'DOC-001',
+        name: 'Financial Statements 2023.pdf',
+        size: '2.5 MB',
+        uploadedBy: 'John Smith',
+        uploadedAt: '2024-01-15T10:30:00Z',
+        type: 'application/pdf'
+      },
+      {
+        id: 'DOC-002',
+        name: 'Audit Report.pdf',
+        size: '1.8 MB',
+        uploadedBy: 'John Smith',
+        uploadedAt: '2024-01-16T14:20:00Z',
+        type: 'application/pdf'
+      },
+      {
+        id: 'DOC-003',
+        name: 'Compliance Certificate.pdf',
+        size: '850 KB',
+        uploadedBy: 'Sarah Admin',
+        uploadedAt: '2024-01-17T09:15:00Z',
+        type: 'application/pdf'
+      },
+      {
+        id: 'DOC-004',
+        name: 'Quality Review Checklist.xlsx',
+        size: '450 KB',
+        uploadedBy: 'John Smith',
+        uploadedAt: '2024-01-18T11:45:00Z',
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      }
+    ]
   },
   {
     id: 'REV-002',
@@ -42,11 +87,29 @@ export const mockReviews: Review[] = [
     partnerStatus: 'Active',
     startDate: '2024-02-01',
     endDate: '2024-02-28',
-    currentGrade: 'B+',
-    status: 'Completed',
+    currentGrade: '2',
+    status: 'Submitted',
     description: 'Regulatory compliance assessment',
     priority: 'High',
-    lastUpdated: '2024-02-28'
+    lastUpdated: '2024-02-28',
+    documents: [
+      {
+        id: 'DOC-005',
+        name: 'Compliance Report Q1 2024.pdf',
+        size: '3.2 MB',
+        uploadedBy: 'Sarah Johnson',
+        uploadedAt: '2024-02-10T08:30:00Z',
+        type: 'application/pdf'
+      },
+      {
+        id: 'DOC-006',
+        name: 'Risk Assessment.docx',
+        size: '1.1 MB',
+        uploadedBy: 'Sarah Johnson',
+        uploadedAt: '2024-02-12T16:45:00Z',
+        type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      }
+    ]
   },
   {
     id: 'REV-003',
@@ -58,7 +121,7 @@ export const mockReviews: Review[] = [
     partnerStatus: 'Pending',
     startDate: '2024-01-20',
     endDate: '2024-04-20',
-    currentGrade: 'A+',
+    currentGrade: '1',
     status: 'In Progress',
     description: 'Enterprise risk management review',
     priority: 'Medium',
@@ -74,7 +137,7 @@ export const mockReviews: Review[] = [
     partnerStatus: 'Active',
     startDate: '2024-01-10',
     endDate: '2024-01-31',
-    currentGrade: 'C+',
+    currentGrade: '3',
     status: 'Overdue',
     description: 'Quality management system audit',
     priority: 'High',
@@ -90,7 +153,7 @@ export const mockReviews: Review[] = [
     partnerStatus: 'Active',
     startDate: '2024-02-15',
     endDate: '2024-05-15',
-    currentGrade: 'B',
+    currentGrade: '2',
     status: 'Pending',
     description: 'Operational performance evaluation',
     priority: 'Medium',
@@ -106,8 +169,8 @@ export const mockReviews: Review[] = [
     partnerStatus: 'Inactive',
     startDate: '2024-01-05',
     endDate: '2024-02-05',
-    currentGrade: 'A-',
-    status: 'Completed',
+    currentGrade: '1',
+    status: 'Submitted',
     description: 'Financial controls and procedures review',
     priority: 'High',
     lastUpdated: '2024-02-05'
@@ -122,7 +185,7 @@ export const mockReviews: Review[] = [
     partnerStatus: 'Active',
     startDate: '2024-03-01',
     endDate: '2024-06-01',
-    currentGrade: 'B+',
+    currentGrade: '2',
     status: 'Pending',
     description: 'Information technology security assessment',
     priority: 'High',
@@ -138,7 +201,7 @@ export const mockReviews: Review[] = [
     partnerStatus: 'Active',
     startDate: '2024-02-20',
     endDate: '2024-04-20',
-    currentGrade: 'A',
+    currentGrade: '1',
     status: 'In Progress',
     description: 'Environmental compliance and sustainability review',
     priority: 'Medium',
@@ -154,7 +217,7 @@ export const mockReviews: Review[] = [
     partnerStatus: 'Pending',
     startDate: '2024-01-30',
     endDate: '2024-03-30',
-    currentGrade: 'C',
+    currentGrade: '3',
     status: 'In Progress',
     description: 'Operational efficiency and process review',
     priority: 'Low',
@@ -170,7 +233,7 @@ export const mockReviews: Review[] = [
     partnerStatus: 'Inactive',
     startDate: '2024-01-01',
     endDate: '2024-01-31',
-    currentGrade: 'D',
+    currentGrade: '4',
     status: 'Cancelled',
     description: 'Corporate governance and ethics review',
     priority: 'Medium',
@@ -180,28 +243,24 @@ export const mockReviews: Review[] = [
 
 export const getGradeColor = (grade: Review['currentGrade']): string => {
   const gradeColors = {
-    'A+': 'text-green-600 bg-green-50',
-    'A': 'text-green-600 bg-green-50',
-    'A-': 'text-green-500 bg-green-50',
-    'B+': 'text-blue-600 bg-blue-50',
-    'B': 'text-blue-600 bg-blue-50',
-    'B-': 'text-blue-500 bg-blue-50',
-    'C+': 'text-yellow-600 bg-yellow-50',
-    'C': 'text-yellow-600 bg-yellow-50',
-    'C-': 'text-yellow-500 bg-yellow-50',
-    'D': 'text-orange-600 bg-orange-50',
-    'F': 'text-red-600 bg-red-50'
+    '1': 'bg-green-600 text-white', // Best - 1 is best
+    '2': 'bg-blue-600 text-white',   // Good
+    '3': 'bg-yellow-600 text-white', // Ok
+    '4': 'bg-orange-600 text-white', // Bad
+    '5': 'bg-red-600 text-white'       // Poor - 5 is poor
   }
-  return gradeColors[grade] || 'text-gray-600 bg-gray-50'
+  return gradeColors[grade] || 'bg-gray-600 text-white'
 }
 
 export const getStatusColor = (status: Review['status']): string => {
   const statusColors = {
     'Completed': 'text-green-600 bg-green-50',
+    'Submitted': 'text-purple-600 bg-purple-50', // Ready for final review
     'In Progress': 'text-blue-600 bg-blue-50',
     'Pending': 'text-yellow-600 bg-yellow-50',
     'Overdue': 'text-red-600 bg-red-50',
-    'Cancelled': 'text-gray-600 bg-gray-50'
+    'Cancelled': 'text-gray-600 bg-gray-50',
+    'Rejected': 'text-red-600 bg-red-50'
   }
   return statusColors[status] || 'text-gray-600 bg-gray-50'
 }

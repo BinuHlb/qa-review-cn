@@ -24,16 +24,16 @@ export function ReviewListCompact({ reviews, selectedReview, onSelectReview }: R
 
   const generateFirmAvatarColor = (firmName: string) => {
     const colors = [
-      'bg-blue-500',
-      'bg-green-500', 
-      'bg-purple-500',
-      'bg-orange-500',
-      'bg-pink-500',
-      'bg-indigo-500',
-      'bg-teal-500',
-      'bg-red-500',
-      'bg-yellow-500',
-      'bg-cyan-500'
+      'bg-blue-100 text-blue-600',
+      'bg-green-100 text-green-600', 
+      'bg-purple-100 text-purple-600',
+      'bg-orange-100 text-orange-600',
+      'bg-pink-100 text-pink-600',
+      'bg-indigo-100 text-indigo-600',
+      'bg-teal-100 text-teal-600',
+      'bg-red-100 text-red-600',
+      'bg-yellow-100 text-yellow-600',
+      'bg-cyan-100 text-cyan-600'
     ]
     
     let hash = 0
@@ -63,7 +63,7 @@ export function ReviewListCompact({ reviews, selectedReview, onSelectReview }: R
           className={cn(
             "cursor-pointer transition-all duration-200 shadow-none border hover:shadow-md",
             selectedReview?.id === review.id
-              ? "border-blue-500 bg-blue-50 shadow-md"
+              ? "border-primary bg-primary/10 shadow-md"
               : "border-neutral-200 bg-white hover:bg-neutral-50"
           )}
           onClick={() => onSelectReview(review)}
@@ -73,7 +73,7 @@ export function ReviewListCompact({ reviews, selectedReview, onSelectReview }: R
               {/* Firm Info */}
               <div className="flex items-start gap-3">
                 <Avatar className="h-10 w-10 flex-shrink-0">
-                  <AvatarFallback className={`${generateFirmAvatarColor(review.memberFirm)} text-white text-sm font-semibold`}>
+                  <AvatarFallback className={`${generateFirmAvatarColor(review.memberFirm)} text-sm font-semibold`}>
                     {generateFirmInitials(review.memberFirm)}
                   </AvatarFallback>
                 </Avatar>

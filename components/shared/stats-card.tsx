@@ -13,7 +13,7 @@ interface StatsCardProps {
 }
 
 const colorClasses = {
-  blue: "bg-blue-50 text-blue-600 border-blue-200",
+  blue: "bg-primary/10 text-primary border-primary/20",
   green: "bg-green-50 text-green-600 border-green-200",
   yellow: "bg-yellow-50 text-yellow-600 border-yellow-200",
   purple: "bg-purple-50 text-purple-600 border-purple-200",

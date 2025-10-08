@@ -44,7 +44,7 @@ export async function POST(
     const updatedReview = {
       ...review,
       currentGrade: finalGrade,
-      status: 'Finalized' as const,
+      status: 'Completed' as const,
       lastUpdated: new Date().toISOString().split('T')[0],
     }
     

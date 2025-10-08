@@ -9,12 +9,15 @@ interface FormFieldProps {
   children: ReactNode
   className?: string
   description?: string
+  htmlFor?: string
 }
 
-export function FormField({ label, required = false, children, className = "", description }: FormFieldProps) {
+export function FormField({ label, required = false, children, className = "", description, htmlFor }: FormFieldProps) {
+  const fieldId = htmlFor || label.toLowerCase().replace(/\s+/g, '-')
+  
   return (
     <div className={`space-y-2 ${className}`}>
-      <Label htmlFor={label.toLowerCase().replace(/\s+/g, '-')}>
+      <Label htmlFor={fieldId}>
         {label}
         {required && <span className="text-red-500 ml-1">*</span>}
       </Label>

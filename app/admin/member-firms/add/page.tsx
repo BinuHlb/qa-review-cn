@@ -74,6 +74,8 @@ export default function AddMemberFirmPage() {
         <GridForm columns={2}>
           <FormField label="Firm Name" required>
             <Input
+              id="firm-name"
+              name="name"
               value={formData.name}
               onChange={(e) => handleInputChange("name", e.target.value)}
               placeholder="Enter firm name"
@@ -83,6 +85,8 @@ export default function AddMemberFirmPage() {
 
           <FormField label="Email Address" required>
             <Input
+              id="email-address"
+              name="email"
               type="email"
               value={formData.email}
               onChange={(e) => handleInputChange("email", e.target.value)}
@@ -93,6 +97,8 @@ export default function AddMemberFirmPage() {
 
           <FormField label="Website">
             <Input
+              id="website"
+              name="website"
               value={formData.website}
               onChange={(e) => handleInputChange("website", e.target.value)}
               placeholder="Enter website URL"
@@ -101,6 +107,8 @@ export default function AddMemberFirmPage() {
 
           <FormField label="Established Year" required>
             <Input
+              id="established-year"
+              name="establishedYear"
               type="number"
               value={formData.establishedYear}
               onChange={(e) => handleInputChange("establishedYear", e.target.value)}
@@ -117,8 +125,8 @@ export default function AddMemberFirmPage() {
       <FormSection title="Status and Type">
         <GridForm columns={2}>
           <FormField label="Status" required>
-            <Select value={formData.status} onValueChange={(value) => handleInputChange("status", value)}>
-              <SelectTrigger>
+            <Select name="status" value={formData.status} onValueChange={(value) => handleInputChange("status", value)}>
+              <SelectTrigger id="status">
                 <SelectValue placeholder="Select status" />
               </SelectTrigger>
               <SelectContent>
@@ -131,8 +139,8 @@ export default function AddMemberFirmPage() {
           </FormField>
 
           <FormField label="Firm Type" required>
-            <Select value={formData.type} onValueChange={(value) => handleInputChange("type", value)}>
-              <SelectTrigger>
+            <Select name="type" value={formData.type} onValueChange={(value) => handleInputChange("type", value)}>
+              <SelectTrigger id="firm-type">
                 <SelectValue placeholder="Select type" />
               </SelectTrigger>
               <SelectContent>
@@ -146,8 +154,8 @@ export default function AddMemberFirmPage() {
           </FormField>
 
           <FormField label="Risk Level" required>
-            <Select value={formData.riskLevel} onValueChange={(value) => handleInputChange("riskLevel", value)}>
-              <SelectTrigger>
+            <Select name="riskLevel" value={formData.riskLevel} onValueChange={(value) => handleInputChange("riskLevel", value)}>
+              <SelectTrigger id="risk-level">
                 <SelectValue placeholder="Select risk level" />
               </SelectTrigger>
               <SelectContent>
@@ -159,8 +167,8 @@ export default function AddMemberFirmPage() {
           </FormField>
 
           <FormField label="Region" required>
-            <Select value={formData.region} onValueChange={(value) => handleInputChange("region", value)}>
-              <SelectTrigger>
+            <Select name="region" value={formData.region} onValueChange={(value) => handleInputChange("region", value)}>
+              <SelectTrigger id="region">
                 <SelectValue placeholder="Select region" />
               </SelectTrigger>
               <SelectContent>
@@ -180,6 +188,8 @@ export default function AddMemberFirmPage() {
         <GridForm columns={2}>
           <FormField label="Location" required>
             <Input
+              id="location"
+              name="location"
               value={formData.location}
               onChange={(e) => handleInputChange("location", e.target.value)}
               placeholder="Enter location"
@@ -189,6 +199,8 @@ export default function AddMemberFirmPage() {
 
           <FormField label="Contact Phone" required>
             <Input
+              id="contact-phone"
+              name="contactPhone"
               value={formData.contactPhone}
               onChange={(e) => handleInputChange("contactPhone", e.target.value)}
               placeholder="Enter contact phone"
@@ -198,6 +210,8 @@ export default function AddMemberFirmPage() {
 
           <FormField label="Contact Email" required>
             <Input
+              id="contact-email"
+              name="contactEmail"
               type="email"
               value={formData.contactEmail}
               onChange={(e) => handleInputChange("contactEmail", e.target.value)}
@@ -213,6 +227,8 @@ export default function AddMemberFirmPage() {
         <GridForm columns={2}>
           <FormField label="Employee Count" required>
             <Input
+              id="employee-count"
+              name="employeeCount"
               type="number"
               value={formData.employeeCount}
               onChange={(e) => handleInputChange("employeeCount", e.target.value)}
@@ -224,6 +240,8 @@ export default function AddMemberFirmPage() {
 
           <FormField label="Partner Count" required>
             <Input
+              id="partner-count"
+              name="partnerCount"
               type="number"
               value={formData.partnerCount}
               onChange={(e) => handleInputChange("partnerCount", e.target.value)}
@@ -235,6 +253,8 @@ export default function AddMemberFirmPage() {
 
           <FormField label="Compliance Score" required>
             <Input
+              id="compliance-score"
+              name="complianceScore"
               type="number"
               value={formData.complianceScore}
               onChange={(e) => handleInputChange("complianceScore", e.target.value)}
@@ -247,6 +267,8 @@ export default function AddMemberFirmPage() {
 
           <FormField label="Total Reviews" required>
             <Input
+              id="total-reviews"
+              name="totalReviews"
               type="number"
               value={formData.totalReviews}
               onChange={(e) => handleInputChange("totalReviews", e.target.value)}
@@ -292,6 +314,8 @@ export default function AddMemberFirmPage() {
         <GridForm columns={1}>
           <FormField label="Description">
             <Textarea
+              id="description"
+              name="description"
               value={formData.description}
               onChange={(e) => handleInputChange("description", e.target.value)}
               placeholder="Enter firm description"
@@ -301,6 +325,8 @@ export default function AddMemberFirmPage() {
 
           <FormField label="Notes">
             <Textarea
+              id="notes"
+              name="notes"
               value={formData.notes}
               onChange={(e) => handleInputChange("notes", e.target.value)}
               placeholder="Enter additional notes"

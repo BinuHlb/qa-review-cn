@@ -55,7 +55,7 @@ export const navigationData = {
         roles: ["admin"],
       },
       {
-        title: "Manage Reviewers",
+        title: "Reviewers",
         url: "/admin/reviewers",
         icon: Users,
         roles: ["admin"],

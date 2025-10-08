@@ -65,6 +65,8 @@ export default function AddReviewerPage() {
         <GridForm columns={2}>
           <FormField label="Full Name" required>
             <Input
+              id="full-name"
+              name="name"
               value={formData.name}
               onChange={(e) => handleInputChange("name", e.target.value)}
               placeholder="Enter full name"
@@ -74,6 +76,8 @@ export default function AddReviewerPage() {
 
           <FormField label="Email Address" required>
             <Input
+              id="email-address"
+              name="email"
               type="email"
               value={formData.email}
               onChange={(e) => handleInputChange("email", e.target.value)}
@@ -83,8 +87,8 @@ export default function AddReviewerPage() {
           </FormField>
 
           <FormField label="Role" required>
-            <Select value={formData.role} onValueChange={(value) => handleInputChange("role", value)}>
-              <SelectTrigger>
+            <Select name="role" value={formData.role} onValueChange={(value) => handleInputChange("role", value)}>
+              <SelectTrigger id="role">
                 <SelectValue placeholder="Select role" />
               </SelectTrigger>
               <SelectContent>
@@ -98,8 +102,8 @@ export default function AddReviewerPage() {
           </FormField>
 
           <FormField label="Status" required>
-            <Select value={formData.status} onValueChange={(value) => handleInputChange("status", value)}>
-              <SelectTrigger>
+            <Select name="status" value={formData.status} onValueChange={(value) => handleInputChange("status", value)}>
+              <SelectTrigger id="status">
                 <SelectValue placeholder="Select status" />
               </SelectTrigger>
               <SelectContent>
@@ -118,6 +122,8 @@ export default function AddReviewerPage() {
         <GridForm columns={2}>
           <FormField label="Specialization" required>
             <Input
+              id="specialization"
+              name="specialization"
               value={formData.specialization}
               onChange={(e) => handleInputChange("specialization", e.target.value)}
               placeholder="Enter specialization"
@@ -127,6 +133,8 @@ export default function AddReviewerPage() {
 
           <FormField label="Experience (Years)" required>
             <Input
+              id="experience"
+              name="experience"
               type="number"
               value={formData.experience}
               onChange={(e) => handleInputChange("experience", e.target.value)}
@@ -138,8 +146,8 @@ export default function AddReviewerPage() {
           </FormField>
 
           <FormField label="Workload" required>
-            <Select value={formData.workload} onValueChange={(value) => handleInputChange("workload", value)}>
-              <SelectTrigger>
+            <Select name="workload" value={formData.workload} onValueChange={(value) => handleInputChange("workload", value)}>
+              <SelectTrigger id="workload">
                 <SelectValue placeholder="Select workload" />
               </SelectTrigger>
               <SelectContent>
@@ -152,6 +160,8 @@ export default function AddReviewerPage() {
 
           <FormField label="Location" required>
             <Input
+              id="location"
+              name="location"
               value={formData.location}
               onChange={(e) => handleInputChange("location", e.target.value)}
               placeholder="Enter location"
@@ -187,6 +197,8 @@ export default function AddReviewerPage() {
         <GridForm columns={1}>
           <FormField label="Bio">
             <Textarea
+              id="bio"
+              name="bio"
               value={formData.bio}
               onChange={(e) => handleInputChange("bio", e.target.value)}
               placeholder="Enter reviewer bio"

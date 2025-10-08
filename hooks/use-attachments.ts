@@ -1,125 +1,114 @@
-/**
- * Custom hook for managing file attachments
- */
+"use client"
 
-import { useState, useEffect, useCallback } from "react"
-import { AttachmentsAPI } from "@/lib/api/attachments"
-import { type Attachment } from "@/lib/schemas/review.schema"
-import { useToast } from "@/hooks/use-toast"
+import { useState, useCallback } from "react"
+import { Attachment } from "@/components/shared/attachments-section"
 
-export function useAttachments(reviewId: string | null) {
-  const [attachments, setAttachments] = useState<Attachment[]>([])
-  const [isLoading, setIsLoading] = useState(false)
+interface UseAttachmentsProps {
+  initialAttachments?: Attachment[]
+  onUpload?: (files: File[]) => Promise<Attachment[]>
+  onRemove?: (attachmentId: string) => Promise<void>
+  onDownload?: (attachment: Attachment) => Promise<void>
+}
+
+export function useAttachments({
+  initialAttachments = [],
+  onUpload,
+  onRemove,
+  onDownload
+}: UseAttachmentsProps = {}) {
+  const [attachments, setAttachments] = useState<Attachment[]>(initialAttachments)
   const [isUploading, setIsUploading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const { toast } = useToast()
+  const [isRemoving, setIsRemoving] = useState<string | null>(null)
 
-  // Fetch attachments when reviewId changes
-  useEffect(() => {
-    if (!reviewId) {
-      setAttachments([])
+  const handleUpload = useCallback(async (files: File[]) => {
+    if (!onUpload) {
+      // Default behavior - create attachments locally
+      const newAttachments: Attachment[] = files.map((file, index) => ({
+        id: `attachment-${Date.now()}-${index}-${Math.random().toString(36).substr(2, 9)}`,
+        name: file.name,
+        size: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
+        uploadedBy: "Current User",
+        uploadedAt: new Date().toISOString(),
+        type: file.type
+      }))
+      
+      setAttachments(prev => [...prev, ...newAttachments])
       return
     }
 
-    const fetchAttachments = async () => {
-      try {
-        setIsLoading(true)
-        setError(null)
-        const data = await AttachmentsAPI.getByReviewId(reviewId)
-        setAttachments(data)
-      } catch (err) {
-        const message = err instanceof Error ? err.message : "Failed to fetch attachments"
-        setError(message)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchAttachments()
-  }, [reviewId])
-
-  // Upload files
-  const uploadFiles = useCallback(async (files: File[]) => {
-    if (!reviewId) return
-
+    setIsUploading(true)
     try {
-      setIsUploading(true)
-      const uploadPromises = files.map(file => AttachmentsAPI.upload(reviewId, file))
-      const newAttachments = await Promise.all(uploadPromises)
+      const newAttachments = await onUpload(files)
       setAttachments(prev => [...prev, ...newAttachments])
-      toast({
-        title: "Success",
-        description: `${files.length} file(s) uploaded successfully`,
-      })
-      return newAttachments
-    } catch (err) {
-      const message = err instanceof Error ? err.message : "Failed to upload files"
-      toast({
-        title: "Error",
-        description: message,
-        variant: "destructive",
-      })
-      throw err
+    } catch (error) {
+      console.error('Failed to upload files:', error)
+      // You could add toast notification here
     } finally {
       setIsUploading(false)
     }
-  }, [reviewId, toast])
+  }, [onUpload])
 
-  // Delete an attachment
-  const deleteAttachment = useCallback(async (id: string) => {
-    try {
-      await AttachmentsAPI.delete(id)
-      setAttachments(prev => prev.filter(att => att.id !== id))
-      toast({
-        title: "Success",
-        description: "File deleted successfully",
-      })
-    } catch (err) {
-      const message = err instanceof Error ? err.message : "Failed to delete file"
-      toast({
-        title: "Error",
-        description: message,
-        variant: "destructive",
-      })
-      throw err
+  const handleRemove = useCallback(async (attachmentId: string) => {
+    if (!onRemove) {
+      // Default behavior - remove locally
+      setAttachments(prev => prev.filter(att => att.id !== attachmentId))
+      return
     }
-  }, [toast])
 
-  // Download an attachment
-  const downloadAttachment = useCallback(async (id: string, filename: string) => {
+    setIsRemoving(attachmentId)
     try {
-      const blob = await AttachmentsAPI.download(id)
-      const url = window.URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = filename
-      document.body.appendChild(a)
-      a.click()
-      window.URL.revokeObjectURL(url)
-      document.body.removeChild(a)
-      toast({
-        title: "Success",
-        description: "File downloaded successfully",
-      })
-    } catch (err) {
-      const message = err instanceof Error ? err.message : "Failed to download file"
-      toast({
-        title: "Error",
-        description: message,
-        variant: "destructive",
-      })
-      throw err
+      await onRemove(attachmentId)
+      setAttachments(prev => prev.filter(att => att.id !== attachmentId))
+    } catch (error) {
+      console.error('Failed to remove attachment:', error)
+      // You could add toast notification here
+    } finally {
+      setIsRemoving(null)
     }
-  }, [toast])
+  }, [onRemove])
+
+  const handleDownload = useCallback(async (attachment: Attachment) => {
+    if (onDownload) {
+      try {
+        await onDownload(attachment)
+      } catch (error) {
+        console.error('Failed to download attachment:', error)
+        // You could add toast notification here
+      }
+    } else if (attachment.url) {
+      // Fallback to direct download
+      const link = document.createElement('a')
+      link.href = attachment.url
+      link.download = attachment.name
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    }
+  }, [onDownload])
+
+  const addAttachment = useCallback((attachment: Attachment) => {
+    setAttachments(prev => [...prev, attachment])
+  }, [])
+
+  const updateAttachment = useCallback((attachmentId: string, updates: Partial<Attachment>) => {
+    setAttachments(prev => prev.map(att => 
+      att.id === attachmentId ? { ...att, ...updates } : att
+    ))
+  }, [])
+
+  const clearAttachments = useCallback(() => {
+    setAttachments([])
+  }, [])
 
   return {
     attachments,
-    isLoading,
     isUploading,
-    error,
-    uploadFiles,
-    deleteAttachment,
-    downloadAttachment,
+    isRemoving,
+    handleUpload,
+    handleRemove,
+    handleDownload,
+    addAttachment,
+    updateAttachment,
+    clearAttachments
   }
 }
-
