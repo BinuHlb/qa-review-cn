@@ -26,6 +26,11 @@ interface ReviewActionPanelProps {
   onAttachmentDownload?: (attachment: Attachment) => Promise<void>
   showSubmitRating?: boolean
   onSubmitRating?: (reviewId: string, grade: string, notes: string) => Promise<void>
+  showTechnicalDirectorRating?: boolean
+  onTechnicalDirectorRating?: (reviewId: string, grade: string, notes: string) => Promise<void>
+  reviewers?: Array<{ id: string; name: string; role: string; status: string }>
+  onSubmit?: (data: Record<string, unknown>) => void
+  onAssignReviewer?: (review: Review) => void
 }
 
 export function ReviewActionPanel({ 
@@ -35,7 +40,9 @@ export function ReviewActionPanel({
   onAttachmentRemove,
   onAttachmentDownload,
   showSubmitRating = false,
-  onSubmitRating
+  onSubmitRating,
+  showTechnicalDirectorRating = false,
+  onTechnicalDirectorRating
 }: ReviewActionPanelProps) {
   
   const [selectedGrade, setSelectedGrade] = useState<string>(review.currentGrade)
@@ -68,6 +75,21 @@ export function ReviewActionPanel({
       setReviewNotes("")
     } catch (error) {
       console.error("Failed to submit rating:", error)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleTechnicalDirectorRating = async () => {
+    if (!selectedGrade || !onTechnicalDirectorRating) return
+    
+    setIsSubmitting(true)
+    try {
+      await onTechnicalDirectorRating(review.id, selectedGrade, reviewNotes)
+      // Reset form after successful submission
+      setReviewNotes("")
+    } catch (error) {
+      console.error("Failed to submit technical director rating:", error)
     } finally {
       setIsSubmitting(false)
     }
@@ -139,19 +161,34 @@ export function ReviewActionPanel({
       </div>
 
       {/* Submit Rating Form - Fixed at Bottom */}
-      {showSubmitRating && (
+      {(showSubmitRating || showTechnicalDirectorRating) && (
         <div className="flex-shrink-0 mt-4 pt-4 border-t">
           <div className="bg-muted/50 rounded-lg p-4 space-y-4">
             <div className="flex items-center gap-2 mb-2">
               <Star className="h-5 w-5 text-primary" />
-              <h3 className="font-semibold text-neutral-900">Submit Review Rating</h3>
+              <h3 className="font-semibold text-neutral-900">
+                {showTechnicalDirectorRating 
+                  ? "Technical Director Rating" 
+                  : "Submit Review Rating"}
+              </h3>
             </div>
+
+            {showTechnicalDirectorRating && (
+              <div className="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                <p className="text-xs text-blue-800">
+                  <strong>Reviewer:</strong> {review.reviewer}
+                </p>
+                <p className="text-xs text-blue-700 mt-1">
+                  Review the submitted work and provide your technical assessment
+                </p>
+              </div>
+            )}
 
             {/* Grade Selection */}
             <GradeSelect
               value={selectedGrade}
               onValueChange={setSelectedGrade}
-              label="Your Grade"
+              label={showTechnicalDirectorRating ? "Technical Director Grade" : "Your Grade"}
               placeholder="Select grade"
               required={true}
             />
@@ -159,11 +196,14 @@ export function ReviewActionPanel({
             {/* Review Notes */}
             <div className="space-y-2">
               <Label htmlFor="reviewNotes" className="text-xs font-medium text-muted-foreground">
-                Review Notes (Optional)
+                {showTechnicalDirectorRating ? "Technical Feedback (Optional)" : "Review Notes (Optional)"}
               </Label>
               <Textarea
                 id="reviewNotes"
-                placeholder="Add your review comments and findings..."
+                name="reviewNotes"
+                placeholder={showTechnicalDirectorRating 
+                  ? "Add your technical assessment and feedback..."
+                  : "Add your review comments and findings..."}
                 value={reviewNotes}
                 onChange={(e) => setReviewNotes(e.target.value)}
                 rows={3}
@@ -173,12 +213,16 @@ export function ReviewActionPanel({
 
             {/* Submit Button */}
             <Button
-              onClick={handleSubmitRating}
+              onClick={showTechnicalDirectorRating ? handleTechnicalDirectorRating : handleSubmitRating}
               disabled={isSubmitting || !selectedGrade}
               className="w-full h-9 bg-primary hover:bg-primary/90"
             >
               <Send className="h-4 w-4 mr-2" />
-              {isSubmitting ? "Submitting..." : "Submit Rating"}
+              {isSubmitting 
+                ? "Submitting..." 
+                : showTechnicalDirectorRating 
+                  ? "Submit Technical Rating" 
+                  : "Submit Rating"}
             </Button>
           </div>
         </div>
