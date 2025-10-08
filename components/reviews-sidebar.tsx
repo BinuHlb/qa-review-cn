@@ -267,12 +267,12 @@ export function ReviewsSidebar({
                   <SidebarMenuButton className="h-auto py-2 px-3">
                     <div className="flex items-center justify-between w-full">
                       <div className="flex items-center gap-2">
-                        <div className="flex items-center justify-center w-6 h-6 rounded-md bg-blue-100 dark:bg-blue-900/20">
-                          <Clock className="h-3 w-3 text-blue-600 dark:text-blue-400" />
+                        <div className="flex items-center justify-center w-6 h-6 rounded-md bg-primary/10">
+                          <Clock className="h-3 w-3 text-primary" />
                         </div>
                         <span className="text-xs font-medium">In Progress</span>
                       </div>
-                      <Badge variant="outline" className="text-xs h-5 px-2 text-blue-600 border-blue-200 bg-blue-50 dark:text-blue-400 dark:border-blue-800 dark:bg-blue-900/20">{stats.inProgress}</Badge>
+                      <Badge variant="outline" className="text-xs h-5 px-2 text-primary border-primary/20 bg-primary/10">{stats.inProgress}</Badge>
                     </div>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -345,8 +345,8 @@ export function ReviewsSidebar({
                 <SidebarMenuItem>
                   <div className="px-2 py-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <div className="flex items-center justify-center w-4 h-4 rounded-sm bg-blue-100 dark:bg-blue-900/30">
-                        <CheckCircle className="h-2.5 w-2.5 text-blue-600 dark:text-blue-400" />
+                      <div className="flex items-center justify-center w-4 h-4 rounded-sm bg-primary/10">
+                        <CheckCircle className="h-2.5 w-2.5 text-primary" />
                       </div>
                       <span className="text-xs font-medium text-sidebar-foreground/70">Status</span>
                     </div>

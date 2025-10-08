@@ -11,6 +11,8 @@ interface FormDatePickerProps {
   value?: string
   onChange?: (value: string) => void
   className?: string
+  id?: string
+  name?: string
 }
 
 export function FormDatePicker({ 
@@ -19,13 +21,20 @@ export function FormDatePicker({
   description, 
   value, 
   onChange, 
-  className 
+  className,
+  id,
+  name
 }: FormDatePickerProps) {
+  const fieldId = id || label.toLowerCase().replace(/\s+/g, '-')
+  const fieldName = name || fieldId
+  
   return (
-    <FormField label={label} required={required} description={description} className={className}>
+    <FormField label={label} required={required} description={description} className={className} htmlFor={fieldId}>
       <div className="relative">
         <Input
           type="date"
+          id={fieldId}
+          name={fieldName}
           value={value}
           onChange={(e) => onChange?.(e.target.value)}
           required={required}

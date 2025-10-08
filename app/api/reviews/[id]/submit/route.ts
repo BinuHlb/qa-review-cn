@@ -15,7 +15,7 @@ export async function POST(
     // const updatedReview = await db.review.update({
     //   where: { id },
     //   data: { 
-    //     status: 'Completed',
+    //     status: 'Submitted',
     //     lastUpdated: new Date()
     //   }
     // })
@@ -30,7 +30,7 @@ export async function POST(
     
     const updatedReview = {
       ...review,
-      status: 'Completed' as const,
+      status: 'Submitted' as const,
       lastUpdated: new Date().toISOString().split('T')[0],
     }
     

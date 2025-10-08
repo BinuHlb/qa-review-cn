@@ -73,7 +73,7 @@ export function CommentsSection({
           {comments.map((comment) => (
             <div key={comment.id} className="flex gap-3">
               <Avatar className="h-8 w-8 flex-shrink-0">
-                <AvatarFallback className={`${generateAvatarColor(comment.author)} text-white text-xs`}>
+                <AvatarFallback className={`${generateAvatarColor(comment.author)} text-xs`}>
                   {generateInitials(comment.author)}
                 </AvatarFallback>
               </Avatar>

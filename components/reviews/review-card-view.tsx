@@ -44,7 +44,7 @@ export function ReviewCardView({ reviews, onView, onEdit, onAssign }: ReviewCard
                 <div className="flex items-center gap-3 flex-1 min-w-0">
                   <Avatar className="h-10 w-10 flex-shrink-0">
                     <AvatarImage src="" alt={review.memberFirm} />
-                    <AvatarFallback className={`${generateAvatarColor(review.memberFirm)} text-white text-sm font-semibold`}>
+                    <AvatarFallback className={`${generateAvatarColor(review.memberFirm)} text-sm font-semibold`}>
                       {generateInitials(review.memberFirm)}
                     </AvatarFallback>
                   </Avatar>
@@ -115,11 +115,11 @@ export function ReviewCardView({ reviews, onView, onEdit, onAssign }: ReviewCard
 
               {/* Status Badges */}
               <div className="flex flex-wrap gap-1">
-                <Badge className={`${getGradeColor(review.currentGrade)} text-xs px-2 py-0.5`}>
-                  {review.currentGrade}
-                </Badge>
                 <Badge className={`${getStatusColor(review.status)} text-xs px-2 py-0.5`}>
                   {review.status}
+                </Badge>
+                <Badge className={`${getGradeColor(review.currentGrade)} text-xs px-2 py-0.5`}>
+                  {review.currentGrade}
                 </Badge>
                 <Badge variant="outline" className={`${getPriorityColor(review.priority)} text-xs px-2 py-0.5`}>
                   {review.priority}

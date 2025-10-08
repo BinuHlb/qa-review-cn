@@ -23,6 +23,8 @@ interface FormSelectProps {
   onChange?: (value: string) => void
   options: SelectOption[]
   className?: string
+  id?: string
+  name?: string
 }
 
 export function FormSelect({ 
@@ -33,12 +35,17 @@ export function FormSelect({
   value, 
   onChange, 
   options,
-  className 
+  className,
+  id,
+  name
 }: FormSelectProps) {
+  const fieldId = id || label.toLowerCase().replace(/\s+/g, '-')
+  const fieldName = name || fieldId
+  
   return (
-    <FormField label={label} required={required} description={description} className={className}>
-      <Select value={value} onValueChange={onChange}>
-        <SelectTrigger>
+    <FormField label={label} required={required} description={description} className={className} htmlFor={fieldId}>
+      <Select name={fieldName} value={value} onValueChange={onChange}>
+        <SelectTrigger id={fieldId}>
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>

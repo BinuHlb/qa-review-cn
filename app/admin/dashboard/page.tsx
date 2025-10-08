@@ -31,7 +31,7 @@ export default function AdminDashboardPage() {
     inProgress: mockReviews.filter(r => r.status === 'In Progress').length,
     pending: mockReviews.filter(r => r.status === 'Pending').length,
     overdue: mockReviews.filter(r => r.status === 'Overdue').length,
-    readyForFinal: mockReviews.filter(r => r.status === 'Completed').length,
+    readyForFinal: mockReviews.filter(r => r.status === 'Submitted').length,
   }
 
   return (
@@ -78,10 +78,10 @@ export default function AdminDashboardPage() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">In Progress</CardTitle>
-                <Clock className="h-4 w-4 text-blue-600" />
+                <Clock className="h-4 w-4 text-primary" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-blue-600">{stats.inProgress}</div>
+                <div className="text-2xl font-bold text-primary">{stats.inProgress}</div>
                 <p className="text-xs text-muted-foreground">
                   Being reviewed
                 </p>
@@ -159,7 +159,7 @@ export default function AdminDashboardPage() {
               <CardContent>
                 <div className="space-y-2">
                   <Link href="/admin/final-reviews">
-                    <Button size="sm" className="w-full bg-blue-600 hover:bg-blue-700">
+                    <Button size="sm" className="w-full">
                       <Star className="h-4 w-4 mr-2" />
                       Review & Grade
                     </Button>
@@ -181,7 +181,7 @@ export default function AdminDashboardPage() {
                   <Link href="/admin/reviewers">
                     <Button size="sm" variant="outline" className="w-full">
                       <Users className="h-4 w-4 mr-2" />
-                      Manage Reviewers
+                      Reviewers
                     </Button>
                   </Link>
                   <Link href="/admin/reviewers/add">
@@ -231,8 +231,8 @@ export default function AdminDashboardPage() {
                 {mockReviews.slice(0, 5).map((review) => (
                   <div key={review.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                        <span className="text-xs font-semibold text-blue-600">
+                      <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+                        <span className="text-xs font-semibold text-primary">
                           {review.memberFirm.charAt(0)}
                         </span>
                       </div>

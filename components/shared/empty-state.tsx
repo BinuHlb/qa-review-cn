@@ -23,8 +23,8 @@ interface EmptyStateProps {
 
 export function EmptyState({
   icon: Icon,
-  iconColor = "text-blue-600",
-  iconBgColor = "bg-blue-100",
+  iconColor = "text-primary",
+  iconBgColor = "bg-primary/10",
   title,
   description,
   steps = [],

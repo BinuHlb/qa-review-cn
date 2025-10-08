@@ -2,7 +2,6 @@ import {
   Users,
   FileText,
   BarChart3,
-  Settings,
   Shield,
   Building2,
   CheckCircle,
@@ -55,7 +54,7 @@ export const navigationData = {
         roles: ["admin"],
       },
       {
-        title: "Manage Reviewers",
+        title: "Reviewers",
         url: "/admin/reviewers",
         icon: Users,
         roles: ["admin"],
@@ -119,26 +118,22 @@ export const navigationData = {
         ],
       },
       {
-        title: "System Settings",
-        url: "/admin/settings",
-        icon: Settings,
+        title: "Technical Director",
+        url: "/director/reviews",
+        icon: Shield,
         roles: ["admin"],
         items: [
           {
-            title: "General",
-            url: "/admin/settings/general",
+            title: "Submitted Reviews",
+            url: "/director/reviews",
           },
           {
-            title: "Security",
-            url: "/admin/settings/security",
+            title: "Rating Dashboard",
+            url: "/director/ratings",
           },
           {
-            title: "Integrations",
-            url: "/admin/settings/integrations",
-          },
-          {
-            title: "Backup & Restore",
-            url: "/admin/settings/backup",
+            title: "Quality Standards",
+            url: "/director/standards",
           },
         ],
       },

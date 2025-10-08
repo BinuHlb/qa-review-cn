@@ -3,7 +3,7 @@ export interface MemberFirm {
   name: string
   email: string
   status: "active" | "inactive" | "pending" | "suspended"
-  type: "full_member" | "associate_member" | "affiliate_member"
+  type: "prospect" | "current_member"
   location: string
   country: string
   region: string
@@ -37,7 +37,7 @@ export const mockMemberFirms: MemberFirm[] = [
     name: "Anderson & Associates LLP",
     email: "contact@anderson-associates.com",
     status: "active",
-    type: "full_member",
+    type: "current_member",
     location: "New York, USA",
     country: "United States",
     region: "North America",
@@ -68,7 +68,7 @@ export const mockMemberFirms: MemberFirm[] = [
     name: "European Legal Partners",
     email: "info@european-legal.com",
     status: "active",
-    type: "full_member",
+    type: "current_member",
     location: "London, UK",
     country: "United Kingdom",
     region: "Europe",
@@ -99,7 +99,7 @@ export const mockMemberFirms: MemberFirm[] = [
     name: "Asia Pacific Legal Group",
     email: "contact@asiapacific-legal.com",
     status: "active",
-    type: "associate_member",
+    type: "current_member",
     location: "Singapore",
     country: "Singapore",
     region: "Asia Pacific",
@@ -130,7 +130,7 @@ export const mockMemberFirms: MemberFirm[] = [
     name: "Canadian Legal Services",
     email: "info@canadian-legal.ca",
     status: "active",
-    type: "full_member",
+    type: "current_member",
     location: "Toronto, Canada",
     country: "Canada",
     region: "North America",
@@ -161,7 +161,7 @@ export const mockMemberFirms: MemberFirm[] = [
     name: "Australian Legal Partners",
     email: "contact@australian-legal.com.au",
     status: "pending",
-    type: "affiliate_member",
+    type: "prospect",
     location: "Sydney, Australia",
     country: "Australia",
     region: "Asia Pacific",
@@ -192,7 +192,7 @@ export const mockMemberFirms: MemberFirm[] = [
     name: "Latin American Legal Group",
     email: "info@latin-legal.com",
     status: "active",
-    type: "associate_member",
+    type: "current_member",
     location: "São Paulo, Brazil",
     country: "Brazil",
     region: "South America",
@@ -223,7 +223,7 @@ export const mockMemberFirms: MemberFirm[] = [
     name: "Middle East Legal Services",
     email: "contact@middleeast-legal.ae",
     status: "suspended",
-    type: "affiliate_member",
+    type: "prospect",
     location: "Dubai, UAE",
     country: "United Arab Emirates",
     region: "Middle East",
@@ -254,7 +254,7 @@ export const mockMemberFirms: MemberFirm[] = [
     name: "African Legal Consortium",
     email: "info@african-legal.co.za",
     status: "active",
-    type: "associate_member",
+    type: "current_member",
     location: "Cape Town, South Africa",
     country: "South Africa",
     region: "Africa",
@@ -299,14 +299,23 @@ export const getStatusColor = (status: MemberFirm["status"]) => {
 
 export const getTypeColor = (type: MemberFirm["type"]) => {
   switch (type) {
-    case "full_member":
+    case "current_member":
       return "bg-blue-100 text-blue-800 border-blue-200"
-    case "associate_member":
+    case "prospect":
       return "bg-purple-100 text-purple-800 border-purple-200"
-    case "affiliate_member":
-      return "bg-orange-100 text-orange-800 border-orange-200"
     default:
       return "bg-gray-100 text-gray-800 border-gray-200"
+  }
+}
+
+export const getTypeLabel = (type: MemberFirm["type"]) => {
+  switch (type) {
+    case "current_member":
+      return "Current Member"
+    case "prospect":
+      return "Prospect"
+    default:
+      return type
   }
 }
 
@@ -339,16 +348,16 @@ export const generateFirmInitials = (firmName: string) => {
 
 export const generateFirmAvatarColor = (firmName: string) => {
   const colors = [
-    'bg-blue-500',
-    'bg-green-500',
-    'bg-purple-500',
-    'bg-orange-500',
-    'bg-pink-500',
-    'bg-indigo-500',
-    'bg-teal-500',
-    'bg-red-500',
-    'bg-yellow-500',
-    'bg-cyan-500'
+    'bg-blue-100 text-blue-600',
+    'bg-green-100 text-green-600',
+    'bg-purple-100 text-purple-600',
+    'bg-orange-100 text-orange-600',
+    'bg-pink-100 text-pink-600',
+    'bg-indigo-100 text-indigo-600',
+    'bg-teal-100 text-teal-600',
+    'bg-red-100 text-red-600',
+    'bg-yellow-100 text-yellow-600',
+    'bg-cyan-100 text-cyan-600'
   ]
 
   let hash = 0

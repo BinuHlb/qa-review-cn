@@ -7,11 +7,14 @@
  * Get color classes for grade badges
  */
 export function getGradeColor(grade: string): string {
-  if (grade.startsWith('A')) return "bg-green-100 text-green-800 border-green-200"
-  if (grade.startsWith('B')) return "bg-blue-100 text-blue-800 border-blue-200"
-  if (grade.startsWith('C')) return "bg-yellow-100 text-yellow-800 border-yellow-200"
-  if (grade.startsWith('D')) return "bg-orange-100 text-orange-800 border-orange-200"
-  return "bg-red-100 text-red-800 border-red-200"
+  switch (grade) {
+    case '1': return "bg-green-600 text-white border-green-600" // Best - 1 is best
+    case '2': return "bg-blue-600 text-white border-blue-600"   // Good
+    case '3': return "bg-yellow-600 text-white border-yellow-600" // Ok
+    case '4': return "bg-orange-600 text-white border-orange-600" // Bad
+    case '5': return "bg-red-600 text-white border-red-600"       // Poor - 5 is poor
+    default: return "bg-gray-600 text-white border-gray-600"
+  }
 }
 
 /**
@@ -21,18 +24,20 @@ export function getStatusColor(status: string): string {
   switch (status.toLowerCase()) {
     case 'completed': 
       return "bg-green-100 text-green-800 border-green-200"
+    case 'submitted':
+      return "bg-purple-100 text-purple-800 border-purple-200" // Ready for final review
     case 'in progress': 
       return "bg-blue-100 text-blue-800 border-blue-200"
     case 'pending': 
       return "bg-yellow-100 text-yellow-800 border-yellow-200"
     case 'overdue': 
       return "bg-red-100 text-red-800 border-red-200"
-    case 'submitted':
-      return "bg-purple-100 text-purple-800 border-purple-200"
-    case 'approved':
-      return "bg-green-100 text-green-800 border-green-200"
+    case 'cancelled':
+      return "bg-gray-100 text-gray-800 border-gray-200"
     case 'rejected':
       return "bg-red-100 text-red-800 border-red-200"
+    case 'approved':
+      return "bg-green-100 text-green-800 border-green-200"
     default: 
       return "bg-gray-100 text-gray-800 border-gray-200"
   }
@@ -115,16 +120,16 @@ export function generateInitials(name: string, maxLength: number = 2): string {
  */
 export function generateAvatarColor(name: string): string {
   const colors = [
-    'bg-blue-500',
-    'bg-green-500', 
-    'bg-purple-500',
-    'bg-orange-500',
-    'bg-pink-500',
-    'bg-indigo-500',
-    'bg-teal-500',
-    'bg-red-500',
-    'bg-yellow-500',
-    'bg-cyan-500'
+    'bg-blue-100 text-blue-600',
+    'bg-green-100 text-green-600', 
+    'bg-purple-100 text-purple-600',
+    'bg-orange-100 text-orange-600',
+    'bg-pink-100 text-pink-600',
+    'bg-indigo-100 text-indigo-600',
+    'bg-teal-100 text-teal-600',
+    'bg-red-100 text-red-600',
+    'bg-yellow-100 text-yellow-600',
+    'bg-cyan-100 text-cyan-600'
   ]
   
   let hash = 0

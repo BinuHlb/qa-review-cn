@@ -26,6 +26,7 @@ import {
   type MemberFirm, 
   getStatusColor, 
   getTypeColor, 
+  getTypeLabel,
   getRiskLevelColor,
   getComplianceScoreColor,
   generateFirmInitials,
@@ -54,7 +55,7 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
                 <div className="flex items-center gap-2 min-w-0 flex-1">
                   <Avatar className="h-8 w-8 flex-shrink-0">
                     <AvatarImage src={memberFirm.avatar} alt={memberFirm.name} />
-                    <AvatarFallback className={`${generateFirmAvatarColor(memberFirm.name)} text-white text-xs font-semibold`}>
+                    <AvatarFallback className={`${generateFirmAvatarColor(memberFirm.name)} text-xs font-semibold`}>
                       {generateFirmInitials(memberFirm.name)}
                     </AvatarFallback>
                   </Avatar>
@@ -87,7 +88,7 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
                     {memberFirm.status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                   </Badge>
                   <Badge className={`${getTypeColor(memberFirm.type)} text-xs px-2 py-0.5`}>
-                    {memberFirm.type.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                    {getTypeLabel(memberFirm.type)}
                   </Badge>
                 </div>
               </div>
@@ -102,15 +103,6 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
                 >
                   <Eye className="h-3 w-3 mr-1" />
                   <span className="hidden sm:inline">Review</span>
-                </Button>
-                
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => onView?.(memberFirm)}
-                  className="text-neutral-600 hover:text-neutral-900 h-7 w-7 p-0"
-                >
-                  <Eye className="h-3 w-3" />
                 </Button>
 
                 <DropdownMenu>
@@ -166,7 +158,7 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
                   {memberFirm.status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                 </Badge>
                 <Badge className={`${getTypeColor(memberFirm.type)} text-xs px-2 py-0.5`}>
-                  {memberFirm.type.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                  {getTypeLabel(memberFirm.type)}
                 </Badge>
               </div>
             </div>
@@ -184,7 +176,7 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
           <div className="flex items-center gap-3 flex-1 min-w-0">
             <Avatar className="h-10 w-10 flex-shrink-0">
               <AvatarImage src={memberFirm.avatar} alt={memberFirm.name} />
-              <AvatarFallback className={`${generateFirmAvatarColor(memberFirm.name)} text-white text-sm font-semibold`}>
+              <AvatarFallback className={`${generateFirmAvatarColor(memberFirm.name)} text-sm font-semibold`}>
                 {generateFirmInitials(memberFirm.name)}
               </AvatarFallback>
             </Avatar>
@@ -234,7 +226,7 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
             {memberFirm.status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
           </Badge>
           <Badge className={`${getTypeColor(memberFirm.type)} text-xs px-2 py-0.5`}>
-            {memberFirm.type.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+            {getTypeLabel(memberFirm.type)}
           </Badge>
           <Badge className={`${getRiskLevelColor(memberFirm.riskLevel)} text-xs px-2 py-0.5`}>
             <span className="hidden sm:inline">{memberFirm.riskLevel.toUpperCase()} RISK</span>
@@ -332,14 +324,6 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
           >
             <Star className="h-3 w-3 mr-1 flex-shrink-0" />
             <span className="truncate">Review</span>
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => onView?.(memberFirm)}
-            className="text-neutral-600 hover:text-neutral-900 h-7 w-7 p-0 flex-shrink-0"
-          >
-            <Eye className="h-3 w-3" />
           </Button>
           <Button
             variant="ghost"

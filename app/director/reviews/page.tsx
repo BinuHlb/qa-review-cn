@@ -2,41 +2,40 @@
 
 import { useState, useEffect, useMemo, useCallback } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
-import {
+import { 
   SidebarInset,
   SidebarProvider,
 } from "@/components/ui/sidebar"
 import { DashboardHeader } from "@/components/dashboard-header"
 import { EmptyState } from "@/components/shared/empty-state"
 import { ReviewView } from "@/components/reviews/review-view"
-import { FinalReviewScreen } from "@/components/reviews/final-review-screen"
-import { Star, Search, Filter, RotateCcw, List, Grid3X3, CheckCircle2, Award, Flag, MapPin } from "lucide-react"
+import { ReviewActionPanel } from "@/components/reviews/review-action-panel"
+import { Shield, Search, RotateCcw, List, Grid3X3, CheckCircle2, Award, Flag, MapPin } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 
-import { mockReviews } from "@/lib/mock-data"
-import { type Review } from "@/lib/schemas/review.schema"
-import { useFinalReview } from "@/hooks/use-final-review"
+import { mockReviews, type Review } from "@/lib/mock-data"
+import { type Attachment } from "@/components/shared/attachments-section"
 
-export default function FinalReviewsPage() {
+export default function DirectorReviewsPage() {
   const [reviews, setReviews] = useState<Review[]>([])
-  const [selectedReview, setSelectedReview] = useState<Review | null>(null)
   const [viewMode, setViewMode] = useState<"list" | "card">("list")
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("all")
   const [gradeFilter, setGradeFilter] = useState<string>("all")
   const [priorityFilter, setPriorityFilter] = useState<string>("all")
-  const [countryFilter, setCountryFilter] = useState<string>("all")
-  const { confirmFinalReview, rejectReview } = useFinalReview()
+  const [reviewerFilter, setReviewerFilter] = useState<string>("all")
+  const [selectedReview, setSelectedReview] = useState<Review | null>(null)
+  const [reviewAttachments, setReviewAttachments] = useState<Record<string, Attachment[]>>({})
 
-  // Load reviews
+  // Load submitted reviews (reviews that have been submitted by reviewers)
   useEffect(() => {
-    // Filter reviews that are ready for final review (completed by reviewer)
-    const readyForFinalReview = mockReviews.filter(review => 
-      review.status === 'Submitted'
+    // Filter reviews that are submitted (ready for technical director rating)
+    const submittedReviews = mockReviews.filter(review => 
+      review.status === 'Submitted' || review.status === 'Completed'
     )
-    setReviews(readyForFinalReview)
+    setReviews(submittedReviews)
   }, [])
 
   // Memoized filtered reviews based on all filter criteria
@@ -70,13 +69,13 @@ export default function FinalReviewsPage() {
       filtered = filtered.filter((review) => review.priority === priorityFilter)
     }
 
-    // Country filter
-    if (countryFilter !== "all") {
-      filtered = filtered.filter((review) => review.country === countryFilter)
+    // Reviewer filter
+    if (reviewerFilter !== "all") {
+      filtered = filtered.filter((review) => review.reviewer === reviewerFilter)
     }
 
     return filtered
-  }, [reviews, searchTerm, statusFilter, gradeFilter, priorityFilter, countryFilter])
+  }, [reviews, searchTerm, statusFilter, gradeFilter, priorityFilter, reviewerFilter])
 
   // Clear selection if filtered reviews change and selected review is no longer in the list
   useEffect(() => {
@@ -88,8 +87,8 @@ export default function FinalReviewsPage() {
   }, [filteredReviews, selectedReview])
 
   // Memoized unique filter values
-  const uniqueCountries = useMemo(() => 
-    Array.from(new Set(reviews.map((review) => review.country))).sort(),
+  const uniqueReviewers = useMemo(() => 
+    Array.from(new Set(reviews.map((review) => review.reviewer))).sort(),
     [reviews]
   )
   
@@ -109,55 +108,13 @@ export default function FinalReviewsPage() {
   )
 
   const hasActiveFilters = useMemo(() => 
-    Boolean(searchTerm || statusFilter !== "all" || gradeFilter !== "all" || priorityFilter !== "all" || countryFilter !== "all"),
-    [searchTerm, statusFilter, gradeFilter, priorityFilter, countryFilter]
+    Boolean(searchTerm || statusFilter !== "all" || gradeFilter !== "all" || priorityFilter !== "all" || reviewerFilter !== "all"),
+    [searchTerm, statusFilter, gradeFilter, priorityFilter, reviewerFilter]
   )
 
-  // Event handlers
+  // Handlers
   const handleViewReview = useCallback((review: Review) => {
     setSelectedReview(prev => prev?.id === review.id ? null : review)
-  }, [])
-
-  const handleConfirmFinalReview = useCallback(async (
-    reviewId: string, 
-    finalGrade: string, 
-    adminNotes: string
-  ) => {
-    try {
-      const updatedReview = await confirmFinalReview(reviewId, finalGrade, adminNotes)
-      setReviews(prev => prev.map(r => r.id === reviewId ? updatedReview : r))
-      setSelectedReview(null)
-    } catch {
-      // Error handling is done in the hook
-    }
-  }, [confirmFinalReview])
-
-  const handleRejectReview = useCallback(async (
-    reviewId: string, 
-    rejectionReason: string
-  ) => {
-    try {
-      const updatedReview = await rejectReview(reviewId, rejectionReason)
-      setReviews(prev => prev.map(r => r.id === reviewId ? updatedReview : r))
-      setSelectedReview(null)
-    } catch {
-      // Error handling is done in the hook
-    }
-  }, [rejectReview])
-
-  const handleBack = useCallback(() => {
-    setSelectedReview(null)
-  }, [])
-
-
-  const handleExportReviews = useCallback(() => {
-    // Export reviews logic
-    console.log("Export reviews")
-  }, [])
-
-  const handleFilter = useCallback(() => {
-    // Filter logic is now handled by the filteredReviews useMemo
-    // This function is kept for compatibility with FilterSection component
   }, [])
 
   const clearFilters = useCallback(() => {
@@ -165,85 +122,124 @@ export default function FinalReviewsPage() {
     setStatusFilter("all")
     setGradeFilter("all")
     setPriorityFilter("all")
-    setCountryFilter("all")
+    setReviewerFilter("all")
   }, [])
 
+  // Attachment handlers
+  const handleAttachmentUpload = useCallback(async (reviewId: string, files: File[]): Promise<Attachment[]> => {
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    
+    const newAttachments: Attachment[] = files.map((file, index) => ({
+      id: `attachment-${reviewId}-${Date.now()}-${index}`,
+      name: file.name,
+      size: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
+      uploadedBy: "Current User",
+      uploadedAt: new Date().toISOString(),
+      type: file.type
+    }))
+    
+    setReviewAttachments(prev => ({
+      ...prev,
+      [reviewId]: [...(prev[reviewId] || []), ...newAttachments]
+    }))
+    
+    return newAttachments
+  }, [])
 
+  const handleAttachmentRemove = useCallback(async (reviewId: string, attachmentId: string): Promise<void> => {
+    await new Promise(resolve => setTimeout(resolve, 500))
+    
+    setReviewAttachments(prev => ({
+      ...prev,
+      [reviewId]: (prev[reviewId] || []).filter(att => att.id !== attachmentId)
+    }))
+  }, [])
+
+  const handleAttachmentDownload = useCallback(async (attachment: Attachment): Promise<void> => {
+    console.log('Downloading attachment:', attachment.name)
+  }, [])
+
+  const handleTechnicalDirectorRating = useCallback(async (reviewId: string, grade: string, notes: string) => {
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    
+    console.log('Technical Director Rating:', { reviewId, grade, notes })
+    
+    // Update the review with new grade
+    setReviews(prev => prev.map(r => 
+      r.id === reviewId 
+        ? { ...r, currentGrade: grade as Review['currentGrade'], status: 'Completed' as Review['status'] }
+        : r
+    ))
+    
+    // Close the detail panel
+    setSelectedReview(null)
+  }, [])
 
   // Empty state configuration
   const emptyStateConfig = {
-    icon: Star,
+    icon: Shield,
     iconColor: "text-primary",
     iconBgColor: "bg-primary/10",
-    title: "Final Review Process",
-    description: "Select a completed review from the list to:",
+    title: "Technical Director Reviews",
+    description: "Select a submitted review to:",
     steps: [
       {
         number: "1",
-        title: "Review Details",
-        description: "Examine attachments, comments, and reviewer notes"
+        title: "Review Submission",
+        description: "Examine reviewer's work, documents, and ratings"
       },
       {
         number: "2", 
-        title: "Assign Final Grade",
-        description: "Set the official grade (1 to 5, where 1 is excellent and 5 is poor)"
+        title: "Provide Technical Rating",
+        description: "Give your technical assessment and grade"
       },
       {
         number: "3",
-        title: "Confirm or Reject", 
-        description: "Approve the review or send back for revision"
+        title: "Add Feedback", 
+        description: "Provide technical feedback and recommendations"
       }
     ],
     badge: {
-      text: `${reviews.length} reviews ready for final review`,
+      text: `${reviews.length} submitted reviews`,
       variant: "outline" as const
     }
   }
-
-  // Statistics for right sidebar
-  const sidebarStats = useMemo(() => ({
-    total: reviews.length,
-    completed: reviews.filter(r => r.status === 'Submitted').length,
-    inProgress: reviews.filter(r => r.status === 'In Progress').length,
-    pending: reviews.filter(r => r.status === 'Pending').length,
-    overdue: reviews.filter(r => r.status === 'Overdue').length
-  }), [reviews])
 
   return (
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
         <DashboardHeader />
-        <div className="flex h-[calc(100vh-60px)]">
+        <div className="flex h-[calc(100vh-85px)]">
           {/* Main Content - Review List with Filters */}
           <div className="flex-1 flex flex-col overflow-hidden p-6">
             {/* Header with Filters */}
             <div className="flex-shrink-0 mb-6">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  {/* <h1 className="text-2xl font-bold text-gray-900">Final Reviews</h1> */}
                   <p className="text-sm text-gray-600">
-                    {filteredReviews.length} of {reviews.length} reviews ready for final review
+                    {filteredReviews.length} of {reviews.length} submitted reviews
                   </p>
                 </div>
                 <div className="flex items-center gap-1 p-1 bg-muted rounded-md">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setViewMode("list")}
-                      className={`h-8 px-3 ${viewMode === "list" ? "bg-background shadow-sm" : ""}`}
-                    >
-                      <List className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setViewMode("card")}
-                      className={`h-8 px-3 ${viewMode === "card" ? "bg-background shadow-sm" : ""}`}
-                    >
-                      <Grid3X3 className="h-4 w-4" />
-                    </Button>
-                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setViewMode("list")}
+                    className={`h-8 px-3 ${viewMode === "list" ? "bg-background shadow-sm" : ""}`}
+                  >
+                    <List className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setViewMode("card")}
+                    className={`h-8 px-3 ${viewMode === "card" ? "bg-background shadow-sm" : ""}`}
+                  >
+                    <Grid3X3 className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
 
               {/* Filters */}
@@ -253,6 +249,8 @@ export default function FinalReviewsPage() {
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
+                      id="search"
+                      name="search"
                       placeholder="Search..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
@@ -262,8 +260,8 @@ export default function FinalReviewsPage() {
                 </div>
 
                 {/* Status Filter */}
-                <Select value={statusFilter} onValueChange={setStatusFilter}>
-                  <SelectTrigger className="w-[140px] h-9">
+                <Select name="status" value={statusFilter} onValueChange={setStatusFilter}>
+                  <SelectTrigger id="status-filter" className="w-[140px] h-9">
                     <CheckCircle2 className="h-4 w-4 mr-2 text-muted-foreground" />
                     <SelectValue placeholder="Status" />
                   </SelectTrigger>
@@ -278,8 +276,8 @@ export default function FinalReviewsPage() {
                 </Select>
 
                 {/* Grade Filter */}
-                <Select value={gradeFilter} onValueChange={setGradeFilter}>
-                  <SelectTrigger className="w-[130px] h-9">
+                <Select name="grade" value={gradeFilter} onValueChange={setGradeFilter}>
+                  <SelectTrigger id="grade-filter" className="w-[130px] h-9">
                     <Award className="h-4 w-4 mr-2 text-muted-foreground" />
                     <SelectValue placeholder="Grade" />
                   </SelectTrigger>
@@ -294,8 +292,8 @@ export default function FinalReviewsPage() {
                 </Select>
 
                 {/* Priority Filter */}
-                <Select value={priorityFilter} onValueChange={setPriorityFilter}>
-                  <SelectTrigger className="w-[130px] h-9">
+                <Select name="priority" value={priorityFilter} onValueChange={setPriorityFilter}>
+                  <SelectTrigger id="priority-filter" className="w-[130px] h-9">
                     <Flag className="h-4 w-4 mr-2 text-muted-foreground" />
                     <SelectValue placeholder="Priority" />
                   </SelectTrigger>
@@ -309,17 +307,17 @@ export default function FinalReviewsPage() {
                   </SelectContent>
                 </Select>
 
-                {/* Country Filter */}
-                <Select value={countryFilter} onValueChange={setCountryFilter}>
-                  <SelectTrigger className="w-[140px] h-9">
+                {/* Reviewer Filter */}
+                <Select name="reviewer" value={reviewerFilter} onValueChange={setReviewerFilter}>
+                  <SelectTrigger id="reviewer-filter" className="w-[140px] h-9">
                     <MapPin className="h-4 w-4 mr-2 text-muted-foreground" />
-                    <SelectValue placeholder="Country" />
+                    <SelectValue placeholder="Reviewer" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Countries</SelectItem>
-                    {uniqueCountries.map((country) => (
-                      <SelectItem key={country} value={country}>
-                        {country}
+                    <SelectItem value="all">All Reviewers</SelectItem>
+                    {uniqueReviewers.map((reviewer) => (
+                      <SelectItem key={reviewer} value={reviewer}>
+                        {reviewer}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -351,14 +349,19 @@ export default function FinalReviewsPage() {
               />
             </div>
           </div>
-          {/* Right Panel - Final Review Screen */}
+
+          {/* Right Panel - Review Details */}
           <div className="w-96 border-l bg-background overflow-y-auto">
             {selectedReview ? (
-              <FinalReviewScreen
+              <ReviewActionPanel
+                key={selectedReview.id}
                 review={selectedReview}
-                onConfirm={handleConfirmFinalReview}
-                onReject={handleRejectReview}
-                onBack={handleBack}
+                initialAttachments={reviewAttachments[selectedReview.id] || []}
+                onAttachmentUpload={(files) => handleAttachmentUpload(selectedReview.id, files)}
+                onAttachmentRemove={(attachmentId) => handleAttachmentRemove(selectedReview.id, attachmentId)}
+                onAttachmentDownload={handleAttachmentDownload}
+                showTechnicalDirectorRating={true}
+                onTechnicalDirectorRating={handleTechnicalDirectorRating}
               />
             ) : (
               <div className="h-full flex items-center justify-center p-6">
@@ -366,10 +369,9 @@ export default function FinalReviewsPage() {
               </div>
             )}
           </div>
-
-          
         </div>
       </SidebarInset>
     </SidebarProvider>
   )
 }
+

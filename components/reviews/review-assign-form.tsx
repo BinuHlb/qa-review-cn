@@ -10,7 +10,8 @@ import { FormDatePicker } from "@/components/shared/form-date-picker"
 import { FormTextarea } from "@/components/shared/form-textarea"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { UserPlus, X, Building2, Award } from "lucide-react"
+import { Checkbox } from "@/components/ui/checkbox"
+import { UserPlus, X, Building2, Award, AlertTriangle } from "lucide-react"
 import { type Review, getGradeColor, getStatusColor } from "@/lib/mock-data"
 
 interface ReviewAssignFormProps {
@@ -21,11 +22,13 @@ interface ReviewAssignFormProps {
     type: string
     dueDate: string
     notes: string
+    forceAssignment?: boolean
   }) => void
   onCancel: () => void
-  reviewers?: Array<{ id: string; name: string; role: string; status: string }>
+  reviewers?: Array<{ id: string; name: string; role: string; status: string; email?: string; specialization?: string[] }>
   priorities?: Array<{ value: string; label: string }>
   types?: Array<{ value: string; label: string }>
+  preSelectedReviewerId?: string
 }
 
 export function ReviewAssignForm({ 
@@ -44,17 +47,19 @@ export function ReviewAssignForm({
     { value: "compliance", label: "Compliance" },
     { value: "quality", label: "Quality Review" },
     { value: "risk", label: "Risk Assessment" }
-  ]
+  ],
+  preSelectedReviewerId = ""
 }: ReviewAssignFormProps) {
   const [formData, setFormData] = useState({
-    reviewerId: "",
+    reviewerId: preSelectedReviewerId,
     priority: "",
     type: "",
     dueDate: "",
-    notes: ""
+    notes: "",
+    forceAssignment: false
   })
 
-  const handleInputChange = (field: string, value: string) => {
+  const handleInputChange = (field: string, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }))
   }
 
@@ -99,7 +104,7 @@ export function ReviewAssignForm({
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <Avatar className="h-12 w-12">
-              <AvatarFallback className={`${generateFirmAvatarColor(review.memberFirm)} text-white text-sm font-semibold`}>
+              <AvatarFallback className={`${generateFirmAvatarColor(review.memberFirm)} text-sm font-semibold`}>
                 {generateFirmInitials(review.memberFirm)}
               </AvatarFallback>
             </Avatar>
@@ -228,6 +233,38 @@ export function ReviewAssignForm({
                 rows={6}
               />
             </GridForm>
+          </FormSection>
+
+          {/* Force Assignment Option */}
+          <FormSection title="Assignment Options">
+            <div className="space-y-3">
+              <div className="flex items-start space-x-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                <Checkbox
+                  id="forceAssignment"
+                  name="forceAssignment"
+                  checked={formData.forceAssignment}
+                  onCheckedChange={(checked) => handleInputChange("forceAssignment", checked as boolean)}
+                  className="mt-0.5"
+                />
+                <div className="flex-1">
+                  <label
+                    htmlFor="forceAssignment"
+                    className="text-sm font-medium text-amber-800 cursor-pointer"
+                  >
+                    Force Assignment
+                  </label>
+                  <p className="text-xs text-amber-700 mt-1">
+                    Override reviewer availability and assign immediately, even if the reviewer is currently busy or has reached their capacity.
+                  </p>
+                  {formData.forceAssignment && (
+                    <div className="flex items-center gap-2 mt-2 text-xs text-amber-800">
+                      <AlertTriangle className="h-3 w-3" />
+                      <span className="font-medium">This will override normal assignment rules</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
           </FormSection>
         </div>
       </div>

@@ -69,16 +69,16 @@ export function ReviewListView({ reviews, onEdit, onAssign }: ReviewListViewProp
 
   const generateFirmAvatarColor = (firmName: string) => {
     const colors = [
-      'bg-blue-500',
-      'bg-green-500', 
-      'bg-purple-500',
-      'bg-orange-500',
-      'bg-pink-500',
-      'bg-indigo-500',
-      'bg-teal-500',
-      'bg-red-500',
-      'bg-yellow-500',
-      'bg-cyan-500'
+      'bg-blue-100 text-blue-600',
+      'bg-green-100 text-green-600', 
+      'bg-purple-100 text-purple-600',
+      'bg-orange-100 text-orange-600',
+      'bg-pink-100 text-pink-600',
+      'bg-indigo-100 text-indigo-600',
+      'bg-teal-100 text-teal-600',
+      'bg-red-100 text-red-600',
+      'bg-yellow-100 text-yellow-600',
+      'bg-cyan-100 text-cyan-600'
     ]
     
     let hash = 0
@@ -104,7 +104,7 @@ export function ReviewListView({ reviews, onEdit, onAssign }: ReviewListViewProp
                     <div className="flex items-center gap-2 min-w-0 flex-1">
                       <Avatar className="h-8 w-8 flex-shrink-0">
                         <AvatarImage src="" alt={review.memberFirm} />
-                        <AvatarFallback className={`${generateFirmAvatarColor(review.memberFirm)} text-white text-xs font-semibold`}>
+                        <AvatarFallback className={`${generateFirmAvatarColor(review.memberFirm)} text-xs font-semibold`}>
                           {generateFirmInitials(review.memberFirm)}
                         </AvatarFallback>
                       </Avatar>
@@ -131,11 +131,11 @@ export function ReviewListView({ reviews, onEdit, onAssign }: ReviewListViewProp
                     
                     {/* Status Badges */}
                     <div className="flex items-center gap-1 flex-shrink-0">
-                      <Badge className={`${getGradeColor(review.currentGrade)} text-xs px-2 py-0.5`}>
-                        {review.currentGrade}
-                      </Badge>
                       <Badge className={`${getStatusColor(review.status)} text-xs px-2 py-0.5`}>
                         {review.status}
+                      </Badge>
+                      <Badge className={`${getGradeColor(review.currentGrade)} text-xs px-2 py-0.5`}>
+                        {review.currentGrade}
                       </Badge>
                     </div>
                   </div>
@@ -215,7 +215,7 @@ export function ReviewListView({ reviews, onEdit, onAssign }: ReviewListViewProp
                   <div className="flex items-center gap-2 p-3 bg-neutral-50 rounded-lg">
                     <Avatar className="h-6 w-6">
                       <AvatarImage src="" alt={selectedReview.memberFirm} />
-                      <AvatarFallback className={`${generateFirmAvatarColor(selectedReview.memberFirm)} text-white text-xs font-semibold`}>
+                      <AvatarFallback className={`${generateFirmAvatarColor(selectedReview.memberFirm)} text-xs font-semibold`}>
                         {generateFirmInitials(selectedReview.memberFirm)}
                       </AvatarFallback>
                     </Avatar>
@@ -253,7 +253,7 @@ export function ReviewListView({ reviews, onEdit, onAssign }: ReviewListViewProp
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-neutral-600">Reviewer Status</label>
                   <div className="p-3 bg-neutral-50 rounded-lg">
-                    <Badge variant="outline" className={`${getReviewerStatusColor(selectedReview.reviewerStatus)} hover:opacity-80 transition-opacity`}>
+                    <Badge variant="outline" className={`${getReviewerStatusColor(selectedReview.reviewerStatus)}`}>
                       {selectedReview.reviewerStatus}
                     </Badge>
                   </div>
@@ -261,7 +261,7 @@ export function ReviewListView({ reviews, onEdit, onAssign }: ReviewListViewProp
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-neutral-600">Partner Status</label>
                   <div className="p-3 bg-neutral-50 rounded-lg">
-                    <Badge variant="outline" className={`${getReviewerStatusColor(selectedReview.partnerStatus)} hover:opacity-80 transition-opacity`}>
+                    <Badge variant="outline" className={`${getReviewerStatusColor(selectedReview.partnerStatus)}`}>
                       {selectedReview.partnerStatus}
                     </Badge>
                   </div>
@@ -291,7 +291,7 @@ export function ReviewListView({ reviews, onEdit, onAssign }: ReviewListViewProp
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-neutral-600">Current Grade</label>
                   <div className="p-3 bg-neutral-50 rounded-lg">
-                    <Badge className={`${getGradeColor(selectedReview.currentGrade)} hover:opacity-80 transition-opacity`}>
+                    <Badge className={`${getGradeColor(selectedReview.currentGrade)}`}>
                       {selectedReview.currentGrade}
                     </Badge>
                   </div>
@@ -299,7 +299,7 @@ export function ReviewListView({ reviews, onEdit, onAssign }: ReviewListViewProp
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-neutral-600">Overall Status</label>
                   <div className="p-3 bg-neutral-50 rounded-lg">
-                    <Badge className={`${getStatusColor(selectedReview.status)} hover:opacity-80 transition-opacity`}>
+                    <Badge className={`${getStatusColor(selectedReview.status)}`}>
                       {selectedReview.status}
                     </Badge>
                   </div>
