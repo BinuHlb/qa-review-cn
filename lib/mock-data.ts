@@ -11,7 +11,7 @@ export interface Document {
 export interface Review {
   id: string
   memberFirm: string
-  type: string
+  type: 'Current Member' | 'Prospect'
   reviewer: string
   country: string
   reviewerStatus: 'Active' | 'Inactive' | 'Pending'
@@ -30,7 +30,7 @@ export const mockReviews: Review[] = [
   {
     id: 'REV-001',
     memberFirm: 'Deloitte & Associates',
-    type: 'Annual Review',
+    type: 'Current Member',
     reviewer: 'John Smith',
     country: 'United States',
     reviewerStatus: 'Active',
@@ -39,7 +39,7 @@ export const mockReviews: Review[] = [
     endDate: '2024-03-15',
     currentGrade: '1',
     status: 'In Progress',
-    description: 'Comprehensive annual quality assurance review',
+    description: 'Current member quality assurance review',
     priority: 'High',
     lastUpdated: '2024-01-20',
     documents: [
@@ -80,7 +80,7 @@ export const mockReviews: Review[] = [
   {
     id: 'REV-002',
     memberFirm: 'PwC Global',
-    type: 'Compliance Review',
+    type: 'Prospect',
     reviewer: 'Sarah Johnson',
     country: 'United Kingdom',
     reviewerStatus: 'Active',
@@ -89,7 +89,7 @@ export const mockReviews: Review[] = [
     endDate: '2024-02-28',
     currentGrade: '2',
     status: 'Submitted',
-    description: 'Regulatory compliance assessment',
+    description: 'Prospect review and assessment',
     priority: 'High',
     lastUpdated: '2024-02-28',
     documents: [
@@ -114,7 +114,7 @@ export const mockReviews: Review[] = [
   {
     id: 'REV-003',
     memberFirm: 'KPMG International',
-    type: 'Risk Assessment',
+    type: 'Current Member',
     reviewer: 'Michael Chen',
     country: 'Canada',
     reviewerStatus: 'Active',
@@ -123,14 +123,14 @@ export const mockReviews: Review[] = [
     endDate: '2024-04-20',
     currentGrade: '1',
     status: 'In Progress',
-    description: 'Enterprise risk management review',
+    description: 'Current member quality assurance review',
     priority: 'Medium',
     lastUpdated: '2024-01-25'
   },
   {
     id: 'REV-004',
     memberFirm: 'EY Global',
-    type: 'Quality Audit',
+    type: 'Prospect',
     reviewer: 'Emily Davis',
     country: 'Australia',
     reviewerStatus: 'Inactive',
@@ -139,14 +139,14 @@ export const mockReviews: Review[] = [
     endDate: '2024-01-31',
     currentGrade: '3',
     status: 'Overdue',
-    description: 'Quality management system audit',
+    description: 'Prospect assessment and review',
     priority: 'High',
     lastUpdated: '2024-01-15'
   },
   {
     id: 'REV-005',
     memberFirm: 'Grant Thornton',
-    type: 'Performance Review',
+    type: 'Current Member',
     reviewer: 'David Wilson',
     country: 'Germany',
     reviewerStatus: 'Active',
@@ -155,14 +155,14 @@ export const mockReviews: Review[] = [
     endDate: '2024-05-15',
     currentGrade: '2',
     status: 'Pending',
-    description: 'Operational performance evaluation',
+    description: 'Current member operational review',
     priority: 'Medium',
     lastUpdated: '2024-02-10'
   },
   {
     id: 'REV-006',
     memberFirm: 'BDO International',
-    type: 'Financial Review',
+    type: 'Prospect',
     reviewer: 'Lisa Anderson',
     country: 'France',
     reviewerStatus: 'Active',
@@ -171,14 +171,14 @@ export const mockReviews: Review[] = [
     endDate: '2024-02-05',
     currentGrade: '1',
     status: 'Submitted',
-    description: 'Financial controls and procedures review',
+    description: 'Prospect review and compliance check',
     priority: 'High',
     lastUpdated: '2024-02-05'
   },
   {
     id: 'REV-007',
     memberFirm: 'RSM International',
-    type: 'IT Security Review',
+    type: 'Current Member',
     reviewer: 'Robert Taylor',
     country: 'Japan',
     reviewerStatus: 'Pending',
@@ -187,14 +187,14 @@ export const mockReviews: Review[] = [
     endDate: '2024-06-01',
     currentGrade: '2',
     status: 'Pending',
-    description: 'Information technology security assessment',
+    description: 'Current member standards assessment',
     priority: 'High',
     lastUpdated: '2024-02-28'
   },
   {
     id: 'REV-008',
     memberFirm: 'Crowe Global',
-    type: 'Environmental Review',
+    type: 'Prospect',
     reviewer: 'Jennifer Brown',
     country: 'Netherlands',
     reviewerStatus: 'Active',
@@ -203,14 +203,14 @@ export const mockReviews: Review[] = [
     endDate: '2024-04-20',
     currentGrade: '1',
     status: 'In Progress',
-    description: 'Environmental compliance and sustainability review',
+    description: 'Prospect compliance and quality review',
     priority: 'Medium',
     lastUpdated: '2024-02-25'
   },
   {
     id: 'REV-009',
     memberFirm: 'Mazars',
-    type: 'Operational Review',
+    type: 'Current Member',
     reviewer: 'Christopher Lee',
     country: 'Singapore',
     reviewerStatus: 'Active',
@@ -219,14 +219,14 @@ export const mockReviews: Review[] = [
     endDate: '2024-03-30',
     currentGrade: '3',
     status: 'In Progress',
-    description: 'Operational efficiency and process review',
+    description: 'Current member performance evaluation',
     priority: 'Low',
     lastUpdated: '2024-02-01'
   },
   {
     id: 'REV-010',
     memberFirm: 'Nexia International',
-    type: 'Governance Review',
+    type: 'Prospect',
     reviewer: 'Amanda Garcia',
     country: 'Brazil',
     reviewerStatus: 'Inactive',
@@ -235,7 +235,7 @@ export const mockReviews: Review[] = [
     endDate: '2024-01-31',
     currentGrade: '4',
     status: 'Cancelled',
-    description: 'Corporate governance and ethics review',
+    description: 'Prospect governance and ethics review',
     priority: 'Medium',
     lastUpdated: '2024-01-15'
   }

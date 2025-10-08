@@ -43,10 +43,8 @@ export function ReviewAssignForm({
     { value: "urgent", label: "Urgent" }
   ],
   types = [
-    { value: "audit", label: "Audit" },
-    { value: "compliance", label: "Compliance" },
-    { value: "quality", label: "Quality Review" },
-    { value: "risk", label: "Risk Assessment" }
+    { value: "Current Member", label: "Current Member" },
+    { value: "Prospect", label: "Prospect" }
   ],
   preSelectedReviewerId = ""
 }: ReviewAssignFormProps) {

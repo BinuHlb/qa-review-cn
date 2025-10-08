@@ -7,7 +7,7 @@ import { z } from "zod"
 export const reviewSchema = z.object({
   id: z.string(),
   memberFirm: z.string().min(1, "Member firm is required"),
-  type: z.string().min(1, "Review type is required"),
+  type: z.enum(['Current Member', 'Prospect']),
   reviewer: z.string().min(1, "Reviewer is required"),
   reviewerId: z.string().optional(),
   country: z.string().min(1, "Country is required"),

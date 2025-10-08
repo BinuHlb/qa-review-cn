@@ -156,11 +156,8 @@ export function ReviewAssignDrawer({
   ]
 
   const types = [
-    { value: "Initial", label: "Initial Review" },
-    { value: "Follow-up", label: "Follow-up Review" },
-    { value: "Compliance", label: "Compliance Review" },
-    { value: "Quality", label: "Quality Assurance" },
-    { value: "Risk", label: "Risk Assessment" }
+    { value: "Current Member", label: "Current Member" },
+    { value: "Prospect", label: "Prospect" }
   ]
 
   if (!review) return null
