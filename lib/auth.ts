@@ -15,12 +15,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         // For development only - accept any credentials
         if (credentials?.email && credentials?.password) {
           // Determine role based on email for development
-          let role = "reviewer" // default role
+          let role = "admin" // default role
           const email = credentials.email as string
-          if (email.includes("admin")) role = "admin"
-          else if (email.includes("ceo")) role = "ceo"
+          if (email.includes("ceo")) role = "ceo"
           else if (email.includes("director")) role = "technical_director"
           else if (email.includes("member")) role = "member_firm"
+          else if (email.includes("reviewer")) role = "reviewer"
           
           return {
             id: "1",

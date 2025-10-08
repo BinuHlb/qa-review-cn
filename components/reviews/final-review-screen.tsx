@@ -16,7 +16,8 @@ import {
 import { type Review, type Comment, type Attachment } from "@/lib/schemas/review.schema"
 import { useToast } from "@/hooks/use-toast"
 import { ScrollablePanel } from "@/components/shared/scrollable-panel"
-import { AttachmentsSection } from "@/components/shared/attachments-section"
+import { DocumentViewer, type Document } from "@/components/shared/document-viewer"
+import { ReviewTimeline } from "@/components/shared/review-timeline"
 import { GradeSelect } from "@/components/shared/grade-select"
 import { 
   getGradeColor, 
@@ -215,18 +216,30 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
       header={header}
       contentClassName="p-3"
     >
-      <div className="space-y-3">
-        {/* Attachments */}
-        <AttachmentsSection className="shadow-none border-none bg-muted/50 rounded-lg"
-          attachments={attachments.map(att => ({
-            ...att,
-            size: typeof att.size === 'number' ? formatFileSize(att.size) : att.size,
-            uploadedAt: new Date(att.uploadedAt).toISOString().split('T')[0]
+      <div className="space-y-4">
+        {/* Review Timeline */}
+        <ReviewTimeline
+          review={review}
+          reviewerGrade={review.currentGrade}
+          reviewerNotes="Initial review completed"
+          reviewerDate={review.lastUpdated}
+          technicalDirectorGrade={review.status === 'Submitted' || review.status === 'Completed' ? review.currentGrade : undefined}
+          technicalDirectorNotes={review.status === 'Submitted' || review.status === 'Completed' ? "Technical assessment completed" : undefined}
+          technicalDirectorDate={review.status === 'Submitted' || review.status === 'Completed' ? review.lastUpdated : undefined}
+          finalReviewStatus={review.status === 'Completed' ? 'approved' : 'pending'}
+        />
+
+        {/* Review Documents */}
+        <DocumentViewer
+          documents={attachments.map(att => ({
+            id: att.id,
+            name: att.name,
+            size: typeof att.size === 'number' ? formatFileSize(att.size) : String(att.size),
+            uploadedBy: att.uploadedBy,
+            uploadedAt: new Date(att.uploadedAt).toISOString(),
+            type: att.type,
+            url: att.url
           }))}
-          onUpload={handleFileUpload}
-          onRemove={handleFileRemove}
-          showUpload={false}
-          maxHeight="max-h-48"
         />
 
         {/* Current Grade - Highlighted */}
