@@ -218,46 +218,42 @@ export function ReviewAssignDrawer({
               </div>
               <div className="grid grid-cols-3 gap-3">
                 {reviewTypes.map((type) => (
-                  <Card
+                  <label
                     key={type.value}
-                    className={`cursor-pointer transition-all hover:shadow-md ${
+                    className={`relative flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
                       formData.reviewType === type.value
-                        ? "border-primary shadow-sm ring-2 ring-primary/20"
-                        : "border-border hover:border-primary/50"
+                        ? "border-primary bg-primary/5"
+                        : "border-muted hover:border-primary/50 hover:bg-accent"
                     }`}
-                    onClick={() => handleInputChange("reviewType", type.value)}
                   >
-                    <CardContent className="p-4">
-                      <div className="space-y-3">
-                        <div className="flex items-center justify-between">
-                          <div className={`h-5 w-5 rounded-full border-2 flex items-center justify-center transition-all ${
-                            formData.reviewType === type.value
-                              ? "border-primary bg-primary"
-                              : "border-muted-foreground/40"
-                          }`}>
-                            {formData.reviewType === type.value && (
-                              <div className="h-2 w-2 rounded-full bg-white" />
-                            )}
-                          </div>
-                          <Clock className={`h-4 w-4 ${
-                            formData.reviewType === type.value ? "text-primary" : "text-muted-foreground"
-                          }`} />
-                        </div>
-                        <div className="space-y-1">
-                          <p className={`text-sm font-semibold leading-tight ${
-                            formData.reviewType === type.value ? "text-foreground" : "text-foreground/80"
-                          }`}>
-                            {type.label}
-                          </p>
-                          <p className={`text-xs font-medium ${
-                            formData.reviewType === type.value ? "text-primary" : "text-muted-foreground"
-                          }`}>
-                            {type.hours}
-                          </p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                    <input
+                      type="radio"
+                      name="reviewType"
+                      value={type.value}
+                      checked={formData.reviewType === type.value}
+                      onChange={(e) => handleInputChange("reviewType", e.target.value)}
+                      className="sr-only"
+                    />
+                    <div className={`h-4 w-4 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${
+                      formData.reviewType === type.value
+                        ? "border-primary bg-primary"
+                        : "border-muted-foreground/40"
+                    }`}>
+                      {formData.reviewType === type.value && (
+                        <div className="h-1.5 w-1.5 rounded-full bg-white" />
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium leading-tight truncate">
+                        {type.label}
+                      </p>
+                      <p className={`text-xs mt-0.5 ${
+                        formData.reviewType === type.value ? "text-primary font-medium" : "text-muted-foreground"
+                      }`}>
+                        {type.hours}
+                      </p>
+                    </div>
+                  </label>
                 ))}
               </div>
             </div>
