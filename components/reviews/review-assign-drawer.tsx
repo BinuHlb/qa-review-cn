@@ -179,9 +179,9 @@ export function ReviewAssignDrawer({
   }
 
   const reviewTypes = [
-    { value: "normal", label: "Normal Review", hours: "18 hours" },
-    { value: "reduce", label: "Reduce Review", hours: "8 hours" },
-    { value: "quick", label: "Quick Review", hours: "5 hours" }
+    { value: "normal", label: "Normal ", hours: "18 hours" },
+    { value: "reduce", label: "Reduce ", hours: "8 hours" },
+    { value: "quick", label: "Quick b", hours: "5 hours" }
   ]
 
   const reviewModes = [
@@ -216,49 +216,39 @@ export function ReviewAssignDrawer({
                   Review Type <span className="text-destructive">*</span>
                 </Label>
               </div>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-3 gap-2">
                 {reviewTypes.map((type) => (
-                  <label
+                  <button
                     key={type.value}
-                    className={`relative flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                    type="button"
+                    onClick={() => handleInputChange("reviewType", type.value)}
+                    className={`group relative px-4 py-3.5 rounded-lg transition-all duration-200 text-left ${
                       formData.reviewType === type.value
-                        ? "border-primary bg-primary/5"
-                        : "border-muted hover:border-primary/50 hover:bg-accent"
+                        ? "bg-primary/10"
+                        : "bg-secondary hover:bg-secondary/80"
                     }`}
                   >
-                    <input
-                      type="radio"
-                      name="reviewType"
-                      value={type.value}
-                      checked={formData.reviewType === type.value}
-                      onChange={(e) => handleInputChange("reviewType", e.target.value)}
-                      className="sr-only"
-                    />
-                    <div className={`h-4 w-4 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${
-                      formData.reviewType === type.value
-                        ? "border-primary bg-primary"
-                        : "border-muted-foreground/40"
-                    }`}>
-                      {formData.reviewType === type.value && (
-                        <div className="h-1.5 w-1.5 rounded-full bg-white" />
-                      )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium leading-tight truncate">
+                    <div className="flex flex-col gap-1">
+                      <span className={`text-sm font-semibold ${
+                        formData.reviewType === type.value ? "text-primary" : "text-foreground"
+                      }`}>
                         {type.label}
-                      </p>
-                      <p className={`text-xs mt-0.5 ${
-                        formData.reviewType === type.value ? "text-primary font-medium" : "text-muted-foreground"
+                      </span>
+                      <span className={`text-xs font-medium ${
+                        formData.reviewType === type.value ? "text-primary/70" : "text-muted-foreground"
                       }`}>
                         {type.hours}
-                      </p>
+                      </span>
                     </div>
-                  </label>
+                    {formData.reviewType === type.value && (
+                      <div className="absolute top-2 right-2">
+                        <div className="h-2 w-2 rounded-full bg-primary" />
+                      </div>
+                    )}
+                  </button>
                 ))}
               </div>
             </div>
-
-            <Separator />
 
             {/* Review Mode */}
             <div className="space-y-3">
@@ -317,7 +307,6 @@ export function ReviewAssignDrawer({
               </div>
             </div>
 
-            <Separator />
 
             {/* Assign Reviewer */}
             <div className="space-y-3">
@@ -349,7 +338,6 @@ export function ReviewAssignDrawer({
               </Select>
             </div>
 
-            <Separator />
 
             {/* Team Meeting Link */}
             <div className="space-y-3">
