@@ -149,7 +149,7 @@ export function ReviewListView({ reviews, onEdit, onAssign }: ReviewListViewProp
                       className="text-xs h-7 px-2"
                     >
                       <UserPlus className="h-3 w-3 mr-1" />
-                      Assign
+                      Assign Reviewer
                     </Button>
                     
                     <Button

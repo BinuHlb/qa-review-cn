@@ -203,7 +203,7 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
               className="ml-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 border-0 shadow-md"
             >
               <UserPlus className="h-4 w-4 mr-2" />
-              Assign
+              Assign Reviewer
             </Button>
           </div>
 

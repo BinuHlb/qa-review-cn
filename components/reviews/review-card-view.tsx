@@ -157,7 +157,7 @@ export function ReviewCardView({ reviews, onView, onEdit, onAssign }: ReviewCard
                   className="text-xs h-7 px-2 flex-1"
                 >
                   <UserPlus className="h-3 w-3 mr-1" />
-                  Assign
+                  Assign Reviewer
                 </Button>
                 <Button
                   variant="ghost"

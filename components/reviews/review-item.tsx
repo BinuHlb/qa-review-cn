@@ -165,7 +165,7 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
                     className="text-xs h-7 px-2"
                   >
                     <UserPlus className="h-3 w-3 mr-1" />
-                    <span className="hidden sm:inline">Assign</span>
+                    <span className="hidden sm:inline">Assign Reviewer</span>
                   </Button>
                 )}
 
@@ -426,7 +426,7 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
               className="text-xs h-7 px-3"
             >
               <UserPlus className="h-3 w-3 mr-1" />
-              Assign
+              Assign Reviewer
             </Button>
           )}
         </div>
