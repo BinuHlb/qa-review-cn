@@ -181,7 +181,7 @@ export function ReviewAssignDrawer({
   const reviewTypes = [
     { value: "normal", label: "Normal ", hours: "18 hours" },
     { value: "reduce", label: "Reduce ", hours: "8 hours" },
-    { value: "quick", label: "Quick b", hours: "5 hours" }
+    { value: "quick", label: "Quick", hours: "5 hours" }
   ]
 
   const reviewModes = [
