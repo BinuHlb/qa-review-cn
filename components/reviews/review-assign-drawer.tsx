@@ -18,9 +18,14 @@ import {
 import { 
   UserPlus, 
   Building2, 
-  AlertTriangle
+  AlertTriangle,
+  Clock,
+  Calendar as CalendarIcon,
+  User
 } from "lucide-react"
 import { Icon } from "@iconify/react"
+import { Card, CardContent } from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
 import { type Review } from "@/lib/mock-data"
 import { useToast } from "@/hooks/use-toast"
 
@@ -190,58 +195,86 @@ export function ReviewAssignDrawer({
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="w-full sm:max-w-lg p-0 flex flex-col">
-        <SheetHeader className="px-6 pt-6 pb-4 border-b bg-background">
+        <SheetHeader className="px-6 pt-6 pb-4 border-b">
           <SheetTitle className="flex items-center gap-2">
             <UserPlus className="h-5 w-5" />
-            {isEditMode ? "Update Review Assignment" : "Assign Reviewer"}
+            {isEditMode ? "Update Assignment" : "Assign Reviewer"}
           </SheetTitle>
           <SheetDescription className="flex items-center gap-2 mt-1">
-            <Building2 className="h-3.5 w-3.5" />
-            <span className="font-semibold">{review.memberFirm}</span>
+            <Building2 className="h-4 w-4" />
+            {review.memberFirm}
           </SheetDescription>
         </SheetHeader>
 
-        <div className="flex-1 overflow-y-auto px-6 py-6">
-          <form className="space-y-6">
+        <div className="flex-1 overflow-y-auto">
+          <form className="p-6 space-y-6">
             {/* Review Type */}
             <div className="space-y-3">
-              <Label className="text-sm font-medium text-foreground">
-                Review Type <span className="text-destructive">*</span>
-              </Label>
-              <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <Clock className="h-4 w-4 text-muted-foreground" />
+                <Label className="text-sm font-medium">
+                  Review Type <span className="text-destructive">*</span>
+                </Label>
+              </div>
+              <div className="grid grid-cols-3 gap-3">
                 {reviewTypes.map((type) => (
-                  <div key={type.value} className="flex items-center space-x-3">
-                    <Checkbox
-                      id={type.value}
-                      checked={formData.reviewType === type.value}
-                      onCheckedChange={(checked) => {
-                        if (checked) {
-                          handleInputChange("reviewType", type.value)
-                        }
-                      }}
-                    />
-                    <label
-                      htmlFor={type.value}
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
-                    >
-                      {type.label} <span className="text-muted-foreground">({type.hours})</span>
-                    </label>
-                  </div>
+                  <Card
+                    key={type.value}
+                    className={`cursor-pointer transition-all hover:shadow-md ${
+                      formData.reviewType === type.value
+                        ? "border-primary shadow-sm ring-2 ring-primary/20"
+                        : "border-border hover:border-primary/50"
+                    }`}
+                    onClick={() => handleInputChange("reviewType", type.value)}
+                  >
+                    <CardContent className="p-4">
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <div className={`h-5 w-5 rounded-full border-2 flex items-center justify-center transition-all ${
+                            formData.reviewType === type.value
+                              ? "border-primary bg-primary"
+                              : "border-muted-foreground/40"
+                          }`}>
+                            {formData.reviewType === type.value && (
+                              <div className="h-2 w-2 rounded-full bg-white" />
+                            )}
+                          </div>
+                          <Clock className={`h-4 w-4 ${
+                            formData.reviewType === type.value ? "text-primary" : "text-muted-foreground"
+                          }`} />
+                        </div>
+                        <div className="space-y-1">
+                          <p className={`text-sm font-semibold leading-tight ${
+                            formData.reviewType === type.value ? "text-foreground" : "text-foreground/80"
+                          }`}>
+                            {type.label}
+                          </p>
+                          <p className={`text-xs font-medium ${
+                            formData.reviewType === type.value ? "text-primary" : "text-muted-foreground"
+                          }`}>
+                            {type.hours}
+                          </p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 ))}
               </div>
             </div>
 
+            <Separator />
+
             {/* Review Mode */}
-            <div className="space-y-2">
-              <Label htmlFor="reviewMode" className="text-sm font-medium text-foreground">
-                Review <span className="text-destructive">*</span>
+            <div className="space-y-3">
+              <Label htmlFor="reviewMode" className="text-sm font-medium">
+                Review Mode <span className="text-destructive">*</span>
               </Label>
               <Select 
                 value={formData.reviewMode} 
                 onValueChange={(value) => handleInputChange("reviewMode", value)}
               >
-                <SelectTrigger id="reviewMode" className="w-full">
-                  <SelectValue placeholder="Select review mode..." />
+                <SelectTrigger id="reviewMode">
+                  <SelectValue placeholder="Choose review mode" />
                 </SelectTrigger>
                 <SelectContent>
                   {reviewModes.map((mode) => (
@@ -254,50 +287,61 @@ export function ReviewAssignDrawer({
             </div>
 
             {/* Dates */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="assignDate" className="text-sm font-medium text-foreground">
-                  Assign Date <span className="text-destructive">*</span>
-                </Label>
-                <DatePicker
-                  id="assignDate"
-                  date={formData.assignDate}
-                  onDateChange={(date) => handleInputChange("assignDate", date)}
-                  placeholder="Select assign date"
-                  minDate={new Date()}
-                />
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <CalendarIcon className="h-4 w-4 text-muted-foreground" />
+                <Label className="text-sm font-medium">Schedule</Label>
               </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="assignDate" className="text-sm text-muted-foreground">
+                    Start Date <span className="text-destructive">*</span>
+                  </Label>
+                  <DatePicker
+                    id="assignDate"
+                    date={formData.assignDate}
+                    onDateChange={(date) => handleInputChange("assignDate", date)}
+                    placeholder="Select date"
+                    minDate={new Date()}
+                  />
+                </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="deadlineDate" className="text-sm font-medium text-foreground">
-                  Deadline Date <span className="text-destructive">*</span>
-                </Label>
-                <DatePicker
-                  id="deadlineDate"
-                  date={formData.deadlineDate}
-                  onDateChange={(date) => handleInputChange("deadlineDate", date)}
-                  placeholder="Select deadline date"
-                  minDate={formData.assignDate || new Date()}
-                />
+                <div className="space-y-2">
+                  <Label htmlFor="deadlineDate" className="text-sm text-muted-foreground">
+                    Deadline <span className="text-destructive">*</span>
+                  </Label>
+                  <DatePicker
+                    id="deadlineDate"
+                    date={formData.deadlineDate}
+                    onDateChange={(date) => handleInputChange("deadlineDate", date)}
+                    placeholder="Select date"
+                    minDate={formData.assignDate || new Date()}
+                  />
+                </div>
               </div>
             </div>
 
+            <Separator />
+
             {/* Assign Reviewer */}
-            <div className="space-y-2">
-              <Label htmlFor="reviewerId" className="text-sm font-medium text-foreground">
-                Assign Reviewer <span className="text-destructive">*</span>
-              </Label>
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <User className="h-4 w-4 text-muted-foreground" />
+                <Label htmlFor="reviewerId" className="text-sm font-medium">
+                  Assign Reviewer <span className="text-destructive">*</span>
+                </Label>
+              </div>
               <Select 
                 value={formData.reviewerId} 
                 onValueChange={(value) => handleInputChange("reviewerId", value)}
               >
-                <SelectTrigger id="reviewerId" className="w-full">
-                  <SelectValue placeholder="Choose a reviewer..." />
+                <SelectTrigger id="reviewerId">
+                  <SelectValue placeholder="Select a reviewer" />
                 </SelectTrigger>
                 <SelectContent>
                   {reviewers.map((reviewer) => (
                     <SelectItem key={reviewer.id} value={reviewer.id}>
-                      <div className="flex flex-col">
+                      <div className="flex flex-col py-1">
                         <div className="font-medium">{reviewer.name}</div>
                         <div className="text-xs text-muted-foreground">
                           {reviewer.role} • {reviewer.status}
@@ -309,51 +353,48 @@ export function ReviewAssignDrawer({
               </Select>
             </div>
 
-            {/* Force Assignment */}
-            <div className="flex items-start space-x-3 p-3 bg-amber-50/50 border border-amber-200/50 rounded-lg">
-              <Checkbox
-                id="forceAssignment"
-                checked={formData.forceAssignment}
-                onCheckedChange={(checked) => handleInputChange("forceAssignment", checked as boolean)}
-                className="mt-0.5"
-              />
-              <div className="flex-1">
-                <label
-                  htmlFor="forceAssignment"
-                  className="text-sm font-medium text-amber-800 cursor-pointer"
-                >
-                  Force Assignment
-                </label>
-                <p className="text-xs text-amber-700 mt-1">
-                  Override reviewer availability and assign immediately
-                </p>
-                {formData.forceAssignment && (
-                  <div className="flex items-center gap-2 mt-2 text-xs text-amber-800">
-                    <AlertTriangle className="h-3 w-3" />
-                    <span className="font-medium">This will override normal assignment rules</span>
-                  </div>
-                )}
-              </div>
-            </div>
+            <Separator />
 
             {/* Team Meeting Link */}
-            <div className="space-y-2">
-              <Label htmlFor="teamMeetingLink" className="text-sm font-medium text-foreground flex items-center gap-2">
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
                 <Icon icon="logos:microsoft-teams" className="h-4 w-4" />
-                Team Meeting Link
-              </Label>
-              <div className="relative">
-                <Icon icon="logos:microsoft-teams" className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4" />
-                <Input
-                  type="url"
-                  id="teamMeetingLink"
-                  placeholder="https://teams.microsoft.com/..."
-                  value={formData.teamMeetingLink}
-                  onChange={(e) => handleInputChange("teamMeetingLink", e.target.value)}
-                  className="w-full pl-10"
-                />
+                <Label htmlFor="teamMeetingLink" className="text-sm font-medium">
+                  Teams Meeting Link
+                </Label>
               </div>
+              <Input
+                type="url"
+                id="teamMeetingLink"
+                placeholder="https://teams.microsoft.com/..."
+                value={formData.teamMeetingLink}
+                onChange={(e) => handleInputChange("teamMeetingLink", e.target.value)}
+              />
+              <p className="text-xs text-muted-foreground">Optional: Add meeting link for quick access</p>
             </div>
+
+            {/* Force Assignment */}
+            <Card className="border-amber-200 bg-amber-50/50">
+              <CardContent className="p-4">
+                <label htmlFor="forceAssignment" className="flex items-start gap-3 cursor-pointer">
+                  <Checkbox
+                    id="forceAssignment"
+                    checked={formData.forceAssignment}
+                    onCheckedChange={(checked) => handleInputChange("forceAssignment", checked as boolean)}
+                    className="mt-0.5"
+                  />
+                  <div className="flex-1 space-y-1">
+                    <div className="flex items-center gap-2">
+                      <AlertTriangle className="h-4 w-4 text-amber-600" />
+                      <span className="text-sm font-medium text-amber-900">Force Assignment</span>
+                    </div>
+                    <p className="text-xs text-amber-700">
+                      Override reviewer availability and capacity limits to assign immediately
+                    </p>
+                  </div>
+                </label>
+              </CardContent>
+            </Card>
           </form>
         </div>
 
@@ -367,25 +408,28 @@ export function ReviewAssignDrawer({
               className="flex-1"
               disabled={isSubmitting}
             >
-              Close
+              Cancel
             </Button>
-            <Button
-              type="button"
-              onClick={(e) => handleSubmit(e, 'assign')}
-              className="flex-1"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Assigning..." : "Assign"}
-            </Button>
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={(e) => handleSubmit(e, 'update')}
-              className="flex-1"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Updating..." : "Update"}
-            </Button>
+            {!isEditMode && (
+              <Button
+                type="button"
+                onClick={(e) => handleSubmit(e, 'assign')}
+                className="flex-1"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Assigning..." : "Assign Review"}
+              </Button>
+            )}
+            {isEditMode && (
+              <Button
+                type="button"
+                onClick={(e) => handleSubmit(e, 'update')}
+                className="flex-1"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Updating..." : "Update Assignment"}
+              </Button>
+            )}
           </div>
         </div>
       </SheetContent>
