@@ -3,7 +3,8 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Eye, Edit, MoreHorizontal, MapPin, User, UserPlus, Clock } from "lucide-react"
+import { Eye, MoreHorizontal, MapPin, User, UserPlus, Clock } from "lucide-react"
+import { Icon } from "@iconify/react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -68,13 +69,13 @@ export function ReviewCardView({ reviews, onView, onEdit, onAssign }: ReviewCard
                       <Eye className="mr-2 h-4 w-4" />
                       View Details
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => onEdit?.(review)}>
-                      <Edit className="mr-2 h-4 w-4" />
-                      Edit Review
+                    <DropdownMenuItem onClick={() => console.log('Send to Teams:', review)}>
+                      <Icon icon="logos:microsoft-teams" className="mr-2 h-4 w-4" />
+                      Send to Teams
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => onAssign?.(review)}>
-                      <UserPlus className="mr-2 h-4 w-4" />
-                      Assign Reviewer
+                    <DropdownMenuItem onClick={() => console.log('Share to Mail:', review)}>
+                      <Icon icon="logos:google-gmail" className="mr-2 h-4 w-4" />
+                      Share to Mail
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -166,14 +167,6 @@ export function ReviewCardView({ reviews, onView, onEdit, onAssign }: ReviewCard
                   className="text-neutral-600 hover:text-neutral-900 h-7 w-7 p-0"
                 >
                   <Eye className="h-3 w-3" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => onEdit?.(review)}
-                  className="text-neutral-600 hover:text-neutral-900 h-7 w-7 p-0"
-                >
-                  <Edit className="h-3 w-3" />
                 </Button>
               </div>
             </CardContent>

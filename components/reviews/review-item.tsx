@@ -4,7 +4,8 @@ import { useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Edit, MoreHorizontal, MapPin, User, UserPlus, Clock, ChevronDown, ChevronUp } from "lucide-react"
+import { MoreHorizontal, MapPin, User, UserPlus, Clock, ChevronDown, ChevronUp } from "lucide-react"
+import { Icon } from "@iconify/react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -182,24 +183,20 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-48">
-                      {onEdit && (
-                        <DropdownMenuItem onClick={(e) => {
-                          e.stopPropagation()
-                          onEdit(review)
-                        }}>
-                          <Edit className="mr-2 h-4 w-4" />
-                          Edit Review
-                        </DropdownMenuItem>
-                      )}
-                      {onAssign && (
-                        <DropdownMenuItem onClick={(e) => {
-                          e.stopPropagation()
-                          onAssign(review)
-                        }}>
-                          <UserPlus className="mr-2 h-4 w-4" />
-                          Assign Reviewer
-                        </DropdownMenuItem>
-                      )}
+                      <DropdownMenuItem onClick={(e) => {
+                        e.stopPropagation()
+                        console.log('Send to Teams:', review)
+                      }}>
+                        <Icon icon="logos:microsoft-teams" className="mr-2 h-4 w-4" />
+                        Send to Teams
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={(e) => {
+                        e.stopPropagation()
+                        console.log('Share to Mail:', review)
+                      }}>
+                        <Icon icon="logos:google-gmail" className="mr-2 h-4 w-4" />
+                        Share to Mail
+                      </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 )}
@@ -283,20 +280,6 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
                   </div>
                 )}
 
-                {/* Additional Actions */}
-                <div className="flex gap-2 pt-2">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      onEdit?.(review)
-                    }}
-                    className="text-neutral-600 hover:text-neutral-900 h-7 w-7 p-0"
-                  >
-                    <Edit className="h-3 w-3" />
-                  </Button>
-                </div>
               </div>
             </div>
 
@@ -347,24 +330,20 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
-                {onEdit && (
-                  <DropdownMenuItem onClick={(e) => {
-                    e.stopPropagation()
-                    onEdit(review)
-                  }}>
-                    <Edit className="mr-2 h-4 w-4" />
-                    Edit Review
-                  </DropdownMenuItem>
-                )}
-                {onAssign && (
-                  <DropdownMenuItem onClick={(e) => {
-                    e.stopPropagation()
-                    onAssign(review)
-                  }}>
-                    <UserPlus className="mr-2 h-4 w-4" />
-                    Assign Reviewer
-                  </DropdownMenuItem>
-                )}
+                <DropdownMenuItem onClick={(e) => {
+                  e.stopPropagation()
+                  console.log('Send to Teams:', review)
+                }}>
+                  <Icon icon="logos:microsoft-teams" className="mr-2 h-4 w-4" />
+                  Send to Teams
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={(e) => {
+                  e.stopPropagation()
+                  console.log('Share to Mail:', review)
+                }}>
+                  <Icon icon="logos:google-gmail" className="mr-2 h-4 w-4" />
+                  Share to Mail
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           )}
@@ -482,20 +461,6 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
               </div>
             )}
 
-            {/* Additional Actions */}
-            <div className="flex gap-2 pt-2">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  onEdit?.(review)
-                }}
-                className="text-neutral-600 hover:text-neutral-900 h-7 w-7 p-0"
-              >
-                <Edit className="h-3 w-3" />
-              </Button>
-            </div>
           </div>
         </div>
       </CardContent>

@@ -1,11 +1,13 @@
 "use client"
 
 import { useState } from "react"
+import { format } from "date-fns"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
+import { DatePicker } from "@/components/ui/date-picker"
 import { 
   Sheet,
   SheetContent,
@@ -18,6 +20,7 @@ import {
   Building2, 
   AlertTriangle
 } from "lucide-react"
+import { Icon } from "@iconify/react"
 import { type Review } from "@/lib/mock-data"
 import { useToast } from "@/hooks/use-toast"
 
@@ -62,15 +65,15 @@ export function ReviewAssignDrawer({
     reviewerId: preSelectedReviewerId,
     reviewType: "normal",
     reviewMode: "",
-    assignDate: "",
-    deadlineDate: "",
+    assignDate: undefined as Date | undefined,
+    deadlineDate: undefined as Date | undefined,
     teamMeetingLink: "",
     forceAssignment: false
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { toast } = useToast()
 
-  const handleInputChange = (field: string, value: string | boolean) => {
+  const handleInputChange = (field: string, value: string | boolean | Date | undefined) => {
     setFormData(prev => ({ ...prev, [field]: value }))
   }
 
@@ -120,14 +123,21 @@ export function ReviewAssignDrawer({
 
     setIsSubmitting(true)
     try {
+      // Convert dates to strings for API
+      const submitData = {
+        ...formData,
+        assignDate: formData.assignDate ? format(formData.assignDate, 'yyyy-MM-dd') : '',
+        deadlineDate: formData.deadlineDate ? format(formData.deadlineDate, 'yyyy-MM-dd') : ''
+      }
+
       if (action === 'assign' && onAssign) {
-        await onAssign(review.id, formData)
+        await onAssign(review.id, submitData)
         toast({
           title: "Success",
           description: "Review assigned successfully"
         })
       } else if (action === 'update' && onUpdate) {
-        await onUpdate(review.id, formData)
+        await onUpdate(review.id, submitData)
         toast({
           title: "Success",
           description: "Review updated successfully"
@@ -151,8 +161,8 @@ export function ReviewAssignDrawer({
       reviewerId: "",
       reviewType: "normal",
       reviewMode: "",
-      assignDate: "",
-      deadlineDate: "",
+      assignDate: undefined,
+      deadlineDate: undefined,
       teamMeetingLink: "",
       forceAssignment: false
     })
@@ -249,12 +259,12 @@ export function ReviewAssignDrawer({
                 <Label htmlFor="assignDate" className="text-sm font-medium text-foreground">
                   Assign Date <span className="text-destructive">*</span>
                 </Label>
-                <Input
-                  type="date"
+                <DatePicker
                   id="assignDate"
-                  value={formData.assignDate}
-                  onChange={(e) => handleInputChange("assignDate", e.target.value)}
-                  className="w-full"
+                  date={formData.assignDate}
+                  onDateChange={(date) => handleInputChange("assignDate", date)}
+                  placeholder="Select assign date"
+                  minDate={new Date()}
                 />
               </div>
 
@@ -262,13 +272,12 @@ export function ReviewAssignDrawer({
                 <Label htmlFor="deadlineDate" className="text-sm font-medium text-foreground">
                   Deadline Date <span className="text-destructive">*</span>
                 </Label>
-                <Input
-                  type="date"
+                <DatePicker
                   id="deadlineDate"
-                  value={formData.deadlineDate}
-                  onChange={(e) => handleInputChange("deadlineDate", e.target.value)}
-                  className="w-full"
-                  min={formData.assignDate || new Date().toISOString().split('T')[0]}
+                  date={formData.deadlineDate}
+                  onDateChange={(date) => handleInputChange("deadlineDate", date)}
+                  placeholder="Select deadline date"
+                  minDate={formData.assignDate || new Date()}
                 />
               </div>
             </div>
@@ -329,17 +338,21 @@ export function ReviewAssignDrawer({
 
             {/* Team Meeting Link */}
             <div className="space-y-2">
-              <Label htmlFor="teamMeetingLink" className="text-sm font-medium text-foreground">
+              <Label htmlFor="teamMeetingLink" className="text-sm font-medium text-foreground flex items-center gap-2">
+                <Icon icon="logos:microsoft-teams" className="h-4 w-4" />
                 Team Meeting Link
               </Label>
-              <Input
-                type="url"
-                id="teamMeetingLink"
-                placeholder="https://meet.example.com/..."
-                value={formData.teamMeetingLink}
-                onChange={(e) => handleInputChange("teamMeetingLink", e.target.value)}
-                className="w-full"
-              />
+              <div className="relative">
+                <Icon icon="logos:microsoft-teams" className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4" />
+                <Input
+                  type="url"
+                  id="teamMeetingLink"
+                  placeholder="https://teams.microsoft.com/..."
+                  value={formData.teamMeetingLink}
+                  onChange={(e) => handleInputChange("teamMeetingLink", e.target.value)}
+                  className="w-full pl-10"
+                />
+              </div>
             </div>
           </form>
         </div>

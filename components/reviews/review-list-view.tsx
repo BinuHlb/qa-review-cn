@@ -11,7 +11,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { Eye, Edit, MoreHorizontal, MapPin, User, UserPlus, Clock, Calendar } from "lucide-react"
+import { Eye, MoreHorizontal, MapPin, User, UserPlus, Clock, Calendar } from "lucide-react"
+import { Icon } from "@iconify/react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -176,13 +177,13 @@ export function ReviewListView({ reviews, onEdit, onAssign }: ReviewListViewProp
                           <Eye className="mr-2 h-4 w-4" />
                           View Details
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => onEdit?.(review)}>
-                          <Edit className="mr-2 h-4 w-4" />
-                          Edit Review
+                        <DropdownMenuItem onClick={() => console.log('Send to Teams:', review)}>
+                          <Icon icon="logos:microsoft-teams" className="mr-2 h-4 w-4" />
+                          Send to Teams
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => onAssign?.(review)}>
-                          <UserPlus className="mr-2 h-4 w-4" />
-                          Assign Reviewer
+                        <DropdownMenuItem onClick={() => console.log('Share to Mail:', review)}>
+                          <Icon icon="logos:google-gmail" className="mr-2 h-4 w-4" />
+                          Share to Mail
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -310,10 +311,6 @@ export function ReviewListView({ reviews, onEdit, onAssign }: ReviewListViewProp
               <div className="flex justify-end gap-3 pt-4 border-t border-neutral-200">
                 <Button variant="outline" onClick={handleCloseDialog}>
                   Close
-                </Button>
-                <Button onClick={() => onEdit?.(selectedReview)}>
-                  <Edit className="mr-2 h-4 w-4" />
-                  Edit Review
                 </Button>
               </div>
             </div>
