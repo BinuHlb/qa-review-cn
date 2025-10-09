@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useMemo, useCallback } from "react"
+import { useState, useEffect, useCallback, useMemo } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import {
   SidebarInset,
@@ -11,7 +11,7 @@ import { EmptyState } from "@/components/shared/empty-state"
 import { ReviewView } from "@/components/reviews/review-view"
 import { ReviewActionPanel } from "@/components/reviews/review-action-panel"
 import { ReviewAssignDrawer } from "@/components/reviews/review-assign-drawer"
-import { ClipboardList, Search, Filter, RotateCcw, List, Grid3X3, CheckCircle2, Award, Flag, MapPin } from "lucide-react"
+import { ClipboardList, Search, RotateCcw, List, Grid3X3, Calendar, Award, Clock, MapPin } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
@@ -19,67 +19,77 @@ import { Button } from "@/components/ui/button"
 import { mockReviews, type Review } from "@/lib/mock-data"
 import { mockReviewers } from "@/lib/reviewers-mock-data"
 import { type Attachment } from "@/components/shared/attachments-section"
+import { REVIEW_TYPE_OPTIONS } from "@/lib/constants"
+import { useDataFilters } from "@/hooks/use-data-filters"
+import { useSelection } from "@/hooks/use-selection"
 
 export default function AdminReviewsPage() {
   const [reviews, setReviews] = useState<Review[]>(mockReviews)
   const [viewMode, setViewMode] = useState<"list" | "card">("list")
-  const [searchTerm, setSearchTerm] = useState("")
-  const [statusFilter, setStatusFilter] = useState<string>("all")
-  const [gradeFilter, setGradeFilter] = useState<string>("all")
-  const [priorityFilter, setPriorityFilter] = useState<string>("all")
-  const [countryFilter, setCountryFilter] = useState<string>("all")
-  const [selectedReview, setSelectedReview] = useState<Review | null>(null)
   const [reviewAttachments, setReviewAttachments] = useState<Record<string, Attachment[]>>({})
   const [assignDrawerOpen, setAssignDrawerOpen] = useState(false)
   const [reviewToAssign, setReviewToAssign] = useState<Review | null>(null)
 
-  // Memoized filtered reviews based on all filter criteria
-  const filteredReviews = useMemo(() => {
-    let filtered = reviews
+  // Use custom filters hook
+  const {
+    filteredData: filteredReviews,
+    searchTerm,
+    setSearchTerm,
+    filters,
+    setFilter,
+    clearFilters: resetFilters,
+    hasActiveFilters: hasFilters
+  } = useDataFilters<Review>(reviews, {
+    searchFields: ['memberFirm', 'reviewer', 'type', 'country']
+  })
 
-    // Search filter
-    if (searchTerm) {
-      const searchLower = searchTerm.toLowerCase()
-      filtered = filtered.filter(
-        (review) =>
-          review.memberFirm.toLowerCase().includes(searchLower) ||
-          review.reviewer.toLowerCase().includes(searchLower) ||
-          review.type.toLowerCase().includes(searchLower) ||
-          review.country.toLowerCase().includes(searchLower)
-      )
+  // Initialize filter values
+  useEffect(() => {
+    if (!filters.year) setFilter('year', 'all')
+    if (!filters.grade) setFilter('grade', 'all')
+    if (!filters.reviewType) setFilter('reviewType', 'all')
+    if (!filters.country) setFilter('country', 'all')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Use selection hook
+  const {
+    selected: selectedReview,
+    select: selectReview,
+    clear: clearSelection
+  } = useSelection<Review>(
+    (review) => review.id,
+    { toggleOnReselect: true }
+  )
+
+  // Extract single review from selection state
+  const currentReview: Review | null = selectedReview && !Array.isArray(selectedReview) ? selectedReview : null
+
+  // Helper to set selected review (for compatibility)
+  const setSelectedReview = (review: Review | null | ((prev: Review | null) => Review | null)) => {
+    if (typeof review === 'function') {
+      // Handle function setter
+      const newReview = review(currentReview)
+      if (newReview) {
+        selectReview(newReview)
+      } else {
+        clearSelection()
+      }
+    } else if (review) {
+      selectReview(review)
+    } else {
+      clearSelection()
     }
-
-    // Status filter
-    if (statusFilter !== "all") {
-      filtered = filtered.filter((review) => review.status === statusFilter)
-    }
-
-    // Grade filter
-    if (gradeFilter !== "all") {
-      filtered = filtered.filter((review) => review.currentGrade === gradeFilter)
-    }
-
-    // Priority filter
-    if (priorityFilter !== "all") {
-      filtered = filtered.filter((review) => review.priority === priorityFilter)
-    }
-
-    // Country filter
-    if (countryFilter !== "all") {
-      filtered = filtered.filter((review) => review.country === countryFilter)
-    }
-
-    return filtered
-  }, [reviews, searchTerm, statusFilter, gradeFilter, priorityFilter, countryFilter])
+  }
 
   // Clear selection if filtered reviews change and selected review is no longer in the list
   useEffect(() => {
     if (filteredReviews.length === 0) {
-      setSelectedReview(null)
-    } else if (selectedReview && !filteredReviews.find(r => r.id === selectedReview.id)) {
-      setSelectedReview(null)
+      clearSelection()
+    } else if (currentReview && !filteredReviews.find(r => r.id === currentReview.id)) {
+      clearSelection()
     }
-  }, [filteredReviews, selectedReview])
+  }, [filteredReviews, currentReview, clearSelection])
 
   // Memoized unique filter values
   const uniqueCountries = useMemo(() => 
@@ -87,24 +97,14 @@ export default function AdminReviewsPage() {
     [reviews]
   )
   
-  const uniqueStatuses = useMemo(() => 
-    Array.from(new Set(reviews.map((review) => review.status))).sort(),
+  const uniqueYears = useMemo(() => 
+    Array.from(new Set(reviews.map((review) => review.year).filter((year): year is string => Boolean(year)))).sort().reverse(),
     [reviews]
   )
   
   const uniqueGrades = useMemo(() => 
     Array.from(new Set(reviews.map((review) => review.currentGrade))).sort(),
     [reviews]
-  )
-  
-  const uniquePriorities = useMemo(() => 
-    Array.from(new Set(reviews.map((review) => review.priority))).sort(),
-    [reviews]
-  )
-
-  const hasActiveFilters = useMemo(() => 
-    Boolean(searchTerm || statusFilter !== "all" || gradeFilter !== "all" || priorityFilter !== "all" || countryFilter !== "all"),
-    [searchTerm, statusFilter, gradeFilter, priorityFilter, countryFilter]
   )
 
   // Handlers
@@ -128,11 +128,12 @@ export default function AdminReviewsPage() {
     reviewId: string,
     data: {
       reviewerId: string
-      priority: string
-      type: string
-      dueDate: string
-      notes: string
-      forceAssignment?: boolean
+      reviewType: string
+      reviewMode: string
+      assignDate: string
+      deadlineDate: string
+      teamMeetingLink: string
+      forceAssignment: boolean
     }
   ) => {
     try {
@@ -141,7 +142,11 @@ export default function AdminReviewsPage() {
       if (selectedReviewer) {
         setReviews(prev => prev.map(r => 
           r.id === reviewId 
-            ? { ...r, reviewer: selectedReviewer.name, priority: data.priority as Review['priority'] }
+            ? { 
+                ...r, 
+                reviewer: selectedReviewer.name, 
+                reviewType: data.reviewType as Review['reviewType']
+              }
             : r
         ))
       }
@@ -156,16 +161,16 @@ export default function AdminReviewsPage() {
   const handleAssignReviewer = useCallback((reviewerId: string) => {
     // TODO: Implement reviewer assignment to selected review
     if (process.env.NODE_ENV === 'development') {
-      console.log("Assign reviewer:", reviewerId, "to review:", selectedReview?.id)
+      console.log("Assign reviewer:", reviewerId, "to review:", currentReview?.id)
     }
-  }, [selectedReview])
+  }, [currentReview])
 
   const handleSubmitReview = useCallback(() => {
     // TODO: Implement submit review functionality
     if (process.env.NODE_ENV === 'development') {
-      console.log("Submit review:", selectedReview)
+      console.log("Submit review:", currentReview)
     }
-  }, [selectedReview])
+  }, [currentReview])
 
   const handleCreateReview = useCallback(() => {
     // TODO: Implement create review functionality
@@ -189,17 +194,14 @@ export default function AdminReviewsPage() {
   }, [])
 
   const handleFilter = useCallback(() => {
-    // Filter logic is now handled by the filteredReviews useMemo
+    // Filter logic is now handled by useDataFilters hook
     // This function is kept for compatibility with FilterSection component
   }, [])
 
   const clearFilters = useCallback(() => {
     setSearchTerm("")
-    setStatusFilter("all")
-    setGradeFilter("all")
-    setPriorityFilter("all")
-    setCountryFilter("all")
-  }, [])
+    resetFilters()
+  }, [setSearchTerm, resetFilters])
 
   // Attachment handlers
   const handleAttachmentUpload = useCallback(async (reviewId: string, files: File[]): Promise<Attachment[]> => {
@@ -329,24 +331,24 @@ export default function AdminReviewsPage() {
                   </div>
                 </div>
 
-                {/* Status Filter */}
-                <Select value={statusFilter} onValueChange={setStatusFilter}>
-                  <SelectTrigger className="w-[140px] h-9">
-                    <CheckCircle2 className="h-4 w-4 mr-2 text-muted-foreground" />
-                    <SelectValue placeholder="Status" />
+                {/* Year Filter */}
+                <Select value={filters.year} onValueChange={(value) => setFilter('year', value)}>
+                  <SelectTrigger className="w-[130px] h-9">
+                    <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
+                    <SelectValue placeholder="Year" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Status</SelectItem>
-                    {uniqueStatuses.map((status) => (
-                      <SelectItem key={status} value={status}>
-                        {status}
+                    <SelectItem value="all">All Years</SelectItem>
+                    {uniqueYears.map((year) => (
+                      <SelectItem key={year} value={year}>
+                        {year}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
 
                 {/* Grade Filter */}
-                <Select value={gradeFilter} onValueChange={setGradeFilter}>
+                <Select value={filters.grade} onValueChange={(value) => setFilter('grade', value)}>
                   <SelectTrigger className="w-[130px] h-9">
                     <Award className="h-4 w-4 mr-2 text-muted-foreground" />
                     <SelectValue placeholder="Grade" />
@@ -361,24 +363,24 @@ export default function AdminReviewsPage() {
                   </SelectContent>
                 </Select>
 
-                {/* Priority Filter */}
-                <Select value={priorityFilter} onValueChange={setPriorityFilter}>
+                {/* Review Type Filter */}
+                <Select value={filters.reviewType} onValueChange={(value) => setFilter('reviewType', value)}>
                   <SelectTrigger className="w-[130px] h-9">
-                    <Flag className="h-4 w-4 mr-2 text-muted-foreground" />
-                    <SelectValue placeholder="Priority" />
+                    <Clock className="h-4 w-4 mr-2 text-muted-foreground" />
+                    <SelectValue placeholder="Type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Priority</SelectItem>
-                    {uniquePriorities.map((priority) => (
-                      <SelectItem key={priority} value={priority}>
-                        {priority}
+                    <SelectItem value="all">All Types</SelectItem>
+                    {REVIEW_TYPE_OPTIONS.map((type) => (
+                      <SelectItem key={type.value} value={type.hoursValue}>
+                        {type.hours}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
 
                 {/* Country Filter */}
-                <Select value={countryFilter} onValueChange={setCountryFilter}>
+                <Select value={filters.country} onValueChange={(value) => setFilter('country', value)}>
                   <SelectTrigger className="w-[140px] h-9">
                     <MapPin className="h-4 w-4 mr-2 text-muted-foreground" />
                     <SelectValue placeholder="Country" />
@@ -394,7 +396,7 @@ export default function AdminReviewsPage() {
                 </Select>
 
                 {/* Clear Filters */}
-                {hasActiveFilters && (
+                {hasFilters && (
                   <Button
                     variant="ghost"
                     size="sm"
@@ -412,7 +414,7 @@ export default function AdminReviewsPage() {
               <ReviewView
                 reviews={filteredReviews}
                 viewMode={viewMode}
-                selectedReview={selectedReview}
+                selectedReview={currentReview}
                 onView={handleViewReview}
                 onEdit={handleEditReview}
                 onAssign={handleAssignReview}
@@ -422,13 +424,13 @@ export default function AdminReviewsPage() {
 
           {/* Right Panel - Review Details */}
           <div className="w-96 border-l bg-background overflow-y-auto">
-            {selectedReview ? (
+            {currentReview ? (
               <ReviewActionPanel
-                key={selectedReview.id}
-                review={selectedReview}
-                initialAttachments={reviewAttachments[selectedReview.id] || []}
-                onAttachmentUpload={(files) => handleAttachmentUpload(selectedReview.id, files)}
-                onAttachmentRemove={(attachmentId) => handleAttachmentRemove(selectedReview.id, attachmentId)}
+                key={currentReview.id}
+                review={currentReview}
+                initialAttachments={reviewAttachments[currentReview.id] || []}
+                onAttachmentUpload={(files) => handleAttachmentUpload(currentReview.id, files)}
+                onAttachmentRemove={(attachmentId) => handleAttachmentRemove(currentReview.id, attachmentId)}
                 onAttachmentDownload={handleAttachmentDownload}
               />
             ) : (

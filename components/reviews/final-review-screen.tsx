@@ -127,7 +127,7 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
     setAttachments(prev => prev.filter(att => att.id !== id))
   }
 
-  const handleDownloadAttachment = (attachment: any) => {
+  const handleDownloadAttachment = (attachment: Attachment) => {
     console.log('Download attachment:', attachment)
   }
 

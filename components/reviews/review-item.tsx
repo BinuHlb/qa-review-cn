@@ -143,12 +143,15 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
                   </div>
                 </div>
                 
-                {/* Status Badge with Percentage */}
+                {/* Status Badge with Percentage and Rating */}
                 <div className="flex items-center gap-2">
                   <Badge className={`${getStatusColor(review.status)} text-xs px-2 py-0.5`}>
                     {review.status}
                   </Badge>
                   <PercentageBadge value={review.percentage || 0} />
+                  <Badge className={`${getGradeColor(review.currentGrade)} text-xs px-2 py-0.5`}>
+                    {review.currentGrade}
+                  </Badge>
                 </div>
               </div>
 
@@ -165,7 +168,7 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
                     className="text-xs h-7 px-2"
                   >
                     <UserPlus className="h-3 w-3 mr-1" />
-                    <span className="hidden sm:inline">Assign Reviewer</span>
+                    <span className="hidden sm:inline">Assign</span>
                   </Button>
                 )}
 
@@ -191,10 +194,10 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={(e) => {
                         e.stopPropagation()
-                        console.log('Share to Mail:', review)
+                        console.log('Notifications:', review)
                       }}>
-                        <Icon icon="logos:google-gmail" className="mr-2 h-4 w-4" />
-                        Share to Mail
+                        <Icon icon="mdi:bell-badge" className="mr-2 h-4 w-4 text-orange-500" />
+                        Notifications
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -215,12 +218,15 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
                 </div>
               </div>
               
-              {/* Status Badge with Percentage */}
+              {/* Status Badge with Percentage and Rating */}
               <div className="flex items-center gap-2">
                 <Badge className={`${getStatusColor(review.status)} text-xs px-2 py-0.5`}>
                   {review.status}
                 </Badge>
                 <PercentageBadge value={review.percentage || 0} />
+                <Badge className={`${getGradeColor(review.currentGrade)} text-xs px-2 py-0.5`}>
+                  {review.currentGrade}
+                </Badge>
               </div>
             </div>
 
@@ -336,10 +342,10 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={(e) => {
                   e.stopPropagation()
-                  console.log('Share to Mail:', review)
+                  console.log('Notifications:', review)
                 }}>
-                  <Icon icon="logos:google-gmail" className="mr-2 h-4 w-4" />
-                  Share to Mail
+                  <Icon icon="mdi:bell-badge" className="mr-2 h-4 w-4 text-orange-500" />
+                  Notifications
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -358,12 +364,15 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
           </div>
         </div>
 
-        {/* Main Status Badge with Percentage - Always Visible */}
+        {/* Main Status Badge with Percentage and Rating - Always Visible */}
         <div className="flex flex-wrap gap-2 items-center">
           <Badge className={`${getStatusColor(review.status)} text-xs px-2 py-0.5`}>
             {review.status}
           </Badge>
           <PercentageBadge value={review.percentage || 0} />
+          <Badge className={`${getGradeColor(review.currentGrade)} text-xs px-2 py-0.5`}>
+            {review.currentGrade}
+          </Badge>
         </div>
 
         {/* Show More and Assign Button in Same Row */}

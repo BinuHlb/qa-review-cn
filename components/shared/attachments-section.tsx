@@ -18,16 +18,10 @@ import {
   RefreshCw
 } from "lucide-react"
 import { getFileIcon } from "@/lib/utils/review-utils"
+import type { Attachment } from "@/types/entities"
 
-export interface Attachment {
-  id: string
-  name: string
-  size: string
-  uploadedBy: string
-  uploadedAt: string
-  type: string
-  url?: string
-}
+// Re-export for backward compatibility
+export type { Attachment }
 
 interface AttachmentsSectionProps {
   attachments: Attachment[]

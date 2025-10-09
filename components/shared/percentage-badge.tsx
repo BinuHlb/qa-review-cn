@@ -1,4 +1,5 @@
 import { TrendingUp } from "lucide-react"
+import { PERCENTAGE_THRESHOLDS, PERCENTAGE_COLORS } from "@/lib/constants"
 
 interface PercentageBadgeProps {
   value: number
@@ -8,11 +9,11 @@ interface PercentageBadgeProps {
 
 export function PercentageBadge({ value, className = "", showIcon = true }: PercentageBadgeProps) {
   const getPercentageColor = (percentage: number) => {
-    if (percentage >= 80) return "text-green-600"
-    if (percentage >= 60) return "text-blue-600"
-    if (percentage >= 40) return "text-yellow-600"
-    if (percentage >= 20) return "text-orange-600"
-    return "text-red-600"
+    if (percentage >= PERCENTAGE_THRESHOLDS.EXCELLENT) return PERCENTAGE_COLORS.EXCELLENT
+    if (percentage >= PERCENTAGE_THRESHOLDS.GOOD) return PERCENTAGE_COLORS.GOOD
+    if (percentage >= PERCENTAGE_THRESHOLDS.AVERAGE) return PERCENTAGE_COLORS.AVERAGE
+    if (percentage >= PERCENTAGE_THRESHOLDS.POOR) return PERCENTAGE_COLORS.BELOW_AVERAGE
+    return PERCENTAGE_COLORS.POOR
   }
 
   return (

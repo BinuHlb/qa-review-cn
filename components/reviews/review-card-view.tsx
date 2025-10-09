@@ -74,9 +74,9 @@ export function ReviewCardView({ reviews, onView, onEdit, onAssign }: ReviewCard
                       <Icon icon="logos:microsoft-teams" className="mr-2 h-4 w-4" />
                       Send to Teams
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => console.log('Share to Mail:', review)}>
-                      <Icon icon="logos:google-gmail" className="mr-2 h-4 w-4" />
-                      Share to Mail
+                    <DropdownMenuItem onClick={() => console.log('Notifications:', review)}>
+                      <Icon icon="mdi:bell-badge" className="mr-2 h-4 w-4 text-orange-500" />
+                      Notifications
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -115,12 +115,15 @@ export function ReviewCardView({ reviews, onView, onEdit, onAssign }: ReviewCard
                 </div>
               </div>
 
-              {/* Status Badge with Percentage */}
+              {/* Status Badge with Percentage and Rating */}
               <div className="flex flex-wrap gap-2 items-center">
                 <Badge className={`${getStatusColor(review.status)} text-xs px-2 py-0.5`}>
                   {review.status}
                 </Badge>
                 <PercentageBadge value={review.percentage || 0} />
+                <Badge className={`${getGradeColor(review.currentGrade)} text-xs px-2 py-0.5`}>
+                  {review.currentGrade}
+                </Badge>
                 <Badge variant="outline" className={`${getPriorityColor(review.priority)} text-xs px-2 py-0.5`}>
                   {review.priority}
                 </Badge>

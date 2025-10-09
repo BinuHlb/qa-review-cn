@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { format } from "date-fns"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
@@ -25,9 +24,10 @@ import {
 } from "lucide-react"
 import { Icon } from "@iconify/react"
 import { Card, CardContent } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
 import { type Review } from "@/lib/mock-data"
 import { useToast } from "@/hooks/use-toast"
+import { REVIEW_TYPE_OPTIONS, REVIEW_MODE_OPTIONS } from "@/lib/constants"
+import { formatDateForAPI } from "@/lib/utils/formatters"
 
 interface ReviewAssignDrawerProps {
   open: boolean
@@ -128,11 +128,11 @@ export function ReviewAssignDrawer({
 
     setIsSubmitting(true)
     try {
-      // Convert dates to strings for API
+      // Convert dates to strings for API using formatter
       const submitData = {
         ...formData,
-        assignDate: formData.assignDate ? format(formData.assignDate, 'yyyy-MM-dd') : '',
-        deadlineDate: formData.deadlineDate ? format(formData.deadlineDate, 'yyyy-MM-dd') : ''
+        assignDate: formatDateForAPI(formData.assignDate),
+        deadlineDate: formatDateForAPI(formData.deadlineDate)
       }
 
       if (action === 'assign' && onAssign) {
@@ -178,17 +178,6 @@ export function ReviewAssignDrawer({
     resetForm()
   }
 
-  const reviewTypes = [
-    { value: "normal", label: "Normal ", hours: "18 hours" },
-    { value: "reduce", label: "Reduce ", hours: "8 hours" },
-    { value: "quick", label: "Quick", hours: "5 hours" }
-  ]
-
-  const reviewModes = [
-    { value: "remote", label: "Remote" },
-    { value: "onsite", label: "Onsite" },
-    { value: "other", label: "Other" }
-  ]
 
   if (!review) return null
 
@@ -217,7 +206,7 @@ export function ReviewAssignDrawer({
                 </Label>
               </div>
               <div className="grid grid-cols-3 gap-2">
-                {reviewTypes.map((type) => (
+                {REVIEW_TYPE_OPTIONS.map((type) => (
                   <button
                     key={type.value}
                     type="button"
@@ -263,7 +252,7 @@ export function ReviewAssignDrawer({
                   <SelectValue placeholder="Choose review mode" />
                 </SelectTrigger>
                 <SelectContent>
-                  {reviewModes.map((mode) => (
+                  {REVIEW_MODE_OPTIONS.map((mode) => (
                     <SelectItem key={mode.value} value={mode.value}>
                       {mode.label}
                     </SelectItem>

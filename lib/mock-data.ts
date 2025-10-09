@@ -25,6 +25,8 @@ export interface Review {
   lastUpdated: string
   documents?: Document[]
   percentage?: number
+  reviewType?: '18' | '8' | '5'
+  year?: string
 }
 
 export const mockReviews: Review[] = [
@@ -44,6 +46,8 @@ export const mockReviews: Review[] = [
     priority: 'High',
     lastUpdated: '2024-01-20',
     percentage: 65,
+    reviewType: '18',
+    year: '2024',
     documents: [
       {
         id: 'DOC-001',
@@ -95,6 +99,8 @@ export const mockReviews: Review[] = [
     priority: 'High',
     lastUpdated: '2024-02-28',
     percentage: 100,
+    reviewType: '8',
+    year: '2024',
     documents: [
       {
         id: 'DOC-005',
@@ -128,7 +134,10 @@ export const mockReviews: Review[] = [
     status: 'In Progress',
     description: 'Current member quality assurance review',
     priority: 'Medium',
-    lastUpdated: '2024-01-25'
+    lastUpdated: '2024-01-25',
+    percentage: 45,
+    reviewType: '18',
+    year: '2024'
   },
   {
     id: 'REV-004',
@@ -144,7 +153,10 @@ export const mockReviews: Review[] = [
     status: 'Overdue',
     description: 'Prospect assessment and review',
     priority: 'High',
-    lastUpdated: '2024-01-15'
+    lastUpdated: '2024-01-15',
+    percentage: 80,
+    reviewType: '5',
+    year: '2023'
   },
   {
     id: 'REV-005',
@@ -161,7 +173,9 @@ export const mockReviews: Review[] = [
     description: 'Current member operational review',
     priority: 'Medium',
     lastUpdated: '2024-02-10',
-    percentage: 25
+    percentage: 25,
+    reviewType: '5',
+    year: '2025'
   },
   {
     id: 'REV-006',
@@ -177,7 +191,10 @@ export const mockReviews: Review[] = [
     status: 'Submitted',
     description: 'Prospect review and compliance check',
     priority: 'High',
-    lastUpdated: '2024-02-05'
+    lastUpdated: '2024-02-05',
+    percentage: 100,
+    reviewType: '18',
+    year: '2023'
   },
   {
     id: 'REV-007',
@@ -193,7 +210,10 @@ export const mockReviews: Review[] = [
     status: 'Pending',
     description: 'Current member standards assessment',
     priority: 'High',
-    lastUpdated: '2024-02-28'
+    lastUpdated: '2024-02-28',
+    percentage: 10,
+    reviewType: '8',
+    year: '2025'
   },
   {
     id: 'REV-008',
@@ -209,7 +229,10 @@ export const mockReviews: Review[] = [
     status: 'In Progress',
     description: 'Prospect compliance and quality review',
     priority: 'Medium',
-    lastUpdated: '2024-02-25'
+    lastUpdated: '2024-02-25',
+    percentage: 55,
+    reviewType: '18',
+    year: '2024'
   },
   {
     id: 'REV-009',
@@ -225,7 +248,10 @@ export const mockReviews: Review[] = [
     status: 'In Progress',
     description: 'Current member performance evaluation',
     priority: 'Low',
-    lastUpdated: '2024-02-01'
+    lastUpdated: '2024-02-01',
+    percentage: 35,
+    reviewType: '8',
+    year: '2023'
   },
   {
     id: 'REV-010',
@@ -241,7 +267,10 @@ export const mockReviews: Review[] = [
     status: 'Cancelled',
     description: 'Prospect governance and ethics review',
     priority: 'Medium',
-    lastUpdated: '2024-01-15'
+    lastUpdated: '2024-01-15',
+    percentage: 90,
+    reviewType: '5',
+    year: '2025'
   }
 ]
 
