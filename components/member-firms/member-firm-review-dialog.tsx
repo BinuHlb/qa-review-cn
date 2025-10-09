@@ -14,23 +14,17 @@ import { Badge } from "@/components/ui/badge"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { 
-  FileText, 
-  Download, 
   CheckCircle, 
   XCircle,
-  Eye,
-  Calendar,
   Building,
   Users,
   Mail,
   Phone,
   Star,
-  X,
-  ZoomIn,
-  ZoomOut,
-  Maximize2
+  FileText
 } from "lucide-react"
 import { type MemberFirm } from "@/lib/member-firms-mock-data"
+import { AttachmentsSection, type Attachment } from "@/components/shared/attachments-section"
 
 interface MemberFirmReviewDialogProps {
   open: boolean
@@ -49,7 +43,32 @@ export function MemberFirmReviewDialog({
 }: MemberFirmReviewDialogProps) {
   const [reviewNotes, setReviewNotes] = useState("")
   const [isProcessing, setIsProcessing] = useState(false)
-  const [selectedDocument, setSelectedDocument] = useState<string | null>(null)
+  const [attachments, setAttachments] = useState<Attachment[]>([
+    {
+      id: "1",
+      name: "Financial_Report_2024.pdf",
+      size: "2.4 MB",
+      uploadedBy: "Admin User",
+      uploadedAt: "2024-01-15T10:00:00Z",
+      type: "application/pdf"
+    },
+    {
+      id: "2",
+      name: "Compliance_Checklist.xlsx",
+      size: "856 KB",
+      uploadedBy: "Admin User",
+      uploadedAt: "2024-01-18T14:00:00Z",
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    },
+    {
+      id: "3",
+      name: "Audit_Summary.pdf",
+      size: "1.2 MB",
+      uploadedBy: "Admin User",
+      uploadedAt: "2024-01-20T09:00:00Z",
+      type: "application/pdf"
+    }
+  ])
 
   const handleAccept = async () => {
     if (!memberFirm) return
@@ -57,7 +76,6 @@ export function MemberFirmReviewDialog({
     try {
       await onAccept?.(memberFirm.id, reviewNotes)
       setReviewNotes("")
-      setSelectedDocument(null)
       onOpenChange(false)
     } catch (error) {
       console.error("Error accepting review:", error)
@@ -72,7 +90,6 @@ export function MemberFirmReviewDialog({
     try {
       await onReject?.(memberFirm.id, reviewNotes)
       setReviewNotes("")
-      setSelectedDocument(null)
       onOpenChange(false)
     } catch (error) {
       console.error("Error rejecting review:", error)
@@ -81,43 +98,27 @@ export function MemberFirmReviewDialog({
     }
   }
 
-  const handleDownload = (docName: string) => {
-    console.log("Downloading document:", docName)
-    // TODO: Implement actual download
+  const handleFileUpload = (files: File[]) => {
+    files.forEach(file => {
+      const newAttachment: Attachment = {
+        id: String(Date.now() + Math.random()),
+        name: file.name,
+        size: `${(file.size / 1024).toFixed(2)} KB`,
+        uploadedBy: "Current User",
+        uploadedAt: new Date().toISOString(),
+        type: file.type
+      }
+      setAttachments(prev => [...prev, newAttachment])
+    })
   }
 
-  const handleViewDocument = (docId: string) => {
-    setSelectedDocument(docId)
+  const handleRemoveAttachment = (id: string) => {
+    setAttachments(prev => prev.filter(att => att.id !== id))
   }
 
-  const handleCloseDocument = () => {
-    setSelectedDocument(null)
+  const handleDownloadAttachment = (attachment: Attachment) => {
+    console.log('Download attachment:', attachment)
   }
-
-  // Mock documents
-  const mockDocuments = [
-    {
-      id: "1",
-      name: "Financial_Report_2024.pdf",
-      type: "PDF",
-      size: "2.4 MB",
-      uploadDate: "2024-01-15"
-    },
-    {
-      id: "2",
-      name: "Compliance_Checklist.xlsx",
-      type: "Excel",
-      size: "856 KB",
-      uploadDate: "2024-01-18"
-    },
-    {
-      id: "3",
-      name: "Audit_Summary.pdf",
-      type: "PDF",
-      size: "1.2 MB",
-      uploadDate: "2024-01-20"
-    }
-  ]
 
   if (!memberFirm) return null
 
@@ -258,280 +259,18 @@ export function MemberFirmReviewDialog({
           </div>
 
           {/* Documents Section */}
-          <div className="space-y-3">
-            <h3 className="font-semibold text-sm flex items-center gap-2">
-              <FileText className="h-4 w-4" />
-              Review Documents
-            </h3>
-            
-            <div className="space-y-2">
-              {mockDocuments.map((doc) => (
-                <div
-                  key={doc.id}
-                  className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors"
-                >
-                  <div className="flex items-center gap-3 flex-1 min-w-0">
-                    <div className="flex-shrink-0">
-                      <FileText className="h-8 w-8 text-blue-600" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-medium text-sm truncate">{doc.name}</p>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
-                        <span>{doc.type}</span>
-                        <span>•</span>
-                        <span>{doc.size}</span>
-                        <span>•</span>
-                        <div className="flex items-center gap-1">
-                          <Calendar className="h-3 w-3" />
-                          {doc.uploadDate}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex gap-1 flex-shrink-0">
-                    <Button
-                      variant={selectedDocument === doc.id ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => handleViewDocument(doc.id)}
-                      className="h-8"
-                    >
-                      <Eye className="h-3 w-3 mr-1" />
-                      View
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleDownload(doc.name)}
-                      className="h-8"
-                    >
-                      <Download className="h-3 w-3" />
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Document Preview Area */}
-            {selectedDocument ? (
-              <div className="relative border rounded-lg overflow-hidden bg-white">
-                {/* Preview Header */}
-                <div className="flex items-center justify-between p-3 border-b bg-muted/30">
-                  <div className="flex items-center gap-2 flex-1 min-w-0">
-                    <FileText className="h-4 w-4 text-blue-600 flex-shrink-0" />
-                    <span className="font-medium text-sm truncate">
-                      {mockDocuments.find(d => d.id === selectedDocument)?.name}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1 flex-shrink-0">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-7 w-7 p-0"
-                      title="Zoom In"
-                    >
-                      <ZoomIn className="h-3.5 w-3.5" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-7 w-7 p-0"
-                      title="Zoom Out"
-                    >
-                      <ZoomOut className="h-3.5 w-3.5" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-7 w-7 p-0"
-                      title="Fullscreen"
-                    >
-                      <Maximize2 className="h-3.5 w-3.5" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={handleCloseDocument}
-                      className="h-7 w-7 p-0"
-                      title="Close"
-                    >
-                      <X className="h-3.5 w-3.5" />
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Document Content */}
-                <div className="relative bg-gray-50 min-h-[400px] max-h-[500px] overflow-auto">
-                  {(() => {
-                    const doc = mockDocuments.find(d => d.id === selectedDocument)
-                    if (!doc) return null
-
-                    // PDF Document Preview
-                    if (doc.type === "PDF") {
-                      return (
-                        <div className="p-8 bg-white m-4 shadow-sm rounded-lg">
-                          <div className="space-y-6">
-                            {/* Mock PDF Content */}
-                            <div className="space-y-2">
-                              <h2 className="text-xl font-bold text-gray-900">{doc.name.replace('.pdf', '')}</h2>
-                              <div className="h-0.5 bg-blue-600 w-16" />
-                            </div>
-                            
-                            <div className="space-y-4 text-sm text-gray-700 leading-relaxed">
-                              <p className="font-semibold text-base">Executive Summary</p>
-                              <p>
-                                This document provides a comprehensive overview of the financial performance and compliance status 
-                                for the fiscal year 2024. All requirements have been met according to the established guidelines 
-                                and industry standards.
-                              </p>
-                              
-                              <p className="font-semibold text-base mt-6">Key Findings</p>
-                              <ul className="list-disc pl-5 space-y-2">
-                                <li>Revenue growth of 15% year-over-year</li>
-                                <li>Full compliance with regulatory requirements</li>
-                                <li>Successful completion of all audit checkpoints</li>
-                                <li>Implementation of new quality control measures</li>
-                              </ul>
-
-                              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
-                                <p className="font-semibold text-blue-900 mb-2">Compliance Status</p>
-                                <p className="text-blue-800">
-                                  All compliance metrics have been satisfied. The firm demonstrates strong adherence 
-                                  to regulatory standards and best practices.
-                                </p>
-                              </div>
-
-                              <p className="font-semibold text-base mt-6">Financial Highlights</p>
-                              <div className="grid grid-cols-2 gap-4 mt-3">
-                                <div className="p-3 bg-gray-50 rounded border">
-                                  <p className="text-xs text-gray-500 mb-1">Total Revenue</p>
-                                  <p className="text-lg font-bold">$12.5M</p>
-                                </div>
-                                <div className="p-3 bg-gray-50 rounded border">
-                                  <p className="text-xs text-gray-500 mb-1">Net Profit</p>
-                                  <p className="text-lg font-bold">$2.8M</p>
-                                </div>
-                                <div className="p-3 bg-gray-50 rounded border">
-                                  <p className="text-xs text-gray-500 mb-1">Operating Margin</p>
-                                  <p className="text-lg font-bold">22.4%</p>
-                                </div>
-                                <div className="p-3 bg-gray-50 rounded border">
-                                  <p className="text-xs text-gray-500 mb-1">Growth Rate</p>
-                                  <p className="text-lg font-bold">15%</p>
-                                </div>
-                              </div>
-
-                              <p className="text-xs text-gray-500 mt-8 pt-4 border-t">
-                                Document ID: {doc.id} | Generated: {doc.uploadDate} | Page 1 of 1
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      )
-                    }
-
-                    // Excel Document Preview
-                    if (doc.type === "Excel") {
-                      return (
-                        <div className="p-4">
-                          <div className="bg-white rounded-lg shadow-sm overflow-hidden border">
-                            {/* Excel Tabs */}
-                            <div className="flex border-b bg-gray-50">
-                              <div className="px-4 py-2 text-xs font-medium text-blue-600 border-b-2 border-blue-600 bg-white">
-                                Summary
-                              </div>
-                              <div className="px-4 py-2 text-xs font-medium text-gray-600 hover:bg-gray-100 cursor-pointer">
-                                Details
-                              </div>
-                              <div className="px-4 py-2 text-xs font-medium text-gray-600 hover:bg-gray-100 cursor-pointer">
-                                Analysis
-                              </div>
-                            </div>
-
-                            {/* Excel Content */}
-                            <div className="overflow-x-auto">
-                              <table className="w-full text-xs">
-                                <thead>
-                                  <tr className="bg-gray-100 border-b">
-                                    <th className="px-3 py-2 text-left font-semibold border-r">Item</th>
-                                    <th className="px-3 py-2 text-left font-semibold border-r">Status</th>
-                                    <th className="px-3 py-2 text-left font-semibold border-r">Score</th>
-                                    <th className="px-3 py-2 text-left font-semibold border-r">Comments</th>
-                                    <th className="px-3 py-2 text-left font-semibold">Date</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr className="border-b hover:bg-gray-50">
-                                    <td className="px-3 py-2 border-r">Financial Controls</td>
-                                    <td className="px-3 py-2 border-r"><span className="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs">Compliant</span></td>
-                                    <td className="px-3 py-2 border-r font-medium">95%</td>
-                                    <td className="px-3 py-2 border-r text-gray-600">Excellent</td>
-                                    <td className="px-3 py-2">2024-01-15</td>
-                                  </tr>
-                                  <tr className="border-b hover:bg-gray-50">
-                                    <td className="px-3 py-2 border-r">Risk Management</td>
-                                    <td className="px-3 py-2 border-r"><span className="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs">Compliant</span></td>
-                                    <td className="px-3 py-2 border-r font-medium">92%</td>
-                                    <td className="px-3 py-2 border-r text-gray-600">Very Good</td>
-                                    <td className="px-3 py-2">2024-01-16</td>
-                                  </tr>
-                                  <tr className="border-b hover:bg-gray-50">
-                                    <td className="px-3 py-2 border-r">Audit Procedures</td>
-                                    <td className="px-3 py-2 border-r"><span className="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs">Compliant</span></td>
-                                    <td className="px-3 py-2 border-r font-medium">98%</td>
-                                    <td className="px-3 py-2 border-r text-gray-600">Outstanding</td>
-                                    <td className="px-3 py-2">2024-01-17</td>
-                                  </tr>
-                                  <tr className="border-b hover:bg-gray-50">
-                                    <td className="px-3 py-2 border-r">Quality Control</td>
-                                    <td className="px-3 py-2 border-r"><span className="px-2 py-0.5 bg-yellow-100 text-yellow-700 rounded text-xs">Review</span></td>
-                                    <td className="px-3 py-2 border-r font-medium">88%</td>
-                                    <td className="px-3 py-2 border-r text-gray-600">Good</td>
-                                    <td className="px-3 py-2">2024-01-18</td>
-                                  </tr>
-                                  <tr className="border-b hover:bg-gray-50">
-                                    <td className="px-3 py-2 border-r">Documentation</td>
-                                    <td className="px-3 py-2 border-r"><span className="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs">Compliant</span></td>
-                                    <td className="px-3 py-2 border-r font-medium">94%</td>
-                                    <td className="px-3 py-2 border-r text-gray-600">Excellent</td>
-                                    <td className="px-3 py-2">2024-01-19</td>
-                                  </tr>
-                                  <tr className="bg-blue-50 font-semibold">
-                                    <td className="px-3 py-2 border-r">Overall Compliance</td>
-                                    <td className="px-3 py-2 border-r"><span className="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs">Compliant</span></td>
-                                    <td className="px-3 py-2 border-r text-blue-600">93.4%</td>
-                                    <td className="px-3 py-2 border-r text-gray-600">Very Good</td>
-                                    <td className="px-3 py-2">2024-01-20</td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </div>
-
-                            <div className="p-3 bg-gray-50 border-t text-xs text-gray-500">
-                              <p>Sheet: Summary | Last modified: {doc.uploadDate}</p>
-                            </div>
-                          </div>
-                        </div>
-                      )
-                    }
-
-                    return null
-                  })()}
-                </div>
-              </div>
-            ) : (
-              <div className="border rounded-lg p-6 bg-muted/20 min-h-[200px] flex items-center justify-center">
-                <div className="text-center space-y-2">
-                  <FileText className="h-12 w-12 mx-auto text-muted-foreground" />
-                  <p className="text-sm text-muted-foreground">
-                    Click &quot;View&quot; on any document to preview it here
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    Document viewer will display PDF and Excel files
-                  </p>
-                </div>
-              </div>
-            )}
-          </div>
+          <AttachmentsSection
+            attachments={attachments}
+            onUpload={handleFileUpload}
+            onRemove={handleRemoveAttachment}
+            onDownload={handleDownloadAttachment}
+            maxHeight="400px"
+            showUpload={true}
+            showDownload={true}
+            showRemove={true}
+            title="Review Documents"
+            className="border-0"
+          />
 
           {/* Review Notes */}
           <div className="space-y-2">

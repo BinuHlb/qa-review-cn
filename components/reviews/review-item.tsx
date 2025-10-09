@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { MoreHorizontal, MapPin, User, UserPlus, Clock, ChevronDown, ChevronUp } from "lucide-react"
 import { Icon } from "@iconify/react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { PercentageBadge } from "@/components/shared/percentage-badge"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -142,14 +143,12 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
                   </div>
                 </div>
                 
-                {/* Status Badges */}
-                <div className="flex items-center gap-1">
+                {/* Status Badge with Percentage */}
+                <div className="flex items-center gap-2">
                   <Badge className={`${getStatusColor(review.status)} text-xs px-2 py-0.5`}>
                     {review.status}
                   </Badge>
-                  <Badge className={`${getGradeColor(review.currentGrade)} text-xs px-2 py-0.5`}>
-                    {review.currentGrade}
-                  </Badge>
+                  <PercentageBadge value={review.percentage || 0} />
                 </div>
               </div>
 
@@ -216,14 +215,12 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
                 </div>
               </div>
               
-              {/* Status Badges */}
-              <div className="flex items-center gap-1">
+              {/* Status Badge with Percentage */}
+              <div className="flex items-center gap-2">
                 <Badge className={`${getStatusColor(review.status)} text-xs px-2 py-0.5`}>
                   {review.status}
                 </Badge>
-                <Badge className={`${getGradeColor(review.currentGrade)} text-xs px-2 py-0.5`}>
-                  {review.currentGrade}
-                </Badge>
+                <PercentageBadge value={review.percentage || 0} />
               </div>
             </div>
 
@@ -361,14 +358,12 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
           </div>
         </div>
 
-        {/* Main Status Badges - Always Visible */}
-        <div className="flex flex-wrap gap-1">
+        {/* Main Status Badge with Percentage - Always Visible */}
+        <div className="flex flex-wrap gap-2 items-center">
           <Badge className={`${getStatusColor(review.status)} text-xs px-2 py-0.5`}>
             {review.status}
           </Badge>
-          <Badge className={`${getGradeColor(review.currentGrade)} text-xs px-2 py-0.5`}>
-            {review.currentGrade}
-          </Badge>
+          <PercentageBadge value={review.percentage || 0} />
         </div>
 
         {/* Show More and Assign Button in Same Row */}

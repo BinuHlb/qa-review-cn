@@ -14,6 +14,8 @@ import {
 import { Eye, MoreHorizontal, MapPin, User, UserPlus, Clock, Calendar } from "lucide-react"
 import { Icon } from "@iconify/react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { PercentageBadge } from "@/components/shared/percentage-badge"
+import { AttachmentsSection, type Attachment } from "@/components/shared/attachments-section"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,13 +33,51 @@ interface ReviewListViewProps {
 
 export function ReviewListView({ reviews, onEdit, onAssign }: ReviewListViewProps) {
   const [selectedReview, setSelectedReview] = useState<Review | null>(null)
+  const [dialogAttachments, setDialogAttachments] = useState<Attachment[]>([])
 
   const handleViewDetails = (review: Review) => {
     setSelectedReview(review)
+    // Load attachments from review.documents
+    if (review.documents) {
+      setDialogAttachments(review.documents.map(doc => ({
+        id: doc.id,
+        name: doc.name,
+        size: doc.size,
+        uploadedBy: doc.uploadedBy,
+        uploadedAt: doc.uploadedAt,
+        type: doc.type,
+        url: doc.url
+      })))
+    } else {
+      setDialogAttachments([])
+    }
   }
 
   const handleCloseDialog = () => {
     setSelectedReview(null)
+    setDialogAttachments([])
+  }
+
+  const handleFileUpload = (files: File[]) => {
+    files.forEach(file => {
+      const newAttachment: Attachment = {
+        id: String(Date.now() + Math.random()),
+        name: file.name,
+        size: `${(file.size / 1024).toFixed(2)} KB`,
+        uploadedBy: "Current User",
+        uploadedAt: new Date().toISOString(),
+        type: file.type
+      }
+      setDialogAttachments(prev => [...prev, newAttachment])
+    })
+  }
+
+  const handleRemoveAttachment = (id: string) => {
+    setDialogAttachments(prev => prev.filter(att => att.id !== id))
+  }
+
+  const handleDownloadAttachment = (attachment: Attachment) => {
+    console.log('Download attachment:', attachment)
   }
 
   const calculateDuration = (startDate: string, endDate: string) => {
@@ -130,14 +170,12 @@ export function ReviewListView({ reviews, onEdit, onAssign }: ReviewListViewProp
                       </div>
                     </div>
                     
-                    {/* Status Badges */}
-                    <div className="flex items-center gap-1 flex-shrink-0">
+                    {/* Status Badge with Percentage */}
+                    <div className="flex items-center gap-2 flex-shrink-0">
                       <Badge className={`${getStatusColor(review.status)} text-xs px-2 py-0.5`}>
                         {review.status}
                       </Badge>
-                      <Badge className={`${getGradeColor(review.currentGrade)} text-xs px-2 py-0.5`}>
-                        {review.currentGrade}
-                      </Badge>
+                      <PercentageBadge value={review.percentage || 0} />
                     </div>
                   </div>
 
@@ -305,6 +343,22 @@ export function ReviewListView({ reviews, onEdit, onAssign }: ReviewListViewProp
                     </Badge>
                   </div>
                 </div>
+              </div>
+
+              {/* Review Documents */}
+              <div className="border-t pt-4">
+                <AttachmentsSection
+                  attachments={dialogAttachments}
+                  onUpload={handleFileUpload}
+                  onRemove={handleRemoveAttachment}
+                  onDownload={handleDownloadAttachment}
+                  maxHeight="300px"
+                  showUpload={true}
+                  showDownload={true}
+                  showRemove={true}
+                  title="Review Documents"
+                  className="border-0"
+                />
               </div>
 
               {/* Actions */}

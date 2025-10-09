@@ -13,11 +13,7 @@ import {
   MapPin, 
   Calendar, 
   FileText, 
-  Upload,
-  X,
   Send,
-  Paperclip,
-  Download,
   UserPlus,
   Clock,
   Award,
@@ -25,6 +21,7 @@ import {
   CheckCircle
 } from "lucide-react"
 import { type Review } from "@/lib/mock-data"
+import { AttachmentsSection, type Attachment } from "@/components/shared/attachments-section"
 import { 
   getGradeColor, 
   getStatusColor, 
@@ -42,15 +39,6 @@ interface Comment {
   content: string
   timestamp: string
   avatar?: string
-}
-
-interface Attachment {
-  id: string
-  name: string
-  size: string
-  uploadedBy: string
-  uploadedAt: string
-  type: string
 }
 
 interface ReviewDetailPanelProps {
@@ -94,7 +82,6 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
   ])
   
   const [newComment, setNewComment] = useState("")
-  const [isDragging, setIsDragging] = useState(false)
 
   if (!review) {
     return (
@@ -126,55 +113,27 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
     }
   }
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files
-    if (files) {
-      Array.from(files).forEach(file => {
-        const newAttachment: Attachment = {
-          id: String(attachments.length + 1),
-          name: file.name,
-          size: `${(file.size / 1024).toFixed(2)} KB`,
-          uploadedBy: "Current User",
-          uploadedAt: new Date().toISOString().split('T')[0],
-          type: file.type
-        }
-        setAttachments(prev => [...prev, newAttachment])
-      })
-    }
-  }
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(true)
-  }
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(false)
-  }
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(false)
-    
-    const files = e.dataTransfer.files
-    if (files) {
-      Array.from(files).forEach(file => {
-        const newAttachment: Attachment = {
-          id: String(attachments.length + 1),
-          name: file.name,
-          size: `${(file.size / 1024).toFixed(2)} KB`,
-          uploadedBy: "Current User",
-          uploadedAt: new Date().toISOString().split('T')[0],
-          type: file.type
-        }
-        setAttachments(prev => [...prev, newAttachment])
-      })
-    }
+  const handleFileUpload = (files: File[]) => {
+    files.forEach(file => {
+      const newAttachment: Attachment = {
+        id: String(attachments.length + 1),
+        name: file.name,
+        size: `${(file.size / 1024).toFixed(2)} KB`,
+        uploadedBy: "Current User",
+        uploadedAt: new Date().toISOString(),
+        type: file.type
+      }
+      setAttachments(prev => [...prev, newAttachment])
+    })
   }
 
   const handleRemoveAttachment = (id: string) => {
     setAttachments(attachments.filter(att => att.id !== id))
+  }
+
+  const handleDownloadAttachment = (attachment: Attachment) => {
+    console.log('Download attachment:', attachment)
+    // Implement actual download logic here
   }
 
 
@@ -363,102 +322,18 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
           </CardContent>
         </Card>
 
-        {/* Enhanced File Attachments */}
-        <Card className="border-slate-200/60 bg-white/60 backdrop-blur-sm shadow-sm">
-          <CardHeader className="pb-4 bg-gradient-to-r from-emerald-50/80 to-emerald-100/50 rounded-t-lg">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-base font-semibold text-slate-900 flex items-center gap-2">
-                <div className="p-1.5 bg-gradient-to-br from-emerald-600 to-emerald-700 rounded-lg">
-                  <Paperclip className="h-4 w-4 text-white" />
-                </div>
-                Attachments ({attachments.length})
-              </CardTitle>
-              <label htmlFor="file-upload">
-                <Button size="sm" className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 border-0 shadow-sm" asChild>
-                  <span className="cursor-pointer">
-                    <Upload className="h-3 w-3 mr-2" />
-                    Upload
-                  </span>
-                </Button>
-                <input
-                  id="file-upload"
-                  type="file"
-                  multiple
-                  className="hidden"
-                  onChange={handleFileUpload}
-                />
-              </label>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-4 p-5">
-            {/* Enhanced Drop Zone */}
-            <div
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
-              className={`border-2 border-dashed rounded-xl p-6 text-center transition-all duration-200 ${
-                isDragging 
-                  ? 'border-emerald-400 bg-emerald-50/80 scale-[1.02]' 
-                  : 'border-slate-200 bg-slate-50/50 hover:bg-slate-100/50 hover:border-slate-300'
-              }`}
-            >
-              <div className={`p-3 rounded-full mx-auto mb-3 w-fit transition-colors ${
-                isDragging ? 'bg-emerald-500' : 'bg-slate-200'
-              }`}>
-                <Paperclip className={`h-5 w-5 ${isDragging ? 'text-white' : 'text-slate-600'}`} />
-              </div>
-              <p className="text-sm font-medium text-slate-700 mb-1">
-                {isDragging ? 'Drop files here' : 'Drag and drop files here'}
-              </p>
-              <p className="text-xs text-slate-500">
-                or click Upload button to browse
-              </p>
-            </div>
-
-            {/* Enhanced Attachments List */}
-            {attachments.length > 0 && (
-              <div className="space-y-3">
-                {attachments.map((attachment) => (
-                  <div
-                    key={attachment.id}
-                    className="flex items-center justify-between p-4 bg-gradient-to-r from-slate-50/80 to-white rounded-xl border border-slate-200/60"
-                  >
-                    <div className="flex items-center gap-4 flex-1 min-w-0">
-                      <div className="flex-shrink-0 p-2 bg-gradient-to-br from-slate-200 to-slate-300 rounded-lg">
-                        <span className="text-lg">{getFileIcon(attachment.type)}</span>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold text-slate-900 truncate mb-1" title={attachment.name}>
-                          {attachment.name}
-                        </p>
-                        <p className="text-xs text-slate-500 flex items-center gap-2">
-                          <span className="font-medium">{attachment.size}</span>
-                          <span className="w-1 h-1 bg-slate-300 rounded-full"></span>
-                          <span>{attachment.uploadedBy}</span>
-                          <span className="w-1 h-1 bg-slate-300 rounded-full"></span>
-                          <span>{new Date(attachment.uploadedAt).toLocaleDateString()}</span>
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-1.5 flex-shrink-0">
-                      <Button variant="outline" size="sm" className="h-8 w-8 p-0 border-slate-300 hover:bg-primary/10 hover:border-primary/30">
-                        <Download className="h-3.5 w-3.5 text-slate-600" />
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="h-8 w-8 p-0 border-red-200 text-red-500 hover:bg-red-50 hover:border-red-300 hover:text-red-600"
-                        onClick={() => handleRemoveAttachment(attachment.id)}
-                      >
-                        <X className="h-3.5 w-3.5" />
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+        {/* File Attachments */}
+        <AttachmentsSection
+          attachments={attachments}
+          onUpload={handleFileUpload}
+          onRemove={handleRemoveAttachment}
+          onDownload={handleDownloadAttachment}
+          maxHeight="400px"
+          showUpload={true}
+          showDownload={true}
+          showRemove={true}
+          title="Review Documents"
+        />
 
         {/* Comments Section */}
         <Card className="shadow-sm">

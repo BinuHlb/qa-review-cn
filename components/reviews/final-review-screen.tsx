@@ -16,7 +16,7 @@ import {
 import { type Review, type Comment, type Attachment } from "@/lib/schemas/review.schema"
 import { useToast } from "@/hooks/use-toast"
 import { ScrollablePanel } from "@/components/shared/scrollable-panel"
-import { DocumentViewer, type Document } from "@/components/shared/document-viewer"
+import { AttachmentsSection } from "@/components/shared/attachments-section"
 import { ReviewTimeline } from "@/components/shared/review-timeline"
 import { GradeSelect } from "@/components/shared/grade-select"
 import { 
@@ -106,6 +106,31 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
     ])
   }, [review.id])
 
+  const handleFileUpload = (files: File[]) => {
+    files.forEach(file => {
+      const newAttachment: Attachment = {
+        id: String(Date.now() + Math.random()),
+        reviewId: review.id,
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        uploadedBy: "Current User",
+        uploadedById: "current-user",
+        uploadedAt: new Date().toISOString(),
+        url: ""
+      }
+      setAttachments(prev => [...prev, newAttachment])
+    })
+  }
+
+  const handleRemoveAttachment = (id: string) => {
+    setAttachments(prev => prev.filter(att => att.id !== id))
+  }
+
+  const handleDownloadAttachment = (attachment: any) => {
+    console.log('Download attachment:', attachment)
+  }
+
   const handleConfirm = async () => {
     if (!finalGrade) {
       toast({
@@ -161,17 +186,6 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
       setIsRejecting(false)
     }
   }
-
-
-  const handleFileUpload = (files: File[]) => {
-    // Handle file upload logic here
-    console.log("Files uploaded:", files)
-  }
-
-  const handleFileRemove = (id: string) => {
-    setAttachments(prev => prev.filter(att => att.id !== id))
-  }
-
 
   const _handleAddComment = (_content: string) => {
     const newComment: Comment = {
@@ -230,8 +244,8 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
         />
 
         {/* Review Documents */}
-        <DocumentViewer
-          documents={attachments.map(att => ({
+        <AttachmentsSection
+          attachments={attachments.map(att => ({
             id: att.id,
             name: att.name,
             size: typeof att.size === 'number' ? formatFileSize(att.size) : String(att.size),
@@ -240,6 +254,14 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
             type: att.type,
             url: att.url
           }))}
+          onUpload={handleFileUpload}
+          onRemove={handleRemoveAttachment}
+          onDownload={handleDownloadAttachment}
+          maxHeight="400px"
+          showUpload={true}
+          showDownload={true}
+          showRemove={true}
+          title="Review Documents"
         />
 
         {/* Current Grade - Highlighted */}

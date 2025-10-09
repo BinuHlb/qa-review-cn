@@ -24,6 +24,7 @@ export interface Review {
   priority: 'High' | 'Medium' | 'Low'
   lastUpdated: string
   documents?: Document[]
+  percentage?: number
 }
 
 export const mockReviews: Review[] = [
@@ -42,6 +43,7 @@ export const mockReviews: Review[] = [
     description: 'Current member quality assurance review',
     priority: 'High',
     lastUpdated: '2024-01-20',
+    percentage: 65,
     documents: [
       {
         id: 'DOC-001',
@@ -92,6 +94,7 @@ export const mockReviews: Review[] = [
     description: 'Prospect review and assessment',
     priority: 'High',
     lastUpdated: '2024-02-28',
+    percentage: 100,
     documents: [
       {
         id: 'DOC-005',
@@ -157,7 +160,8 @@ export const mockReviews: Review[] = [
     status: 'Pending',
     description: 'Current member operational review',
     priority: 'Medium',
-    lastUpdated: '2024-02-10'
+    lastUpdated: '2024-02-10',
+    percentage: 25
   },
   {
     id: 'REV-006',

@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Eye, MoreHorizontal, MapPin, User, UserPlus, Clock } from "lucide-react"
 import { Icon } from "@iconify/react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { PercentageBadge } from "@/components/shared/percentage-badge"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -114,14 +115,12 @@ export function ReviewCardView({ reviews, onView, onEdit, onAssign }: ReviewCard
                 </div>
               </div>
 
-              {/* Status Badges */}
-              <div className="flex flex-wrap gap-1">
+              {/* Status Badge with Percentage */}
+              <div className="flex flex-wrap gap-2 items-center">
                 <Badge className={`${getStatusColor(review.status)} text-xs px-2 py-0.5`}>
                   {review.status}
                 </Badge>
-                <Badge className={`${getGradeColor(review.currentGrade)} text-xs px-2 py-0.5`}>
-                  {review.currentGrade}
-                </Badge>
+                <PercentageBadge value={review.percentage || 0} />
                 <Badge variant="outline" className={`${getPriorityColor(review.priority)} text-xs px-2 py-0.5`}>
                   {review.priority}
                 </Badge>

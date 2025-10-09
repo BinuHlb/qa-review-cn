@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { type Review, getGradeColor } from "@/lib/mock-data"
 import { GradeSelect } from "@/components/shared/grade-select"
-import { DocumentViewer, type Document } from "@/components/shared/document-viewer"
+import { AttachmentsSection, type Attachment } from "@/components/shared/attachments-section"
 import { ReviewTimeline } from "@/components/shared/review-timeline"
 import { 
   generateInitials,
@@ -19,10 +19,10 @@ import { Star, Send } from "lucide-react"
 
 interface ReviewActionPanelProps {
   review: Review
-  initialAttachments?: Document[]
-  onAttachmentUpload?: (files: File[]) => Promise<Document[]>
+  initialAttachments?: Attachment[]
+  onAttachmentUpload?: (files: File[]) => Promise<Attachment[]>
   onAttachmentRemove?: (attachmentId: string) => Promise<void>
-  onAttachmentDownload?: (attachment: Document) => Promise<void>
+  onAttachmentDownload?: (attachment: Attachment) => Promise<void>
   showSubmitRating?: boolean
   onSubmitRating?: (reviewId: string, grade: string, notes: string) => Promise<void>
   showTechnicalDirectorRating?: boolean
@@ -67,9 +67,9 @@ export function ReviewActionPanel({
   const [selectedGrade, setSelectedGrade] = useState<string>(review.currentGrade)
   const [reviewNotes, setReviewNotes] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
-  
-  // Use review documents or initial attachments
-  const documents = (review.documents || initialAttachments) as Document[]
+  const [attachments, setAttachments] = useState<Attachment[]>(
+    (review.documents || initialAttachments) as Attachment[]
+  )
 
   const handleSubmitRating = async () => {
     if (!selectedGrade || !onSubmitRating) return
@@ -98,6 +98,55 @@ export function ReviewActionPanel({
       console.error("Failed to submit technical director rating:", error)
     } finally {
       setIsSubmitting(false)
+    }
+  }
+
+  const handleFileUpload = async (files: File[]) => {
+    if (onAttachmentUpload) {
+      try {
+        const newAttachments = await onAttachmentUpload(files)
+        setAttachments(prev => [...prev, ...newAttachments])
+      } catch (error) {
+        console.error("Failed to upload files:", error)
+      }
+    } else {
+      // Fallback if no upload handler
+      files.forEach(file => {
+        const newAttachment: Attachment = {
+          id: String(Date.now() + Math.random()),
+          name: file.name,
+          size: `${(file.size / 1024).toFixed(2)} KB`,
+          uploadedBy: "Current User",
+          uploadedAt: new Date().toISOString(),
+          type: file.type
+        }
+        setAttachments(prev => [...prev, newAttachment])
+      })
+    }
+  }
+
+  const handleRemoveAttachment = async (id: string) => {
+    if (onAttachmentRemove) {
+      try {
+        await onAttachmentRemove(id)
+        setAttachments(prev => prev.filter(att => att.id !== id))
+      } catch (error) {
+        console.error("Failed to remove attachment:", error)
+      }
+    } else {
+      setAttachments(prev => prev.filter(att => att.id !== id))
+    }
+  }
+
+  const handleDownloadAttachment = async (attachment: Attachment) => {
+    if (onAttachmentDownload) {
+      try {
+        await onAttachmentDownload(attachment)
+      } catch (error) {
+        console.error("Failed to download attachment:", error)
+      }
+    } else {
+      console.log('Download attachment:', attachment)
     }
   }
 
@@ -172,10 +221,17 @@ export function ReviewActionPanel({
       )}
 
       {/* Review Documents - Scrollable */}
-      <div className="flex-1 overflow-y-auto min-h-0">
-        <DocumentViewer
-          documents={documents}
-          onDownload={onAttachmentDownload}
+      <div className="flex-1 overflow-y-auto min-h-0 mt-4">
+        <AttachmentsSection
+          attachments={attachments}
+          onUpload={handleFileUpload}
+          onRemove={handleRemoveAttachment}
+          onDownload={handleDownloadAttachment}
+          maxHeight="500px"
+          showUpload={true}
+          showDownload={true}
+          showRemove={true}
+          title="Review Documents"
         />
       </div>
 
