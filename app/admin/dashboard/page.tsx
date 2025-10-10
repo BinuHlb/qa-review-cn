@@ -88,18 +88,6 @@ export default function AdminDashboardPage() {
       .slice(0, 6)
   }, [])
 
-  const getStatusColor = (status: string) => {
-    const colors: Record<string, string> = {
-      'pending_acceptance': 'bg-amber-500',
-      'reviewer_accepted': 'bg-amber-400',
-      'in_progress': 'bg-blue-500',
-      'submitted_for_verification': 'bg-purple-500',
-      'verified_pending_final': 'bg-indigo-500',
-      'completed': 'bg-green-500'
-    }
-    return colors[status] || 'bg-gray-500'
-  }
-
   const getTimeAgo = (date: string) => {
     const now = new Date()
     const past = new Date(date)
@@ -158,10 +146,10 @@ export default function AdminDashboardPage() {
 
           {/* Urgent Actions Banner */}
           {urgentActions.length > 0 && (
-            <Card className="border-amber-200 dark:border-amber-900 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20 animate-in slide-in-from-top-5 duration-300">
+            <Card className="border-destructive/50 bg-destructive/10 animate-in slide-in-from-top-5 duration-300">
               <CardHeader className="pb-3">
-                <CardTitle className="flex items-center gap-2 text-amber-900 dark:text-amber-200">
-                  <Zap className="h-5 w-5 animate-pulse" />
+                <CardTitle className="flex items-center gap-2">
+                  <Zap className="h-5 w-5 animate-pulse text-destructive" />
                   Urgent Actions Required
                 </CardTitle>
               </CardHeader>
@@ -223,29 +211,29 @@ export default function AdminDashboardPage() {
           {/* Main Stats Grid */}
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 animate-in slide-in-from-bottom-5 duration-500">
             {/* Total Reviews */}
-            <Card className="hover:shadow-lg transition-all duration-300 hover:scale-[1.02] cursor-pointer border-l-4 border-l-blue-500 group">
+            <Card className="hover:shadow-lg transition-all duration-300 hover:scale-[1.02] cursor-pointer border-l-4 border-l-primary group">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
                   Total Reviews
                 </CardTitle>
-                <ClipboardList className="h-4 w-4 text-blue-500 group-hover:scale-110 transition-transform duration-200" />
+                <ClipboardList className="h-4 w-4 text-primary group-hover:scale-110 transition-transform duration-200" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stats.totalReviews}</div>
                 <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
-                  <TrendingUp className="h-3 w-3 text-green-500" />
+                  <TrendingUp className="h-3 w-3" />
                   <span>+12.5% from last {selectedPeriod}</span>
                 </p>
               </CardContent>
             </Card>
 
             {/* Pending Actions */}
-            <Card className="hover:shadow-lg transition-all duration-300 hover:scale-[1.02] cursor-pointer border-l-4 border-l-amber-500 group">
+            <Card className="hover:shadow-lg transition-all duration-300 hover:scale-[1.02] cursor-pointer border-l-4 border-l-muted-foreground group">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
                   Pending Actions
                 </CardTitle>
-                <Clock className="h-4 w-4 text-amber-500 group-hover:scale-110 transition-transform duration-200" />
+                <Clock className="h-4 w-4 text-muted-foreground group-hover:scale-110 transition-transform duration-200" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stats.pendingAcceptance + stats.awaitingVerification + stats.awaitingFinal}</div>
@@ -256,12 +244,12 @@ export default function AdminDashboardPage() {
             </Card>
 
             {/* In Progress */}
-            <Card className="hover:shadow-lg transition-all duration-300 hover:scale-[1.02] cursor-pointer border-l-4 border-l-purple-500 group">
+            <Card className="hover:shadow-lg transition-all duration-300 hover:scale-[1.02] cursor-pointer border-l-4 border-l-accent-foreground group">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
                   In Progress
                 </CardTitle>
-                <Activity className="h-4 w-4 text-purple-500 group-hover:scale-110 transition-transform duration-200" />
+                <Activity className="h-4 w-4 text-accent-foreground group-hover:scale-110 transition-transform duration-200" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stats.inProgress}</div>
@@ -272,17 +260,17 @@ export default function AdminDashboardPage() {
             </Card>
 
             {/* Completion Rate */}
-            <Card className="hover:shadow-lg transition-all duration-300 hover:scale-[1.02] cursor-pointer border-l-4 border-l-green-500 group">
+            <Card className="hover:shadow-lg transition-all duration-300 hover:scale-[1.02] cursor-pointer border-l-4 border-l-primary group">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
                   Completion Rate
                 </CardTitle>
-                <CheckCircle className="h-4 w-4 text-green-500 group-hover:scale-110 transition-transform duration-200" />
+                <CheckCircle className="h-4 w-4 text-primary group-hover:scale-110 transition-transform duration-200" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stats.completionRate}%</div>
                 <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
-                  <TrendingUp className="h-3 w-3 text-green-500" />
+                  <TrendingUp className="h-3 w-3" />
                   <span>+5.3% from last {selectedPeriod}</span>
                 </p>
               </CardContent>
@@ -370,7 +358,7 @@ export default function AdminDashboardPage() {
                   className="justify-start h-auto py-4 hover:bg-primary/5 hover:border-primary transition-all duration-200 hover:translate-x-1"
                   onClick={() => router.push('/admin/reviews')}
                 >
-                  <ClipboardList className="h-5 w-5 mr-3 text-blue-500 flex-shrink-0" />
+                  <ClipboardList className="h-5 w-5 mr-3 text-primary flex-shrink-0" />
                   <div className="flex-1 text-left">
                     <div className="font-medium">Manage QA Reviews</div>
                     <div className="text-xs text-muted-foreground">{stats.totalReviews} total reviews</div>
@@ -383,7 +371,7 @@ export default function AdminDashboardPage() {
                   className="justify-start h-auto py-4 hover:bg-primary/5 hover:border-primary transition-all duration-200 hover:translate-x-1"
                   onClick={() => router.push('/admin/reviewers')}
                 >
-                  <UserPlus className="h-5 w-5 mr-3 text-green-500 flex-shrink-0" />
+                  <UserPlus className="h-5 w-5 mr-3 text-primary flex-shrink-0" />
                   <div className="flex-1 text-left">
                     <div className="font-medium">Manage Reviewers</div>
                     <div className="text-xs text-muted-foreground">{stats.activeReviewers} active reviewers</div>
@@ -396,7 +384,7 @@ export default function AdminDashboardPage() {
                   className="justify-start h-auto py-4 hover:bg-primary/5 hover:border-primary transition-all duration-200 hover:translate-x-1"
                   onClick={() => router.push('/admin/member-firms')}
                 >
-                  <Building2 className="h-5 w-5 mr-3 text-purple-500 flex-shrink-0" />
+                  <Building2 className="h-5 w-5 mr-3 text-primary flex-shrink-0" />
                   <div className="flex-1 text-left">
                     <div className="font-medium">Member Firms</div>
                     <div className="text-xs text-muted-foreground">{stats.activeFirms} active firms</div>
@@ -409,7 +397,7 @@ export default function AdminDashboardPage() {
                   className="justify-start h-auto py-4 hover:bg-primary/5 hover:border-primary transition-all duration-200 hover:translate-x-1"
                   onClick={() => router.push('/admin/final-reviews')}
                 >
-                  <Star className="h-5 w-5 mr-3 text-amber-500 flex-shrink-0" />
+                  <Star className="h-5 w-5 mr-3 text-primary flex-shrink-0" />
                   <div className="flex-1 text-left">
                     <div className="font-medium">Final Reviews</div>
                     <div className="text-xs text-muted-foreground">{stats.awaitingFinal} awaiting approval</div>
@@ -422,7 +410,7 @@ export default function AdminDashboardPage() {
                   className="justify-start h-auto py-4 hover:bg-primary/5 hover:border-primary transition-all duration-200 hover:translate-x-1"
                   onClick={() => router.push('/admin/settings')}
                 >
-                  <BarChart3 className="h-5 w-5 mr-3 text-cyan-500 flex-shrink-0" />
+                  <BarChart3 className="h-5 w-5 mr-3 text-primary flex-shrink-0" />
                   <div className="flex-1 text-left">
                     <div className="font-medium">Analytics & Reports</div>
                     <div className="text-xs text-muted-foreground">View detailed insights</div>
@@ -443,7 +431,7 @@ export default function AdminDashboardPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {recentActivity.map((review, index) => (
+                  {recentActivity.map((review) => (
                     <div
                       key={review.id}
                       className={cn(
@@ -451,10 +439,9 @@ export default function AdminDashboardPage() {
                         "hover:bg-muted/80 hover:translate-x-1",
                         "animate-in slide-in-from-right-5 fade-in-50"
                       )}
-                      style={{ animationDelay: `${index * 50}ms` }}
                       onClick={() => router.push('/admin/reviews')}
                     >
-                      <div className={`h-2 w-2 rounded-full mt-2 flex-shrink-0 ${getStatusColor(review.workflowStatus || '')} animate-pulse`} />
+                      <div className="h-2 w-2 rounded-full mt-2 flex-shrink-0 bg-primary animate-pulse" />
                       <Avatar className="h-9 w-9 flex-shrink-0">
                         <AvatarFallback className="text-xs">
                           {review.memberFirm.substring(0, 2).toUpperCase()}
@@ -501,65 +488,70 @@ export default function AdminDashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="grid gap-3 md:grid-cols-5">
-                <button 
-                  className="group p-4 rounded-lg border-2 border-amber-200 dark:border-amber-900 bg-amber-50/50 dark:bg-amber-950/20 hover:shadow-md transition-all duration-200 hover:scale-[1.05] text-left"
+                <Button 
+                  variant="outline"
+                  className="group h-auto p-4 justify-start flex-col items-start border-2 hover:shadow-md transition-all duration-200 hover:scale-[1.05] bg-muted/50"
                   onClick={() => router.push('/admin/reviews?status=pending_acceptance')}
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <Clock className="h-5 w-5 text-amber-600 group-hover:scale-110 transition-transform" />
-                    <ArrowRight className="h-4 w-4 text-amber-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="flex items-center justify-between w-full mb-2">
+                    <Clock className="h-5 w-5 text-muted-foreground group-hover:scale-110 transition-transform" />
+                    <ArrowRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
-                  <div className="text-2xl font-bold text-amber-900 dark:text-amber-100">{stats.pendingAcceptance}</div>
-                  <p className="text-xs text-amber-700 dark:text-amber-400 mt-1">Pending Acceptance</p>
-                </button>
+                  <div className="text-2xl font-bold">{stats.pendingAcceptance}</div>
+                  <p className="text-xs text-muted-foreground mt-1">Pending Acceptance</p>
+                </Button>
 
-                <button 
-                  className="group p-4 rounded-lg border-2 border-blue-200 dark:border-blue-900 bg-blue-50/50 dark:bg-blue-950/20 hover:shadow-md transition-all duration-200 hover:scale-[1.05] text-left"
+                <Button 
+                  variant="outline"
+                  className="group h-auto p-4 justify-start flex-col items-start border-2 hover:shadow-md transition-all duration-200 hover:scale-[1.05] bg-muted/50"
                   onClick={() => router.push('/admin/reviews?status=in_progress')}
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <Activity className="h-5 w-5 text-blue-600 group-hover:scale-110 transition-transform" />
-                    <ArrowRight className="h-4 w-4 text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="flex items-center justify-between w-full mb-2">
+                    <Activity className="h-5 w-5 text-muted-foreground group-hover:scale-110 transition-transform" />
+                    <ArrowRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
-                  <div className="text-2xl font-bold text-blue-900 dark:text-blue-100">{stats.inProgress}</div>
-                  <p className="text-xs text-blue-700 dark:text-blue-400 mt-1">In Progress</p>
-                </button>
+                  <div className="text-2xl font-bold">{stats.inProgress}</div>
+                  <p className="text-xs text-muted-foreground mt-1">In Progress</p>
+                </Button>
 
-                <button 
-                  className="group p-4 rounded-lg border-2 border-purple-200 dark:border-purple-900 bg-purple-50/50 dark:bg-purple-950/20 hover:shadow-md transition-all duration-200 hover:scale-[1.05] text-left"
+                <Button 
+                  variant="outline"
+                  className="group h-auto p-4 justify-start flex-col items-start border-2 hover:shadow-md transition-all duration-200 hover:scale-[1.05] bg-muted/50"
                   onClick={() => router.push('/admin/reviews?status=submitted_for_verification')}
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <FileText className="h-5 w-5 text-purple-600 group-hover:scale-110 transition-transform" />
-                    <ArrowRight className="h-4 w-4 text-purple-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="flex items-center justify-between w-full mb-2">
+                    <FileText className="h-5 w-5 text-muted-foreground group-hover:scale-110 transition-transform" />
+                    <ArrowRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
-                  <div className="text-2xl font-bold text-purple-900 dark:text-purple-100">{stats.awaitingVerification}</div>
-                  <p className="text-xs text-purple-700 dark:text-purple-400 mt-1">For Verification</p>
-                </button>
+                  <div className="text-2xl font-bold">{stats.awaitingVerification}</div>
+                  <p className="text-xs text-muted-foreground mt-1">For Verification</p>
+                </Button>
 
-                <button 
-                  className="group p-4 rounded-lg border-2 border-indigo-200 dark:border-indigo-900 bg-indigo-50/50 dark:bg-indigo-950/20 hover:shadow-md transition-all duration-200 hover:scale-[1.05] text-left"
+                <Button 
+                  variant="outline"
+                  className="group h-auto p-4 justify-start flex-col items-start border-2 hover:shadow-md transition-all duration-200 hover:scale-[1.05] bg-muted/50"
                   onClick={() => router.push('/admin/final-reviews')}
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <Star className="h-5 w-5 text-indigo-600 group-hover:scale-110 transition-transform" />
-                    <ArrowRight className="h-4 w-4 text-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="flex items-center justify-between w-full mb-2">
+                    <Star className="h-5 w-5 text-muted-foreground group-hover:scale-110 transition-transform" />
+                    <ArrowRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
-                  <div className="text-2xl font-bold text-indigo-900 dark:text-indigo-100">{stats.awaitingFinal}</div>
-                  <p className="text-xs text-indigo-700 dark:text-indigo-400 mt-1">Awaiting Final</p>
-                </button>
+                  <div className="text-2xl font-bold">{stats.awaitingFinal}</div>
+                  <p className="text-xs text-muted-foreground mt-1">Awaiting Final</p>
+                </Button>
 
-                <button 
-                  className="group p-4 rounded-lg border-2 border-green-200 dark:border-green-900 bg-green-50/50 dark:bg-green-950/20 hover:shadow-md transition-all duration-200 hover:scale-[1.05] text-left"
+                <Button 
+                  variant="outline"
+                  className="group h-auto p-4 justify-start flex-col items-start border-2 hover:shadow-md transition-all duration-200 hover:scale-[1.05] bg-muted/50"
                   onClick={() => router.push('/admin/reviews?status=completed')}
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <CheckCircle className="h-5 w-5 text-green-600 group-hover:scale-110 transition-transform" />
-                    <ArrowRight className="h-4 w-4 text-green-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="flex items-center justify-between w-full mb-2">
+                    <CheckCircle className="h-5 w-5 text-muted-foreground group-hover:scale-110 transition-transform" />
+                    <ArrowRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
-                  <div className="text-2xl font-bold text-green-900 dark:text-green-100">{stats.completed}</div>
-                  <p className="text-xs text-green-700 dark:text-green-400 mt-1">Completed</p>
-                </button>
+                  <div className="text-2xl font-bold">{stats.completed}</div>
+                  <p className="text-xs text-muted-foreground mt-1">Completed</p>
+                </Button>
               </div>
             </CardContent>
           </Card>
