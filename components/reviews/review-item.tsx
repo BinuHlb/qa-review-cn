@@ -200,6 +200,13 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
                         <Icon icon="mdi:bell-badge" className="mr-2 h-4 w-4 text-orange-500" />
                         Notifications
                       </DropdownMenuItem>
+                      <DropdownMenuItem onClick={(e) => {
+                        e.stopPropagation()
+                        console.log('Conditions:', review)
+                      }}>
+                        <Icon icon="mdi:alert-circle" className="mr-2 h-4 w-4 text-red-500" />
+                        Conditions
+                      </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 )}
@@ -260,6 +267,11 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
                   <Badge variant="outline" className={`${getPriorityColor(review.priority)} text-xs px-2 py-0.5`}>
                     {review.priority}
                   </Badge>
+                  {review.previousRating && (
+                    <Badge variant="outline" className="bg-muted text-xs px-2 py-0.5">
+                      Previous: {review.previousRating}/5
+                    </Badge>
+                  )}
                 </div>
 
                 {/* Status Section */}
@@ -440,9 +452,16 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
             </div>
 
             {/* Additional Status Badges */}
-            <Badge variant="outline" className={`${getPriorityColor(review.priority)} text-xs px-2 py-0.5`}>
-              {review.priority}
-            </Badge>
+            <div className="flex flex-wrap gap-1">
+              <Badge variant="outline" className={`${getPriorityColor(review.priority)} text-xs px-2 py-0.5`}>
+                {review.priority}
+              </Badge>
+              {review.previousRating && (
+                <Badge variant="outline" className="bg-muted text-xs px-2 py-0.5">
+                  Previous: {review.previousRating}/5
+                </Badge>
+              )}
+            </div>
 
             {/* Status Section */}
             <div className="grid grid-cols-2 gap-2 text-xs">

@@ -15,7 +15,7 @@ import {
   generateInitials,
   generateAvatarColor
 } from "@/lib/utils/review-utils"
-import { Star, Send, Upload, X, FileText } from "lucide-react"
+import { Star, Send, FileText } from "lucide-react"
 
 
 interface ReviewActionPanelProps {
@@ -71,18 +71,7 @@ export function ReviewActionPanel({
   const [attachments, setAttachments] = useState<Attachment[]>(
     (review.documents || initialAttachments) as Attachment[]
   )
-  const [additionalDocuments, setAdditionalDocuments] = useState<File[]>([])
-
-  const handleAdditionalDocsUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files
-    if (files) {
-      setAdditionalDocuments(prev => [...prev, ...Array.from(files)])
-    }
-  }
-
-  const handleRemoveAdditionalDoc = (index: number) => {
-    setAdditionalDocuments(prev => prev.filter((_, i) => i !== index))
-  }
+  const [additionalDocsRequest, setAdditionalDocsRequest] = useState("")
 
   const handleSubmitRating = async () => {
     if (!selectedGrade || !onSubmitRating) return
@@ -279,52 +268,24 @@ export function ReviewActionPanel({
               />
             </div>
 
-            {/* Additional Documents */}
+            {/* Request Additional Documents */}
             <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="additional-docs" className="text-xs font-medium text-muted-foreground">
-                  Additional Documents (Optional)
-                </Label>
-                <label htmlFor="additional-docs-input" className="cursor-pointer">
-                  <div className="flex items-center gap-1.5 text-xs text-primary hover:text-primary/80">
-                    <Upload className="h-3.5 w-3.5" />
-                    <span>Upload</span>
-                  </div>
-                </label>
-                <input
-                  id="additional-docs-input"
-                  type="file"
-                  multiple
-                  className="hidden"
-                  onChange={handleAdditionalDocsUpload}
-                  accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png"
-                />
-              </div>
-              
-              {additionalDocuments.length > 0 && (
-                <div className="space-y-1.5 max-h-32 overflow-y-auto">
-                  {additionalDocuments.map((file, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between p-2 bg-white border rounded-md text-xs"
-                    >
-                      <div className="flex items-center gap-2 flex-1 min-w-0">
-                        <FileText className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
-                        <span className="truncate text-foreground">{file.name}</span>
-                        <span className="text-muted-foreground flex-shrink-0">
-                          ({(file.size / 1024).toFixed(1)} KB)
-                        </span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveAdditionalDoc(index)}
-                        className="ml-2 p-0.5 hover:bg-destructive/10 rounded"
-                      >
-                        <X className="h-3.5 w-3.5 text-destructive" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
+              <Label htmlFor="additional-docs-request" className="text-xs font-medium text-muted-foreground">
+                Request Additional Documents (Optional)
+              </Label>
+              <Textarea
+                id="additional-docs-request"
+                placeholder="Specify any additional documents needed from the member firm"
+                value={additionalDocsRequest}
+                onChange={(e) => setAdditionalDocsRequest(e.target.value)}
+                rows={3}
+                className="text-sm resize-none bg-white"
+              />
+              {additionalDocsRequest && (
+                <p className="text-xs text-blue-600 flex items-center gap-1">
+                  <FileText className="h-3 w-3" />
+                  Request will be sent to member firm via email
+                </p>
               )}
             </div>
 

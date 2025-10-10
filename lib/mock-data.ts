@@ -27,6 +27,7 @@ export interface Review {
   percentage?: number
   reviewType?: '18' | '8' | '5'
   year?: string
+  previousRating?: '1' | '2' | '3' | '4' | '5'
 }
 
 export const mockReviews: Review[] = [
@@ -48,6 +49,7 @@ export const mockReviews: Review[] = [
     percentage: 65,
     reviewType: '18',
     year: '2024',
+    previousRating: '2',
     documents: [
       {
         id: 'DOC-001',
@@ -101,6 +103,7 @@ export const mockReviews: Review[] = [
     percentage: 100,
     reviewType: '8',
     year: '2024',
+    previousRating: '3',
     documents: [
       {
         id: 'DOC-005',
@@ -127,17 +130,18 @@ export const mockReviews: Review[] = [
     reviewer: 'Michael Chen',
     country: 'Canada',
     reviewerStatus: 'Active',
-    partnerStatus: 'Pending',
+    partnerStatus: 'Active',
     startDate: '2024-01-20',
     endDate: '2024-04-20',
     currentGrade: '1',
-    status: 'In Progress',
+    status: 'Submitted',
     description: 'Current member quality assurance review',
     priority: 'Medium',
     lastUpdated: '2024-01-25',
-    percentage: 45,
+    percentage: 100,
     reviewType: '18',
-    year: '2024'
+    year: '2024',
+    previousRating: '1'
   },
   {
     id: 'REV-004',
@@ -156,7 +160,8 @@ export const mockReviews: Review[] = [
     lastUpdated: '2024-01-15',
     percentage: 80,
     reviewType: '5',
-    year: '2023'
+    year: '2023',
+    previousRating: '4'
   },
   {
     id: 'REV-005',
@@ -175,7 +180,8 @@ export const mockReviews: Review[] = [
     lastUpdated: '2024-02-10',
     percentage: 25,
     reviewType: '5',
-    year: '2025'
+    year: '2025',
+    previousRating: '2'
   },
   {
     id: 'REV-006',
@@ -194,7 +200,8 @@ export const mockReviews: Review[] = [
     lastUpdated: '2024-02-05',
     percentage: 100,
     reviewType: '18',
-    year: '2023'
+    year: '2023',
+    previousRating: '1'
   },
   {
     id: 'REV-007',
@@ -202,18 +209,19 @@ export const mockReviews: Review[] = [
     type: 'Current Member',
     reviewer: 'Robert Taylor',
     country: 'Japan',
-    reviewerStatus: 'Pending',
+    reviewerStatus: 'Active',
     partnerStatus: 'Active',
     startDate: '2024-03-01',
     endDate: '2024-06-01',
     currentGrade: '2',
-    status: 'Pending',
+    status: 'Submitted',
     description: 'Current member standards assessment',
     priority: 'High',
     lastUpdated: '2024-02-28',
-    percentage: 10,
+    percentage: 100,
     reviewType: '8',
-    year: '2025'
+    year: '2025',
+    previousRating: '3'
   },
   {
     id: 'REV-008',
@@ -241,17 +249,18 @@ export const mockReviews: Review[] = [
     reviewer: 'Christopher Lee',
     country: 'Singapore',
     reviewerStatus: 'Active',
-    partnerStatus: 'Pending',
+    partnerStatus: 'Active',
     startDate: '2024-01-30',
     endDate: '2024-03-30',
     currentGrade: '3',
-    status: 'In Progress',
+    status: 'Submitted',
     description: 'Current member performance evaluation',
     priority: 'Low',
     lastUpdated: '2024-02-01',
-    percentage: 35,
+    percentage: 100,
     reviewType: '8',
-    year: '2023'
+    year: '2023',
+    previousRating: '4'
   },
   {
     id: 'REV-010',

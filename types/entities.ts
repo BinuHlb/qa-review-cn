@@ -119,6 +119,9 @@ export interface Review {
   // Conditions/Alerts
   conditions?: boolean
   
+  // Previous Rating (for historical tracking)
+  previousRating?: '1' | '2' | '3' | '4' | '5'
+  
   // Complete workflow data (optional, for detailed views)
   workflow?: ReviewWorkflowData
 }

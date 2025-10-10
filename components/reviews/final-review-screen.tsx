@@ -34,7 +34,9 @@ interface FinalReviewScreenProps {
 }
 
 export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: FinalReviewScreenProps) {
+  const isProspect = review.type === 'Prospect'
   const [finalGrade, setFinalGrade] = useState<string>(review.currentGrade)
+  const [prospectDecision, setProspectDecision] = useState<'pass' | 'fail' | ''>('')
   const [adminNotes, setAdminNotes] = useState("")
   const [rejectionReason, setRejectionReason] = useState("")
   const [isConfirming, setIsConfirming] = useState(false)
@@ -133,7 +135,16 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
   }
 
   const handleConfirm = async () => {
-    if (!finalGrade) {
+    if (isProspect && !prospectDecision) {
+      toast({
+        title: "Error",
+        description: "Please select Pass or Fail",
+        variant: "destructive"
+      })
+      return
+    }
+    
+    if (!isProspect && !finalGrade) {
       toast({
         title: "Error",
         description: "Please select a final grade",
@@ -144,7 +155,8 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
 
     setIsConfirming(true)
     try {
-      await onConfirm(review.id, finalGrade, adminNotes)
+      const gradeToSubmit = isProspect ? prospectDecision : finalGrade
+      await onConfirm(review.id, gradeToSubmit, adminNotes)
       toast({
         title: "Success",
         description: "Review confirmed successfully"
@@ -283,14 +295,63 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
           </div>
 
             <div className="space-y-4">
-              {/* Compact Grade Selection */}
-              <GradeSelect
-                value={finalGrade}
-                onValueChange={setFinalGrade}
-                label="Final Grade"
-                placeholder="Select grade"
-                required={true}
-              />
+              {/* Grade Selection - Conditional based on review type */}
+              {isProspect ? (
+                <div className="space-y-2">
+                  <Label className="text-xs font-medium text-muted-foreground">
+                    Final Decision *
+                  </Label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setProspectDecision('pass')}
+                      className={`relative flex items-center justify-center p-4 rounded-lg border-2 transition-all duration-200 hover:scale-105 hover:shadow-md active:scale-95 ${
+                        prospectDecision === 'pass'
+                          ? 'border-green-500 bg-green-50 shadow-sm'
+                          : 'border-muted hover:border-green-300 bg-white'
+                      }`}
+                    >
+                      <div className="flex flex-col items-center gap-1.5">
+                        <ThumbsUp className={`h-6 w-6 ${prospectDecision === 'pass' ? 'text-green-600' : 'text-muted-foreground'}`} />
+                        <span className={`text-sm font-semibold ${prospectDecision === 'pass' ? 'text-green-700' : 'text-muted-foreground'}`}>
+                          Pass
+                        </span>
+                      </div>
+                      {prospectDecision === 'pass' && (
+                        <Star className="absolute -top-1 -right-1 h-3.5 w-3.5 fill-green-600 text-green-600" />
+                      )}
+                    </button>
+                    
+                    <button
+                      type="button"
+                      onClick={() => setProspectDecision('fail')}
+                      className={`relative flex items-center justify-center p-4 rounded-lg border-2 transition-all duration-200 hover:scale-105 hover:shadow-md active:scale-95 ${
+                        prospectDecision === 'fail'
+                          ? 'border-red-500 bg-red-50 shadow-sm'
+                          : 'border-muted hover:border-red-300 bg-white'
+                      }`}
+                    >
+                      <div className="flex flex-col items-center gap-1.5">
+                        <ThumbsDown className={`h-6 w-6 ${prospectDecision === 'fail' ? 'text-red-600' : 'text-muted-foreground'}`} />
+                        <span className={`text-sm font-semibold ${prospectDecision === 'fail' ? 'text-red-700' : 'text-muted-foreground'}`}>
+                          Fail
+                        </span>
+                      </div>
+                      {prospectDecision === 'fail' && (
+                        <Star className="absolute -top-1 -right-1 h-3.5 w-3.5 fill-red-600 text-red-600" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <GradeSelect
+                  value={finalGrade}
+                  onValueChange={setFinalGrade}
+                  label="Final Grade"
+                  placeholder="Select grade"
+                  required={true}
+                />
+              )}
 
               {/* Compact Admin Notes */}
               <div className="space-y-2">
@@ -313,7 +374,7 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
               <div className="flex gap-2">
                 <Button
                   onClick={handleConfirm}
-                  disabled={isConfirming || !finalGrade}
+                  disabled={isConfirming || (isProspect ? !prospectDecision : !finalGrade)}
                   className="flex-1 h-9 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-sm font-medium shadow-sm"
                 >
                   {isConfirming ? (
