@@ -4,7 +4,8 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Building2, User } from "lucide-react"
-import { type Review, getGradeColor, getStatusColor } from "@/lib/mock-data"
+import type { Review } from "@/types/entities"
+import { getGradeColor, getStatusColor } from "@/lib/mock-data"
 import { cn } from "@/lib/utils"
 
 interface ReviewListCompactProps {

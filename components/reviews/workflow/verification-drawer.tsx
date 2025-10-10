@@ -283,7 +283,7 @@ export function VerificationDrawer({
             {/* Agreement Level */}
             <div className="space-y-3">
               <Label className="text-sm font-medium">Agreement Level</Label>
-              <RadioGroup value={agreementLevel} onValueChange={(v) => setAgreementLevel(v as any)}>
+              <RadioGroup value={agreementLevel} onValueChange={(v) => setAgreementLevel(v as 'full' | 'partial' | 'disagree')}>
                 <div className="space-y-2">
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="full" id="full" />

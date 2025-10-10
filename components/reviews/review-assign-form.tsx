@@ -12,7 +12,8 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Checkbox } from "@/components/ui/checkbox"
 import { UserPlus, X, Building2, Award, AlertTriangle } from "lucide-react"
-import { type Review, getGradeColor, getStatusColor } from "@/lib/mock-data"
+import type { Review } from "@/types/entities"
+import { getGradeColor, getStatusColor } from "@/lib/mock-data"
 
 interface ReviewAssignFormProps {
   review: Review

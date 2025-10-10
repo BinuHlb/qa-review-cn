@@ -20,7 +20,7 @@ import {
   Flag,
   CheckCircle
 } from "lucide-react"
-import { type Review } from "@/lib/mock-data"
+import type { Review } from "@/types/entities"
 import { AttachmentsSection, type Attachment } from "@/components/shared/attachments-section"
 import { 
   getGradeColor, 

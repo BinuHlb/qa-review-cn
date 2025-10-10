@@ -264,19 +264,60 @@ export default function AdminReviewsPage() {
     setAcceptanceDrawerOpen(true)
   }, [])
 
-  const handleAcceptReview = useCallback(async (reviewId: string, accepted: boolean, reason?: string) => {
-    const updated = WorkflowService.handleAcceptance(reviews, reviewId, accepted, reason)
-    setReviews(updated)
-    await NotificationService.sendAcceptanceNotification(
+  const handleAcceptReview = useCallback(async (reviewId: string, notes?: string) => {
+    const review = reviews.find(r => r.id === reviewId)
+    if (!review) return
+    
+    const updatedReview = WorkflowService.acceptReview(review, {
       reviewId,
-      accepted,
-      'admin@qa-review.com',
+      acceptedBy: 'Admin',
+      acceptedByRole: 'reviewer',
+      acceptanceNotes: notes
+    })
+    
+    setReviews(prev => prev.map(r => r.id === reviewId ? updatedReview : r))
+    
+    await NotificationService.sendAcceptanceConfirmation(
+      reviewId,
+      review.memberFirm,
+      'Admin',
+      'reviewer'
+    )
+    
+    toast({
+      title: "Review Accepted",
+      description: "Review accepted on behalf of reviewer. Proceeding to review work.",
+      variant: "default"
+    })
+    setAcceptanceDrawerOpen(false)
+    setReviewForAcceptance(null)
+  }, [reviews, toast])
+
+  const handleRejectReview = useCallback(async (reviewId: string, reason: string) => {
+    const review = reviews.find(r => r.id === reviewId)
+    if (!review) return
+    
+    const updatedReview = WorkflowService.rejectReview(review, {
+      reviewId,
+      rejectedBy: 'Admin',
+      rejectedByRole: 'reviewer',
+      rejectionReason: reason
+    })
+    
+    setReviews(prev => prev.map(r => r.id === reviewId ? updatedReview : r))
+    
+    await NotificationService.sendRejectionNotification(
+      reviewId,
+      review.memberFirm,
+      'Admin',
+      'reviewer',
       reason
     )
+    
     toast({
-      title: accepted ? "Review Accepted" : "Review Rejected",
-      description: accepted ? "Proceeding to review work." : "Review has been rejected.",
-      variant: accepted ? "default" : "destructive"
+      title: "Review Rejected",
+      description: "Review rejected on behalf of reviewer.",
+      variant: "destructive"
     })
     setAcceptanceDrawerOpen(false)
     setReviewForAcceptance(null)
@@ -292,24 +333,48 @@ export default function AdminReviewsPage() {
     comments: string
     strengths?: string
     areasForImprovement?: string
+    recommendations?: string
     reviewedFiles: File[]
   }) => {
-    const updated = WorkflowService.submitReview(reviews, reviewId, {
-      grade: data.grade,
-      comments: data.comments,
-      strengths: data.strengths,
-      areasForImprovement: data.areasForImprovement,
-      reviewedFiles: data.reviewedFiles.map(f => f.name)
+    const review = reviews.find(r => r.id === reviewId)
+    if (!review) return
+    
+    const updatedReview = WorkflowService.submitReview(review, {
+      reviewId,
+      rating: {
+        grade: data.grade as '1' | '2' | '3' | '4' | '5',
+        comments: data.comments,
+        strengths: data.strengths,
+        areasForImprovement: data.areasForImprovement,
+        recommendations: data.recommendations,
+        submittedBy: 'Admin',
+        submittedByRole: 'admin',
+        submittedAt: new Date().toISOString()
+      },
+      reviewedDocuments: data.reviewedFiles.map((file, idx) => ({
+        id: `reviewed-${reviewId}-${Date.now()}-${idx}`,
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        url: URL.createObjectURL(file),
+        uploadedBy: 'Admin',
+        uploadedByRole: 'admin',
+        uploadedAt: new Date().toISOString(),
+        category: 'reviewed' as const
+      }))
     })
-    setReviews(updated)
+    
+    setReviews(prev => prev.map(r => r.id === reviewId ? updatedReview : r))
+    
     await NotificationService.sendSubmissionNotification(
       reviewId,
-      'admin@qa-review.com',
-      data.grade
+      review.memberFirm,
+      'technicaldirector@qa-review.com'
     )
+    
     toast({
       title: "Review Submitted",
-      description: "Review work has been submitted for verification.",
+      description: "Review work submitted on behalf of reviewer for TD verification.",
       variant: "default"
     })
     setWorkDrawerOpen(false)
@@ -329,24 +394,35 @@ export default function AdminReviewsPage() {
     agreementLevel: 'full' | 'partial' | 'disagree'
     additionalFindings?: string
   }) => {
-    const updated = WorkflowService.verifyReview(reviews, reviewId, {
-      grade: data.grade,
-      originalGrade: data.originalGrade,
-      modified: data.modified,
-      verificationNotes: data.verificationNotes,
-      agreementLevel: data.agreementLevel,
-      additionalFindings: data.additionalFindings
+    const review = reviews.find(r => r.id === reviewId)
+    if (!review) return
+    
+    const updatedReview = WorkflowService.verifyReview(review, {
+      reviewId,
+      verification: {
+        grade: data.grade as '1' | '2' | '3' | '4' | '5',
+        originalReviewerGrade: data.originalGrade as '1' | '2' | '3' | '4' | '5',
+        modified: data.modified,
+        verificationNotes: data.verificationNotes,
+        agreementLevel: data.agreementLevel,
+        additionalFindings: data.additionalFindings,
+        verifiedBy: 'Admin',
+        verifiedByRole: 'admin',
+        verifiedAt: new Date().toISOString()
+      }
     })
-    setReviews(updated)
+    
+    setReviews(prev => prev.map(r => r.id === reviewId ? updatedReview : r))
+    
     await NotificationService.sendVerificationNotification(
       reviewId,
-      'admin@qa-review.com',
-      data.grade,
-      data.modified
+      review.memberFirm,
+      'ceo@qa-review.com'
     )
+    
     toast({
       title: "Review Verified",
-      description: "Review has been sent to CEO for final approval.",
+      description: "Review verified on behalf of TD and sent to CEO for final approval.",
       variant: "default"
     })
     setVerificationDrawerOpen(false)
@@ -545,7 +621,7 @@ export default function AdminReviewsPage() {
                     Admin Workflow Actions
                   </h3>
                   <div className="grid grid-cols-2 gap-2">
-                    {currentReview.workflowStatus === 'pending-acceptance' && (
+                    {currentReview.workflowStatus === 'pending_acceptance' && (
                       <Button
                         size="sm"
                         variant="outline"
@@ -556,7 +632,7 @@ export default function AdminReviewsPage() {
                         Accept/Reject
                       </Button>
                     )}
-                    {(currentReview.workflowStatus === 'in-progress' || currentReview.workflowStatus === 'accepted') && (
+                    {(currentReview.workflowStatus === 'in_progress' || currentReview.workflowStatus === 'accepted') && (
                       <Button
                         size="sm"
                         variant="outline"
@@ -567,7 +643,7 @@ export default function AdminReviewsPage() {
                         Perform Work
                       </Button>
                     )}
-                    {currentReview.workflowStatus === 'submitted-for-verification' && (
+                    {currentReview.workflowStatus === 'submitted_for_verification' && (
                       <Button
                         size="sm"
                         variant="outline"
@@ -578,7 +654,7 @@ export default function AdminReviewsPage() {
                         Verify (TD)
                       </Button>
                     )}
-                    {currentReview.workflowStatus === 'verified-pending-final' && (
+                    {currentReview.workflowStatus === 'verified_pending_final' && (
                       <Button
                         size="sm"
                         variant="outline"
@@ -636,7 +712,10 @@ export default function AdminReviewsPage() {
           open={acceptanceDrawerOpen}
           onOpenChange={setAcceptanceDrawerOpen}
           review={reviewForAcceptance}
+          userRole="reviewer"
+          userName="Admin (Acting as Reviewer)"
           onAccept={handleAcceptReview}
+          onReject={handleRejectReview}
         />
 
         <ReviewerWorkDrawer

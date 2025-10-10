@@ -22,7 +22,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { type Review, getGradeColor, getStatusColor, getReviewerStatusColor } from "@/lib/mock-data"
+import type { Review } from "@/types/entities"
+import { getGradeColor, getStatusColor, getReviewerStatusColor } from "@/lib/mock-data"
 
 interface ReviewListViewProps {
   reviews: Review[]

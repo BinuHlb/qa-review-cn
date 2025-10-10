@@ -11,7 +11,7 @@ export interface SendNotificationParams {
   recipientRole: string
   reviewId: string
   reviewTitle: string
-  additionalData?: Record<string, any>
+  additionalData?: Record<string, unknown>
 }
 
 export class NotificationService {

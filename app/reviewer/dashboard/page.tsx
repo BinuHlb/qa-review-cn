@@ -135,7 +135,7 @@ export default function ReviewerDashboardPage() {
         submittedAt: new Date().toISOString(),
         timeSpentHours: parseFloat(review.reviewType || '18')
       },
-      reviewedFiles: data.reviewedFiles
+      reviewedDocuments: data.reviewedFiles
     })
     
     // Update local state

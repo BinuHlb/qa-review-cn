@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Search, Filter, X, List, Grid3X3 } from "lucide-react"
-import { type Review } from "@/lib/mock-data"
+import type { Review } from "@/types/entities"
 
 interface ReviewFiltersProps {
   reviews: Review[]

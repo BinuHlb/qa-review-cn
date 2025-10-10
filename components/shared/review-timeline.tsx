@@ -9,7 +9,7 @@ import {
   Star,
   type LucideIcon
 } from "lucide-react"
-import { type Review } from "@/lib/mock-data"
+import type { Review } from "@/types/entities"
 
 export interface TimelineStage {
   id: string

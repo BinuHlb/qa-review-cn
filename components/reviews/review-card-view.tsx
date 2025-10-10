@@ -13,7 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { type Review } from "@/lib/mock-data"
+import type { Review } from "@/types/entities"
 import { 
   getGradeColor, 
   getStatusColor, 

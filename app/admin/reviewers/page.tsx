@@ -15,7 +15,8 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 
-import { mockReviews, type Review } from "@/lib/mock-data"
+import { mockReviews } from "@/lib/mock-data"
+import type { Review } from "@/types/entities"
 import { type Attachment } from "@/components/shared/attachments-section"
 
 export default function AdminReviewersPage() {

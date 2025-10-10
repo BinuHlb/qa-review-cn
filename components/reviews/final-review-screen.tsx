@@ -13,7 +13,8 @@ import {
   ThumbsDown,
   
 } from "lucide-react"
-import { type Review, type Comment, type Attachment } from "@/lib/schemas/review.schema"
+import type { Review, Attachment } from "@/types/entities"
+import { type Comment } from "@/lib/schemas/review.schema"
 import { useToast } from "@/hooks/use-toast"
 import { ScrollablePanel } from "@/components/shared/scrollable-panel"
 import { AttachmentsSection } from "@/components/shared/attachments-section"
