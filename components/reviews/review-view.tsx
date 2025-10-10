@@ -1,7 +1,7 @@
 "use client"
 
 import { ReviewItem } from "./review-item"
-import { type Review } from "@/lib/mock-data"
+import type { Review } from "@/types/entities"
 
 interface ReviewViewProps {
   reviews: Review[]

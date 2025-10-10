@@ -11,24 +11,41 @@ import { EmptyState } from "@/components/shared/empty-state"
 import { ReviewView } from "@/components/reviews/review-view"
 import { ReviewActionPanel } from "@/components/reviews/review-action-panel"
 import { ReviewAssignDrawer } from "@/components/reviews/review-assign-drawer"
-import { ClipboardList, Search, RotateCcw, List, Grid3X3, Calendar, Award, Clock, MapPin } from "lucide-react"
+import { AcceptanceDrawer } from "@/components/reviews/workflow/acceptance-drawer"
+import { ReviewerWorkDrawer } from "@/components/reviews/workflow/reviewer-work-drawer"
+import { VerificationDrawer } from "@/components/reviews/workflow/verification-drawer"
+import { ClipboardList, Search, RotateCcw, List, Grid3X3, Calendar, Award, Clock, MapPin, Shield, CheckCircle, FileText } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 
-import { mockReviews, type Review } from "@/lib/mock-data"
+import type { Review } from "@/types/entities"
+import workflowMockReviews from "@/lib/mock-data-workflow"
 import { mockReviewers } from "@/lib/reviewers-mock-data"
 import { type Attachment } from "@/components/shared/attachments-section"
 import { REVIEW_TYPE_OPTIONS } from "@/lib/constants"
 import { useDataFilters } from "@/hooks/use-data-filters"
 import { useSelection } from "@/hooks/use-selection"
+import { WorkflowService } from "@/lib/services/workflow-service"
+import { NotificationService } from "@/lib/services/notification-service"
+import { useToast } from "@/hooks/use-toast"
 
 export default function AdminReviewsPage() {
-  const [reviews, setReviews] = useState<Review[]>(mockReviews)
+  const { toast } = useToast()
+  const [reviews, setReviews] = useState<Review[]>(workflowMockReviews)
   const [viewMode, setViewMode] = useState<"list" | "card">("list")
   const [reviewAttachments, setReviewAttachments] = useState<Record<string, Attachment[]>>({})
+  
+  // Workflow drawers state
   const [assignDrawerOpen, setAssignDrawerOpen] = useState(false)
+  const [acceptanceDrawerOpen, setAcceptanceDrawerOpen] = useState(false)
+  const [workDrawerOpen, setWorkDrawerOpen] = useState(false)
+  const [verificationDrawerOpen, setVerificationDrawerOpen] = useState(false)
+  
   const [reviewToAssign, setReviewToAssign] = useState<Review | null>(null)
+  const [reviewForAcceptance, setReviewForAcceptance] = useState<Review | null>(null)
+  const [reviewForWork, setReviewForWork] = useState<Review | null>(null)
+  const [reviewForVerification, setReviewForVerification] = useState<Review | null>(null)
 
   // Use custom filters hook
   const {
@@ -241,6 +258,101 @@ export default function AdminReviewsPage() {
     // In a real app, this would trigger the actual download
   }, [])
 
+  // Workflow action handlers (Admin omnipotent mode - can perform any action)
+  const handleOpenAcceptance = useCallback((review: Review) => {
+    setReviewForAcceptance(review)
+    setAcceptanceDrawerOpen(true)
+  }, [])
+
+  const handleAcceptReview = useCallback(async (reviewId: string, accepted: boolean, reason?: string) => {
+    const updated = WorkflowService.handleAcceptance(reviews, reviewId, accepted, reason)
+    setReviews(updated)
+    await NotificationService.sendAcceptanceNotification(
+      reviewId,
+      accepted,
+      'admin@qa-review.com',
+      reason
+    )
+    toast({
+      title: accepted ? "Review Accepted" : "Review Rejected",
+      description: accepted ? "Proceeding to review work." : "Review has been rejected.",
+      variant: accepted ? "default" : "destructive"
+    })
+    setAcceptanceDrawerOpen(false)
+    setReviewForAcceptance(null)
+  }, [reviews, toast])
+
+  const handleOpenWork = useCallback((review: Review) => {
+    setReviewForWork(review)
+    setWorkDrawerOpen(true)
+  }, [])
+
+  const handleSubmitWorkReview = useCallback(async (reviewId: string, data: {
+    grade: string
+    comments: string
+    strengths?: string
+    areasForImprovement?: string
+    reviewedFiles: File[]
+  }) => {
+    const updated = WorkflowService.submitReview(reviews, reviewId, {
+      grade: data.grade,
+      comments: data.comments,
+      strengths: data.strengths,
+      areasForImprovement: data.areasForImprovement,
+      reviewedFiles: data.reviewedFiles.map(f => f.name)
+    })
+    setReviews(updated)
+    await NotificationService.sendSubmissionNotification(
+      reviewId,
+      'admin@qa-review.com',
+      data.grade
+    )
+    toast({
+      title: "Review Submitted",
+      description: "Review work has been submitted for verification.",
+      variant: "default"
+    })
+    setWorkDrawerOpen(false)
+    setReviewForWork(null)
+  }, [reviews, toast])
+
+  const handleOpenVerification = useCallback((review: Review) => {
+    setReviewForVerification(review)
+    setVerificationDrawerOpen(true)
+  }, [])
+
+  const handleVerifyReview = useCallback(async (reviewId: string, data: {
+    grade: string
+    originalGrade: string
+    modified: boolean
+    verificationNotes: string
+    agreementLevel: 'full' | 'partial' | 'disagree'
+    additionalFindings?: string
+  }) => {
+    const updated = WorkflowService.verifyReview(reviews, reviewId, {
+      grade: data.grade,
+      originalGrade: data.originalGrade,
+      modified: data.modified,
+      verificationNotes: data.verificationNotes,
+      agreementLevel: data.agreementLevel,
+      additionalFindings: data.additionalFindings
+    })
+    setReviews(updated)
+    await NotificationService.sendVerificationNotification(
+      reviewId,
+      'admin@qa-review.com',
+      data.grade,
+      data.modified
+    )
+    toast({
+      title: "Review Verified",
+      description: "Review has been sent to CEO for final approval.",
+      variant: "default"
+    })
+    setVerificationDrawerOpen(false)
+    setReviewForVerification(null)
+  }, [reviews, toast])
+
   // Empty state configuration
   const emptyStateConfig = {
     icon: ClipboardList,
@@ -425,14 +537,76 @@ export default function AdminReviewsPage() {
           {/* Right Panel - Review Details */}
           <div className="w-96 border-l bg-background overflow-y-auto">
             {currentReview ? (
-              <ReviewActionPanel
-                key={currentReview.id}
-                review={currentReview}
-                initialAttachments={reviewAttachments[currentReview.id] || []}
-                onAttachmentUpload={(files) => handleAttachmentUpload(currentReview.id, files)}
-                onAttachmentRemove={(attachmentId) => handleAttachmentRemove(currentReview.id, attachmentId)}
-                onAttachmentDownload={handleAttachmentDownload}
-              />
+              <div className="flex flex-col h-full">
+                {/* Admin Workflow Actions - Omnipotent Controls */}
+                <div className="border-b bg-muted/30 p-4 space-y-2">
+                  <h3 className="text-sm font-semibold text-muted-foreground flex items-center gap-2">
+                    <Shield className="h-4 w-4" />
+                    Admin Workflow Actions
+                  </h3>
+                  <div className="grid grid-cols-2 gap-2">
+                    {currentReview.workflowStatus === 'pending-acceptance' && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleOpenAcceptance(currentReview)}
+                        className="text-xs"
+                      >
+                        <CheckCircle className="h-3 w-3 mr-1" />
+                        Accept/Reject
+                      </Button>
+                    )}
+                    {(currentReview.workflowStatus === 'in-progress' || currentReview.workflowStatus === 'accepted') && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleOpenWork(currentReview)}
+                        className="text-xs"
+                      >
+                        <FileText className="h-3 w-3 mr-1" />
+                        Perform Work
+                      </Button>
+                    )}
+                    {currentReview.workflowStatus === 'submitted-for-verification' && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleOpenVerification(currentReview)}
+                        className="text-xs"
+                      >
+                        <Shield className="h-3 w-3 mr-1" />
+                        Verify (TD)
+                      </Button>
+                    )}
+                    {currentReview.workflowStatus === 'verified-pending-final' && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => {
+                          // Navigate to CEO final reviews or open finalization drawer
+                          window.location.href = `/admin/final-reviews?reviewId=${currentReview.id}`
+                        }}
+                        className="text-xs"
+                      >
+                        <Award className="h-3 w-3 mr-1" />
+                        Finalize (CEO)
+                      </Button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Review Details */}
+                <div className="flex-1 overflow-y-auto">
+                  <ReviewActionPanel
+                    key={currentReview.id}
+                    review={currentReview}
+                    initialAttachments={reviewAttachments[currentReview.id] || []}
+                    onAttachmentUpload={(files) => handleAttachmentUpload(currentReview.id, files)}
+                    onAttachmentRemove={(attachmentId) => handleAttachmentRemove(currentReview.id, attachmentId)}
+                    onAttachmentDownload={handleAttachmentDownload}
+                  />
+                </div>
+              </div>
             ) : (
               <div className="h-full flex items-center justify-center p-6">
                 <EmptyState {...emptyStateConfig} />
@@ -455,6 +629,28 @@ export default function AdminReviewsPage() {
             specialization: reviewer.specialization
           }))}
           onAssign={handleAssignReviewSubmit}
+        />
+
+        {/* Admin Omnipotent Workflow Drawers - Can perform any action on behalf of any user */}
+        <AcceptanceDrawer
+          open={acceptanceDrawerOpen}
+          onOpenChange={setAcceptanceDrawerOpen}
+          review={reviewForAcceptance}
+          onAccept={handleAcceptReview}
+        />
+
+        <ReviewerWorkDrawer
+          open={workDrawerOpen}
+          onOpenChange={setWorkDrawerOpen}
+          review={reviewForWork}
+          onSubmit={handleSubmitWorkReview}
+        />
+
+        <VerificationDrawer
+          open={verificationDrawerOpen}
+          onOpenChange={setVerificationDrawerOpen}
+          review={reviewForVerification}
+          onVerify={handleVerifyReview}
         />
       </SidebarInset>
     </SidebarProvider>

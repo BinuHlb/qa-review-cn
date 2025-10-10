@@ -24,7 +24,7 @@ import {
 } from "lucide-react"
 import { Icon } from "@iconify/react"
 import { Card, CardContent } from "@/components/ui/card"
-import { type Review } from "@/lib/mock-data"
+import type { Review } from "@/types/entities"
 import { useToast } from "@/hooks/use-toast"
 import { REVIEW_TYPE_OPTIONS, REVIEW_MODE_OPTIONS } from "@/lib/constants"
 import { formatDateForAPI } from "@/lib/utils/formatters"
