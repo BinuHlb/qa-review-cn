@@ -5,13 +5,12 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { GradeSelect } from "@/components/shared/grade-select"
-import { 
+import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
-  SheetTitle,
-  SheetFooter
+  SheetTitle
 } from "@/components/ui/sheet"
 import { 
   FileText,
@@ -24,7 +23,6 @@ import {
   AlertCircle
 } from "lucide-react"
 import type { Review } from "@/types/entities"
-import type { Attachment } from "@/types/entities"
 import { WorkflowStatusBadge } from "@/components/shared/workflow-status-badge"
 import { PercentageBadge } from "@/components/shared/percentage-badge"
 import { useToast } from "@/hooks/use-toast"
@@ -46,14 +44,6 @@ interface ReviewerWorkDrawerProps {
     reviewedFiles: File[]
   }) => Promise<void>
 }
-
-const gradeOptions = [
-  { value: '1', label: 'Grade 1 - Excellent', description: 'Exceeds all quality standards', color: 'text-green-700' },
-  { value: '2', label: 'Grade 2 - Good', description: 'Meets quality standards well', color: 'text-blue-700' },
-  { value: '3', label: 'Grade 3 - Satisfactory', description: 'Meets minimum standards', color: 'text-yellow-700' },
-  { value: '4', label: 'Grade 4 - Needs Improvement', description: 'Below minimum standards', color: 'text-orange-700' },
-  { value: '5', label: 'Grade 5 - Poor', description: 'Significantly below standards', color: 'text-red-700' }
-]
 
 export function ReviewerWorkDrawer({
   open,

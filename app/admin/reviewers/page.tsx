@@ -10,7 +10,7 @@ import { DashboardHeader } from "@/components/dashboard-header"
 import { EmptyState } from "@/components/shared/empty-state"
 import { ReviewView } from "@/components/reviews/review-view"
 import { ReviewActionPanel } from "@/components/reviews/review-action-panel"
-import { UserCheck, Search, Filter, RotateCcw, List, Grid3X3, CheckCircle2, Award, Flag, MapPin } from "lucide-react"
+import { Search, RotateCcw, List, Grid3X3, Award, MapPin, CheckCircle2, Flag, UserCheck } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
@@ -118,14 +118,6 @@ export default function AdminReviewersPage() {
     setSelectedReview(prev => prev?.id === review.id ? null : review)
   }, [])
 
-  const handleExportReviews = useCallback(() => {
-    console.log("Export assigned reviews")
-  }, [])
-
-  const handleFilter = useCallback(() => {
-    // Filter logic is now handled by the filteredReviews useMemo
-  }, [])
-
   const clearFilters = useCallback(() => {
     setSearchTerm("")
     setStatusFilter("all")
@@ -216,14 +208,6 @@ export default function AdminReviewersPage() {
   }
 
   // Statistics for right sidebar
-  const sidebarStats = useMemo(() => ({
-    total: reviews.length,
-    completed: reviews.filter(r => r.status === 'Completed').length,
-    inProgress: reviews.filter(r => r.status === 'In Progress').length,
-    pending: reviews.filter(r => r.status === 'Pending').length,
-    overdue: reviews.filter(r => r.status === 'Overdue').length
-  }), [reviews])
-
   return (
     <SidebarProvider>
       <AppSidebar />

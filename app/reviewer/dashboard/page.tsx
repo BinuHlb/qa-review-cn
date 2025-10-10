@@ -347,7 +347,6 @@ export default function ReviewerDashboardPage() {
         onOpenChange={setAcceptanceDrawerOpen}
         review={selectedReviewForAcceptance}
         userRole="reviewer"
-        userName={currentReviewerName}
         onAccept={handleAcceptReview}
         onReject={handleRejectReview}
       />

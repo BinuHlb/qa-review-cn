@@ -11,7 +11,6 @@ import {
   SheetHeader,
   SheetTitle
 } from "@/components/ui/sheet"
-import { DrawerFooter } from "@/components/shared/drawer-footer"
 import { 
   AlertCircle,
   CheckCircle,
@@ -39,7 +38,6 @@ interface AcceptanceDrawerProps {
   onOpenChange: (open: boolean) => void
   review: Review | null
   userRole: 'reviewer' | 'firm'
-  userName: string
   onAccept?: (reviewId: string, notes?: string) => Promise<void>
   onReject?: (reviewId: string, reason: string) => Promise<void>
 }
@@ -49,7 +47,6 @@ export function AcceptanceDrawer({
   onOpenChange,
   review,
   userRole,
-  userName,
   onAccept,
   onReject
 }: AcceptanceDrawerProps) {

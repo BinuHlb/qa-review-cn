@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo, useCallback, useEffect } from "react"
+import { useState, useMemo, useCallback } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { 
   SidebarInset,
@@ -102,11 +102,6 @@ export default function AdminMemberFirmsPage() {
     setRegionFilter("all")
     setRiskLevelFilter("all")
   }, [])
-
-  const handleAddMemberFirm = () => {
-    console.log("Add new member firm")
-    // TODO: Implement add member firm functionality
-  }
 
   const handleViewMemberFirm = (memberFirm: MemberFirm) => {
     console.log("View member firm:", memberFirm)

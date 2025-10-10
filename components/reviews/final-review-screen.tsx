@@ -14,7 +14,6 @@ import {
   
 } from "lucide-react"
 import type { Review, Attachment } from "@/types/entities"
-import { type Comment } from "@/lib/schemas/review.schema"
 import { useToast } from "@/hooks/use-toast"
 import { ScrollablePanel } from "@/components/shared/scrollable-panel"
 import { AttachmentsSection } from "@/components/shared/attachments-section"
@@ -43,7 +42,6 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
   const [isRejecting, setIsRejecting] = useState(false)
   const [showRejectForm, setShowRejectForm] = useState(false)
 
-  const [_comments, _setComments] = useState<Comment[]>([])
   const [attachments, setAttachments] = useState<Attachment[]>([])
   const { toast } = useToast()
   
@@ -63,26 +61,7 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
 
   // Mock data - replace with actual API calls
   useEffect(() => {
-    // Simulate loading comments and attachments
-    _setComments([
-      {
-        id: "1",
-        reviewId: review.id,
-        author: "John Smith",
-        authorId: "user-1",
-        content: "Initial review completed. All documents verified.",
-        timestamp: "2024-01-15T10:30:00Z"
-      },
-      {
-        id: "2", 
-        reviewId: review.id,
-        author: "Sarah Johnson",
-        authorId: "user-2",
-        content: "Additional verification needed for financial statements.",
-        timestamp: "2024-01-16T14:20:00Z"
-      }
-    ])
-
+    // Simulate loading attachments
     setAttachments([
       {
         id: "1",
@@ -198,18 +177,6 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
     } finally {
       setIsRejecting(false)
     }
-  }
-
-  const _handleAddComment = (_content: string) => {
-    const newComment: Comment = {
-      id: `comment-${Date.now()}`,
-      reviewId: review.id,
-      author: "Current User",
-      authorId: "current-user",
-      content: _content,
-      timestamp: new Date().toISOString()
-    }
-    _setComments(prev => [...prev, newComment])
   }
 
   const header = (

@@ -3,8 +3,6 @@
 import { useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Textarea } from "@/components/ui/textarea"
 import { 
@@ -15,10 +13,7 @@ import {
   FileText, 
   Send,
   UserPlus,
-  Clock,
-  Award,
-  Flag,
-  CheckCircle
+  Clock
 } from "lucide-react"
 import type { Review } from "@/types/entities"
 import { AttachmentsSection, type Attachment } from "@/components/shared/attachments-section"
@@ -29,8 +24,7 @@ import {
   getReviewerStatusColor,
   generateInitials,
   generateAvatarColor,
-  formatDateRange,
-  getFileIcon
+  formatDateRange
 } from "@/lib/utils/review-utils"
 
 interface Comment {

@@ -127,6 +127,7 @@ export default function AdminReviewsPage() {
   // Handlers
   const handleViewReview = useCallback((review: Review) => {
     setSelectedReview(prev => prev?.id === review.id ? null : review)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleEditReview = useCallback((review: Review) => {
@@ -173,46 +174,6 @@ export default function AdminReviewsPage() {
       console.error("Failed to assign review:", error)
       throw error
     }
-  }, [])
-
-  const handleAssignReviewer = useCallback((reviewerId: string) => {
-    // TODO: Implement reviewer assignment to selected review
-    if (process.env.NODE_ENV === 'development') {
-      console.log("Assign reviewer:", reviewerId, "to review:", currentReview?.id)
-    }
-  }, [currentReview])
-
-  const handleSubmitReview = useCallback(() => {
-    // TODO: Implement submit review functionality
-    if (process.env.NODE_ENV === 'development') {
-      console.log("Submit review:", currentReview)
-    }
-  }, [currentReview])
-
-  const handleCreateReview = useCallback(() => {
-    // TODO: Implement create review functionality
-    if (process.env.NODE_ENV === 'development') {
-      console.log("Create new review")
-    }
-  }, [])
-
-  const handleExportReviews = useCallback(() => {
-    // TODO: Implement export functionality
-    if (process.env.NODE_ENV === 'development') {
-      console.log("Export reviews")
-    }
-  }, [])
-
-  const handleImportReviews = useCallback(() => {
-    // TODO: Implement import functionality
-    if (process.env.NODE_ENV === 'development') {
-      console.log("Import reviews")
-    }
-  }, [])
-
-  const handleFilter = useCallback(() => {
-    // Filter logic is now handled by useDataFilters hook
-    // This function is kept for compatibility with FilterSection component
   }, [])
 
   const clearFilters = useCallback(() => {
@@ -460,14 +421,6 @@ export default function AdminReviewsPage() {
   }
 
   // Statistics for right sidebar
-  const sidebarStats = useMemo(() => ({
-    total: reviews.length,
-    completed: reviews.filter(r => r.status === 'Completed').length,
-    inProgress: reviews.filter(r => r.status === 'In Progress').length,
-    pending: reviews.filter(r => r.status === 'Pending').length,
-    overdue: reviews.filter(r => r.status === 'Overdue').length
-  }), [reviews])
-
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -713,7 +666,6 @@ export default function AdminReviewsPage() {
           onOpenChange={setAcceptanceDrawerOpen}
           review={reviewForAcceptance}
           userRole="reviewer"
-          userName="Admin (Acting as Reviewer)"
           onAccept={handleAcceptReview}
           onReject={handleRejectReview}
         />

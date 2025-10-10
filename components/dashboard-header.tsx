@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { LogOut, User } from "lucide-react"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 
 export function DashboardHeader() {
   const { data: session } = useSession()
@@ -112,6 +113,7 @@ export function DashboardHeader() {
       </div>
       
       <div className="flex items-center gap-2 px-4">
+        <ThemeToggle />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-8 w-8 rounded-full">
