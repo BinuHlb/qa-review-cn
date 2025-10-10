@@ -118,7 +118,7 @@ export const navigationData = {
         ],
       },
       {
-        title: "Technical Director",
+        title: "GDPSSA (Global Director)",
         url: "/director/reviews",
         icon: Shield,
         roles: ["admin"],

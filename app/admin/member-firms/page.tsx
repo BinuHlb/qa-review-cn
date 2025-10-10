@@ -1,8 +1,12 @@
 "use client"
 
-import { useState } from "react"
-import { DualSidebarLayout } from "@/components/shared/dual-sidebar-layout"
-import { UnifiedView } from "@/components/shared/unified-view"
+import { useState, useMemo, useCallback, useEffect } from "react"
+import { AppSidebar } from "@/components/app-sidebar"
+import { 
+  SidebarInset,
+  SidebarProvider,
+} from "@/components/ui/sidebar"
+import { DashboardHeader } from "@/components/dashboard-header"
 import { MemberFirmItem } from "@/components/member-firms/member-firm-item"
 import { MemberFirmReviewDialog } from "@/components/member-firms/member-firm-review-dialog"
 import { useToast } from "@/hooks/use-toast"
@@ -10,10 +14,13 @@ import {
   mockMemberFirms, 
   type MemberFirm
 } from "@/lib/member-firms-mock-data"
+import { Building2, Search, RotateCcw, List, Grid3X3, MapPin, Target, AlertTriangle } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Button } from "@/components/ui/button"
 
 export default function AdminMemberFirmsPage() {
   const [memberFirms] = useState<MemberFirm[]>(mockMemberFirms)
-  const [filteredMemberFirms, setFilteredMemberFirms] = useState<MemberFirm[]>(mockMemberFirms)
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("all")
   const [typeFilter, setTypeFilter] = useState<string>("all")
@@ -24,18 +31,20 @@ export default function AdminMemberFirmsPage() {
   const [selectedFirmForReview, setSelectedFirmForReview] = useState<MemberFirm | null>(null)
   const { toast } = useToast()
 
-  const handleFilter = () => {
+  // Memoized filtered member firms
+  const filteredMemberFirms = useMemo(() => {
     let filtered = memberFirms
 
     // Search filter
     if (searchTerm) {
+      const searchLower = searchTerm.toLowerCase()
       filtered = filtered.filter(
         (firm) =>
-          firm.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          firm.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          firm.country.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          firm.name.toLowerCase().includes(searchLower) ||
+          firm.location.toLowerCase().includes(searchLower) ||
+          firm.country.toLowerCase().includes(searchLower) ||
           firm.specializations.some(spec => 
-            spec.toLowerCase().includes(searchTerm.toLowerCase())
+            spec.toLowerCase().includes(searchLower)
           )
       )
     }
@@ -60,25 +69,39 @@ export default function AdminMemberFirmsPage() {
       filtered = filtered.filter((firm) => firm.riskLevel === riskLevelFilter)
     }
 
-    setFilteredMemberFirms(filtered)
-  }
+    return filtered
+  }, [memberFirms, searchTerm, statusFilter, typeFilter, regionFilter, riskLevelFilter])
 
-  const clearFilters = () => {
+  // Get unique values for filters
+  const uniqueStatuses = useMemo(() => 
+    Array.from(new Set(memberFirms.map((firm) => firm.status))).sort(),
+    [memberFirms]
+  )
+  const uniqueTypes = useMemo(() => 
+    Array.from(new Set(memberFirms.map((firm) => firm.type))).sort(),
+    [memberFirms]
+  )
+  const uniqueRegions = useMemo(() => 
+    Array.from(new Set(memberFirms.map((firm) => firm.region))).sort(),
+    [memberFirms]
+  )
+  const uniqueRiskLevels = useMemo(() => 
+    Array.from(new Set(memberFirms.map((firm) => firm.riskLevel))).sort(),
+    [memberFirms]
+  )
+
+  const hasActiveFilters = useMemo(() => 
+    Boolean(searchTerm || statusFilter !== "all" || typeFilter !== "all" || regionFilter !== "all" || riskLevelFilter !== "all"),
+    [searchTerm, statusFilter, typeFilter, regionFilter, riskLevelFilter]
+  )
+
+  const clearFilters = useCallback(() => {
     setSearchTerm("")
     setStatusFilter("all")
     setTypeFilter("all")
     setRegionFilter("all")
     setRiskLevelFilter("all")
-    setFilteredMemberFirms(memberFirms)
-  }
-
-  const hasActiveFilters = Boolean(searchTerm || statusFilter !== "all" || typeFilter !== "all" || regionFilter !== "all" || riskLevelFilter !== "all")
-
-  // Get unique values for filters
-  const uniqueStatuses = Array.from(new Set(memberFirms.map((firm) => firm.status))).sort()
-  const uniqueTypes = Array.from(new Set(memberFirms.map((firm) => firm.type))).sort()
-  const uniqueRegions = Array.from(new Set(memberFirms.map((firm) => firm.region))).sort()
-  const uniqueRiskLevels = Array.from(new Set(memberFirms.map((firm) => firm.riskLevel))).sort()
+  }, [])
 
   const handleAddMemberFirm = () => {
     console.log("Add new member firm")
@@ -124,109 +147,164 @@ export default function AdminMemberFirmsPage() {
     })
   }
 
-  // Calculate stats for sidebar
-  const sidebarStats = {
-    total: memberFirms.length,
-    completed: memberFirms.filter(firm => firm.status === 'active').length,
-    inProgress: memberFirms.filter(firm => firm.status === 'pending').length,
-    pending: memberFirms.filter(firm => firm.status === 'inactive').length,
-    overdue: memberFirms.filter(firm => firm.riskLevel === 'high').length
-  }
-
-
-  // const statsCards = (
-  //   <>
-  //     <StatsCard
-  //       icon={Building}
-  //       label="Total Firms"
-  //       value={totalFirms}
-  //       color="blue"
-  //       compact={true}
-  //     />
-  //     <StatsCard
-  //       icon={Building}
-  //       label="Active"
-  //       value={activeFirms}
-  //       color="green"
-  //       compact={true}
-  //     />
-  //     <StatsCard
-  //       icon={AlertTriangle}
-  //       label="High Risk"
-  //       value={highRiskFirms}
-  //       color="yellow"
-  //       compact={true}
-  //     />
-  //     <StatsCard
-  //       icon={Star}
-  //       label="Avg Compliance"
-  //       value={`${Math.round(averageCompliance)}%`}
-  //       color="purple"
-  //       compact={true}
-  //     />
-  //   </>
-  // )
-
   return (
-    <DualSidebarLayout
-      title=""
-      description=""
-      rightSidebarProps={{
-        stats: sidebarStats,
-        onExport: () => console.log("Export member firms"),
-        onImport: () => console.log("Import member firms"),
-        onSettings: () => console.log("Member firm settings"),
-        filters: {
-          searchTerm,
-          statusFilter,
-          gradeFilter: typeFilter, // Using typeFilter as gradeFilter for consistency
-          priorityFilter: riskLevelFilter, // Using riskLevelFilter as priorityFilter
-          countryFilter: regionFilter, // Using regionFilter as countryFilter
-          onSearchChange: setSearchTerm,
-          onStatusChange: setStatusFilter,
-          onGradeChange: setTypeFilter,
-          onPriorityChange: setRiskLevelFilter,
-          onCountryChange: setRegionFilter,
-          onFilter: handleFilter,
-          onClearFilters: clearFilters,
-          hasActiveFilters,
-          resultsCount: filteredMemberFirms.length,
-          viewMode,
-          onViewModeChange: setViewMode,
-          statusOptions: uniqueStatuses,
-          gradeOptions: uniqueTypes,
-          priorityOptions: uniqueRiskLevels,
-          countryOptions: uniqueRegions
-        }
-      }}
-      className="!p-0"
-    >
-      <div className="h-[calc(100vh-120px)] p-6">
-        {/* Member Firms View */}
-        <UnifiedView
-          viewMode={viewMode}
-          items={filteredMemberFirms}
-          renderItem={(memberFirm) => (
-            <MemberFirmItem
-              memberFirm={memberFirm}
-              viewMode={viewMode}
-              onView={handleViewMemberFirm}
-              onEdit={handleEditMemberFirm}
-              onDelete={handleDeleteMemberFirm}
-              onReview={handleReviewMemberFirm}
-            />
-          )}
-        />
-      </div>
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <DashboardHeader />
+        <div className="flex h-[calc(100vh-85px)]">
+          {/* Main Content - Member Firms List with Filters */}
+          <div className="flex-1 flex flex-col overflow-hidden p-6">
+            {/* Header with Filters */}
+            <div className="flex-shrink-0 mb-6">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <p className="text-sm text-gray-600">
+                    {filteredMemberFirms.length} of {memberFirms.length} member firms
+                  </p>
+                </div>
+                <div className="flex items-center gap-1 p-1 bg-muted rounded-md">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setViewMode("list")}
+                    className={`h-8 px-3 ${viewMode === "list" ? "bg-background shadow-sm" : ""}`}
+                  >
+                    <List className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setViewMode("card")}
+                    className={`h-8 px-3 ${viewMode === "card" ? "bg-background shadow-sm" : ""}`}
+                  >
+                    <Grid3X3 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
 
-      {/* Review Dialog */}
-      <MemberFirmReviewDialog
-        open={reviewDialogOpen}
-        onOpenChange={setReviewDialogOpen}
-        memberFirm={selectedFirmForReview}
-        onAccept={handleAcceptReview}
-        onReject={handleRejectReview}
-      />
-    </DualSidebarLayout>
+              {/* Filters */}
+              <div className="flex flex-wrap items-center gap-2">
+                {/* Search */}
+                <div className="flex-1 min-w-[200px]">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      placeholder="Search member firms..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-9 h-9"
+                    />
+                  </div>
+                </div>
+
+                {/* Status Filter */}
+                <Select value={statusFilter} onValueChange={setStatusFilter}>
+                  <SelectTrigger className="w-[130px] h-9">
+                    <Target className="h-4 w-4 mr-2 text-muted-foreground" />
+                    <SelectValue placeholder="Status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Statuses</SelectItem>
+                    {uniqueStatuses.map((status) => (
+                      <SelectItem key={status} value={status} className="capitalize">
+                        {status}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                {/* Type Filter */}
+                <Select value={typeFilter} onValueChange={setTypeFilter}>
+                  <SelectTrigger className="w-[140px] h-9">
+                    <Building2 className="h-4 w-4 mr-2 text-muted-foreground" />
+                    <SelectValue placeholder="Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Types</SelectItem>
+                    {uniqueTypes.map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {type === 'current_member' ? 'Current Member' : 'Prospect'}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                {/* Region Filter */}
+                <Select value={regionFilter} onValueChange={setRegionFilter}>
+                  <SelectTrigger className="w-[140px] h-9">
+                    <MapPin className="h-4 w-4 mr-2 text-muted-foreground" />
+                    <SelectValue placeholder="Region" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Regions</SelectItem>
+                    {uniqueRegions.map((region) => (
+                      <SelectItem key={region} value={region}>
+                        {region}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                {/* Risk Level Filter */}
+                <Select value={riskLevelFilter} onValueChange={setRiskLevelFilter}>
+                  <SelectTrigger className="w-[130px] h-9">
+                    <AlertTriangle className="h-4 w-4 mr-2 text-muted-foreground" />
+                    <SelectValue placeholder="Risk" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Risk Levels</SelectItem>
+                    {uniqueRiskLevels.map((risk) => (
+                      <SelectItem key={risk} value={risk} className="capitalize">
+                        {risk}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                {/* Clear Filters */}
+                {hasActiveFilters && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={clearFilters}
+                    className="h-9 px-3"
+                  >
+                    <RotateCcw className="h-4 w-4 mr-2" />
+                    Clear
+                  </Button>
+                )}
+              </div>
+            </div>
+
+            {/* Member Firms List */}
+            <div className="flex-1 min-h-0 overflow-y-auto">
+              <div className={viewMode === "card" ? "grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4" : "space-y-3"}>
+                {filteredMemberFirms.map((firm) => (
+                  <MemberFirmItem
+                    key={firm.id}
+                    memberFirm={firm}
+                    viewMode={viewMode}
+                    onView={handleViewMemberFirm}
+                    onEdit={handleEditMemberFirm}
+                    onDelete={handleDeleteMemberFirm}
+                    onReview={handleReviewMemberFirm}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Review Dialog */}
+        <MemberFirmReviewDialog
+          open={reviewDialogOpen}
+          onOpenChange={setReviewDialogOpen}
+          memberFirm={selectedFirmForReview}
+          onAccept={handleAcceptReview}
+          onReject={handleRejectReview}
+        />
+      </SidebarInset>
+    </SidebarProvider>
   )
 }

@@ -116,6 +116,9 @@ export interface Review {
   // Team Communication
   teamMeetingLink?: string
   
+  // Conditions/Alerts
+  conditions?: boolean
+  
   // Complete workflow data (optional, for detailed views)
   workflow?: ReviewWorkflowData
 }
