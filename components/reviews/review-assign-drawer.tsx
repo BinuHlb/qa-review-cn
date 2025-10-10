@@ -189,10 +189,13 @@ export function ReviewAssignDrawer({
             <UserPlus className="h-5 w-5" />
             {isEditMode ? "Update Assignment" : "Assign Reviewer"}
           </SheetTitle>
-          <SheetDescription className="flex items-center gap-2 mt-1">
+          <SheetDescription>
+            Assign a reviewer to this QA review
+          </SheetDescription>
+          <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
             <Building2 className="h-4 w-4" />
             {review.memberFirm}
-          </SheetDescription>
+          </div>
         </SheetHeader>
 
         <div className="flex-1 overflow-y-auto">

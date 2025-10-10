@@ -135,19 +135,22 @@ export function VerificationDrawer({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="w-full sm:max-w-2xl overflow-y-auto">
-        <SheetHeader>
+      <SheetContent className="w-full sm:max-w-2xl p-0 flex flex-col">
+        <SheetHeader className="px-6 pt-6 pb-4 border-b">
           <SheetTitle className="flex items-center gap-2">
             <Shield className="h-5 w-5 text-violet-600" />
             Verify Review: {review.memberFirm}
           </SheetTitle>
-          <SheetDescription className="flex items-center gap-2 flex-wrap">
+          <SheetDescription>
             Review the assessment and provide your verification
-            <WorkflowStatusBadge status={review.workflowStatus} size="sm" />
           </SheetDescription>
+          <div className="flex items-center gap-2 flex-wrap mt-1">
+            <WorkflowStatusBadge status={review.workflowStatus} size="sm" />
+          </div>
         </SheetHeader>
 
-        <div className="space-y-6 py-6">
+        <div className="flex-1 overflow-y-auto">
+          <div className="p-6 space-y-6">
           {/* Reviewer's Assessment */}
           <Card className="border-blue-200 bg-blue-50/30">
             <CardContent className="pt-6 space-y-4">
@@ -257,9 +260,16 @@ export function VerificationDrawer({
             {/* Grade Selection (if modifying) */}
             {verifiedGrade && verifiedGrade !== reviewerGrade && (
               <div className="space-y-3">
-                <Label htmlFor="modified-grade" className="text-sm font-medium">
-                  Your Verified Grade <span className="text-destructive">*</span>
-                </Label>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="modified-grade" className="text-sm font-medium">
+                    Your Verified Grade <span className="text-destructive">*</span>
+                  </Label>
+                  {review.technicalDirectorVerification?.grade && (
+                    <Badge variant="outline" className="text-xs bg-violet-50 text-violet-700">
+                      Previous TD: {review.technicalDirectorVerification.grade}/5
+                    </Badge>
+                  )}
+                </div>
                 <Select value={verifiedGrade} onValueChange={setVerifiedGrade}>
                   <SelectTrigger id="modified-grade">
                     <SelectValue placeholder="Select grade" />
@@ -274,7 +284,7 @@ export function VerificationDrawer({
                 </Select>
                 {isModified && (
                   <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-300">
-                    Modified from Grade {reviewerGrade} to Grade {verifiedGrade}
+                    Modified from Reviewer Grade {reviewerGrade} to {verifiedGrade}
                   </Badge>
                 )}
               </div>
@@ -373,18 +383,31 @@ export function VerificationDrawer({
               </div>
             </CardContent>
           </Card>
+          </div>
         </div>
 
-        <SheetFooter>
-          <Button
-            onClick={handleVerifyReview}
-            disabled={isSubmitting || !verifiedGrade || verificationNotes.length < 30}
-            className="w-full bg-violet-600 hover:bg-violet-700"
-          >
-            <Send className="h-4 w-4 mr-2" />
-            {isSubmitting ? 'Verifying...' : 'Verify & Send to CEO'}
-          </Button>
-        </SheetFooter>
+        <div className="px-6 py-4 border-t bg-muted/30">
+          <div className="flex gap-3">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+              className="flex-1"
+              disabled={isSubmitting}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              onClick={handleVerifyReview}
+              className="flex-1 bg-violet-600 hover:bg-violet-700"
+              disabled={isSubmitting || !verifiedGrade || verificationNotes.length < 30}
+            >
+              <Send className="h-4 w-4 mr-2" />
+              {isSubmitting ? 'Verifying...' : 'Verify & Send to CEO'}
+            </Button>
+          </div>
+        </div>
       </SheetContent>
     </Sheet>
   )

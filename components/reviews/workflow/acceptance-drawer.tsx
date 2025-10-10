@@ -128,19 +128,22 @@ export function AcceptanceDrawer({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="w-full sm:max-w-lg overflow-y-auto">
-        <SheetHeader>
+      <SheetContent className="w-full sm:max-w-lg p-0 flex flex-col">
+        <SheetHeader className="px-6 pt-6 pb-4 border-b">
           <SheetTitle className="flex items-center gap-2">
             <AlertCircle className="h-5 w-5 text-amber-600" />
             Review Assignment
           </SheetTitle>
-          <SheetDescription className="flex items-center gap-2 flex-wrap">
+          <SheetDescription>
             Please review the details and decide whether to accept this assignment.
-            <WorkflowStatusBadge status={review.workflowStatus} size="sm" />
           </SheetDescription>
+          <div className="flex items-center gap-2 flex-wrap mt-1">
+            <WorkflowStatusBadge status={review.workflowStatus} size="sm" />
+          </div>
         </SheetHeader>
 
-        <div className="space-y-6 py-6">
+        <div className="flex-1 overflow-y-auto">
+          <div className="p-6 space-y-6">
           {/* Review Info Card */}
           <Card>
             <CardContent className="pt-6 space-y-4">
@@ -377,52 +380,61 @@ export function AcceptanceDrawer({
               </CardContent>
             </Card>
           )}
+          </div>
         </div>
 
-        <SheetFooter className="gap-2">
-          {!showRejectDialog ? (
-            <>
-              <Button
-                variant="outline"
-                onClick={() => setShowRejectDialog(true)}
-                className="flex-1"
-                disabled={isSubmitting}
-              >
-                <XCircle className="h-4 w-4 mr-2" />
-                Reject
-              </Button>
-              <Button
-                onClick={handleAccept}
-                className="flex-1 bg-green-600 hover:bg-green-700"
-                disabled={isSubmitting}
-              >
-                <CheckCircle className="h-4 w-4 mr-2" />
-                {isSubmitting ? 'Accepting...' : 'Accept Review'}
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setShowRejectDialog(false)
-                  setRejectionReason("")
-                }}
-                disabled={isSubmitting}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="destructive"
-                onClick={handleReject}
-                disabled={isSubmitting || !rejectionReason.trim()}
-              >
-                <XCircle className="h-4 w-4 mr-2" />
-                {isSubmitting ? 'Rejecting...' : 'Confirm Rejection'}
-              </Button>
-            </>
-          )}
-        </SheetFooter>
+        <div className="px-6 py-4 border-t bg-muted/30">
+          <div className="flex gap-3">
+            {!showRejectDialog ? (
+              <>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setShowRejectDialog(true)}
+                  className="flex-1"
+                  disabled={isSubmitting}
+                >
+                  <XCircle className="h-4 w-4 mr-2" />
+                  Reject
+                </Button>
+                <Button
+                  type="button"
+                  onClick={handleAccept}
+                  className="flex-1 bg-green-600 hover:bg-green-700"
+                  disabled={isSubmitting}
+                >
+                  <CheckCircle className="h-4 w-4 mr-2" />
+                  {isSubmitting ? 'Accepting...' : 'Accept Review'}
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setShowRejectDialog(false)
+                    setRejectionReason("")
+                  }}
+                  className="flex-1"
+                  disabled={isSubmitting}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={handleReject}
+                  className="flex-1"
+                  disabled={isSubmitting || !rejectionReason.trim()}
+                >
+                  <XCircle className="h-4 w-4 mr-2" />
+                  {isSubmitting ? 'Rejecting...' : 'Confirm Rejection'}
+                </Button>
+              </>
+            )}
+          </div>
+        </div>
       </SheetContent>
     </Sheet>
   )

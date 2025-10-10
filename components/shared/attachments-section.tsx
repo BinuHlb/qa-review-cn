@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { 
@@ -107,27 +106,27 @@ export function AttachmentsSection({
   }
 
   return (
-    <Card className={`shadow-none border ${className}`}>
-      <CardHeader className="pb-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-primary/10 rounded-lg">
-              <Paperclip className="h-4 w-4 text-primary" />
+    <div className={className}>
+      <div className="pb-3">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 bg-primary/10 rounded">
+              <Paperclip className="h-3.5 w-3.5 text-primary" />
             </div>
             <div>
-              <CardTitle className="text-base">
+              <h3 className="text-sm font-medium">
                 {title}
-              </CardTitle>
-              <p className="text-xs text-muted-foreground mt-0.5">
+              </h3>
+              <p className="text-xs text-muted-foreground">
                 {attachments.length} {attachments.length === 1 ? 'file' : 'files'}
               </p>
             </div>
           </div>
           {showUpload && onUpload && (
             <label htmlFor="file-upload" className="flex-shrink-0">
-              <Button size="sm" variant="ghost" className="h-8 w-8 p-0" asChild>
+              <Button size="sm" variant="ghost" className="h-7 w-7 p-0" asChild>
                 <span className="cursor-pointer" title="Upload files">
-                  <Upload className="h-4 w-4" />
+                  <Upload className="h-3.5 w-3.5" />
                 </span>
               </Button>
               <input
@@ -141,15 +140,15 @@ export function AttachmentsSection({
           )}
         </div>
         {showUpload && onUpload && (
-          <div className="flex items-center gap-2 mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-            <RefreshCw className="h-4 w-4 text-blue-600 flex-shrink-0" />
-            <p className="text-xs text-blue-700">
-              <span className="font-semibold">Review Flow:</span> Download files → Review → Re-upload reviewed files
+          <div className="flex items-center gap-2 p-2.5 bg-blue-50/50 border border-blue-200/50 rounded text-xs text-muted-foreground">
+            <RefreshCw className="h-3.5 w-3.5 text-blue-600 flex-shrink-0" />
+            <p>
+              <span className="font-medium">Review Flow:</span> Download → Review → Re-upload
             </p>
           </div>
         )}
-      </CardHeader>
-      <CardContent className={`space-y-3 overflow-y-auto`} style={{ maxHeight }}>
+      </div>
+      <div className={`space-y-2 overflow-y-auto`} style={{ maxHeight }}>
         {/* Drop Zone */}
         {showUpload && onUpload && (
           <div
@@ -251,7 +250,7 @@ export function AttachmentsSection({
             )}
           </div>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }

@@ -265,41 +265,21 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
           title="Review Documents"
         />
 
-        {/* Current Grade - Highlighted */}
-        <div className="bg-muted/50 rounded-lg p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className={`${getGradeColor(review.currentGrade)} p-3 rounded-lg`}>
-                <Star className="h-6 w-6" />
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Current Rating</p>
-                <p className="text-2xl font-bold text-neutral-900 mt-0.5">Rating {review.currentGrade}</p>
-              </div>
-            </div>
-            <div className="text-center">
-              <Badge className={`${getGradeColor(review.currentGrade)} text-base px-4 py-1.5 font-semibold`}>
-                {review.currentGrade}
-              </Badge>
-            <p className="text-xs text-muted-foreground mt-1">
-              {review.currentGrade === '1' ? 'Best' :
-               review.currentGrade === '2' ? 'Good' :
-               review.currentGrade === '3' ? 'Ok' :
-               review.currentGrade === '4' ? 'Bad' :
-               'Poor'}
-            </p>
-            </div>
-          </div>
-        </div>
-
         {/* Final Review Actions - Optimized Layout */}
         <div className="bg-muted/50 rounded-lg p-4">
           {/* Section Header */}
-          <div className="flex items-center gap-2 mb-4 pb-2 border-b border-muted">
-            <div className="p-1.5 bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg">
-              <Star className="h-4 w-4 text-white" />
+          <div className="flex items-center justify-between mb-4 pb-2 border-b border-muted">
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg">
+                <Star className="h-4 w-4 text-white" />
+              </div>
+              <h3 className="font-semibold text-neutral-900">Final Review & Grading</h3>
             </div>
-            <h3 className="font-semibold text-neutral-900">Final Review & Grading</h3>
+            {review.currentGrade && (
+              <Badge variant="outline" className={`${getGradeColor(review.currentGrade)} text-xs`}>
+                Previous: {review.currentGrade}/5
+              </Badge>
+            )}
           </div>
 
             <div className="space-y-4">

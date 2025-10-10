@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { GradeSelect } from "@/components/shared/grade-select"
 import { 
   Sheet,
   SheetContent,
@@ -167,20 +167,23 @@ export function ReviewerWorkDrawer({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="w-full sm:max-w-2xl overflow-y-auto">
-        <SheetHeader>
+      <SheetContent className="w-full sm:max-w-2xl p-0 flex flex-col">
+        <SheetHeader className="px-6 pt-6 pb-4 border-b">
           <SheetTitle className="flex items-center gap-2">
             <FileText className="h-5 w-5 text-blue-600" />
             Review Work: {review.memberFirm}
           </SheetTitle>
-          <SheetDescription className="flex items-center gap-2 flex-wrap">
+          <SheetDescription>
             {review.reviewType}-hour {review.reviewMode} review
+          </SheetDescription>
+          <div className="flex items-center gap-2 flex-wrap mt-1">
             <WorkflowStatusBadge status={review.workflowStatus} size="sm" />
             <PercentageBadge value={review.percentage || 0} />
-          </SheetDescription>
+          </div>
         </SheetHeader>
 
-        <div className="space-y-6 py-6">
+        <div className="flex-1 overflow-y-auto">
+          <div className="p-6 space-y-6">
           {/* Progress Indicator */}
           <Card>
             <CardContent className="pt-6">
@@ -319,43 +322,27 @@ export function ReviewerWorkDrawer({
           <Separator />
 
           {/* Rating Selection */}
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <Award className="h-4 w-4 text-muted-foreground" />
-              <Label className="text-sm font-medium">
-                Your Rating <span className="text-destructive">*</span>
-              </Label>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Award className="h-4 w-4 text-muted-foreground" />
+                <Label className="text-sm font-medium">
+                  Your Rating <span className="text-destructive">*</span>
+                </Label>
+              </div>
+              {review.reviewerRating?.grade && (
+                <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700">
+                  Previous: {review.reviewerRating.grade}/5
+                </Badge>
+              )}
             </div>
             
-            <RadioGroup value={selectedGrade} onValueChange={setSelectedGrade}>
-              <div className="space-y-2">
-                {gradeOptions.map((option) => (
-                  <div
-                    key={option.value}
-                    className={`flex items-start space-x-3 p-4 rounded-lg border-2 transition-all ${
-                      selectedGrade === option.value
-                        ? 'border-primary bg-primary/5'
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
-                  >
-                    <RadioGroupItem value={option.value} id={`grade-${option.value}`} className="mt-1" />
-                    <div className="flex-1">
-                      <label
-                        htmlFor={`grade-${option.value}`}
-                        className={`text-sm font-semibold cursor-pointer ${
-                          selectedGrade === option.value ? 'text-primary' : option.color
-                        }`}
-                      >
-                        {option.label}
-                      </label>
-                      <p className="text-xs text-muted-foreground mt-0.5">
-                        {option.description}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </RadioGroup>
+            <GradeSelect
+              value={selectedGrade}
+              onValueChange={setSelectedGrade}
+              placeholder="Select grade (1-5)"
+              required={true}
+            />
           </div>
 
           <Separator />
@@ -473,25 +460,31 @@ export function ReviewerWorkDrawer({
               </div>
             </CardContent>
           </Card>
+          </div>
         </div>
 
-        <SheetFooter className="gap-2">
-          <Button
-            variant="outline"
-            onClick={handleSaveDraft}
-            disabled={isSubmitting}
-          >
-            Save Draft
-          </Button>
-          <Button
-            onClick={handleSubmitReview}
-            disabled={isSubmitting || !selectedGrade || comments.length < 50 || reviewedFiles.length === 0}
-            className="bg-blue-600 hover:bg-blue-700"
-          >
-            <Send className="h-4 w-4 mr-2" />
-            {isSubmitting ? 'Submitting...' : 'Submit for Verification'}
-          </Button>
-        </SheetFooter>
+        <div className="px-6 py-4 border-t bg-muted/30">
+          <div className="flex gap-3">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleSaveDraft}
+              className="flex-1"
+              disabled={isSubmitting}
+            >
+              Save Draft
+            </Button>
+            <Button
+              type="button"
+              onClick={handleSubmitReview}
+              className="flex-1 bg-blue-600 hover:bg-blue-700"
+              disabled={isSubmitting || !selectedGrade || comments.length < 50 || reviewedFiles.length === 0}
+            >
+              <Send className="h-4 w-4 mr-2" />
+              {isSubmitting ? 'Submitting...' : 'Submit for Verification'}
+            </Button>
+          </div>
+        </div>
       </SheetContent>
     </Sheet>
   )

@@ -176,33 +176,6 @@ export function ReviewActionPanel({
         </div>
       </div>
 
-      {/* Current Grade - Highlighted */}
-      <div className="flex-shrink-0 my-4 bg-muted/50 rounded-lg p-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className={`${getGradeColor(review.currentGrade)} p-3 rounded-lg`}>
-              <Star className="h-6 w-6" />
-            </div>
-            <div>
-              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Current Rating</p>
-              <p className="text-2xl font-bold text-neutral-900 mt-0.5">Rating {review.currentGrade}</p>
-            </div>
-          </div>
-          <div className="text-center">
-            <Badge className={`${getGradeColor(review.currentGrade)} text-base px-4 py-1.5 font-semibold`}>
-              {review.currentGrade}
-            </Badge>
-            <p className="text-xs text-muted-foreground mt-1">
-              {review.currentGrade === '1' ? 'Best' :
-               review.currentGrade === '2' ? 'Good' :
-               review.currentGrade === '3' ? 'Ok' :
-               review.currentGrade === '4' ? 'Bad' :
-               'Poor'}
-            </p>
-          </div>
-        </div>
-      </div>
-
       {/* Review Timeline - If enabled */}
       {showTimeline && (
         <div className="flex-shrink-0">
@@ -240,19 +213,26 @@ export function ReviewActionPanel({
       {(showSubmitRating || showTechnicalDirectorRating) && (
         <div className="flex-shrink-0 mt-4 pt-4 border-t">
           <div className="bg-muted/50 rounded-lg p-4 space-y-4">
-            <div className="flex items-center gap-2 mb-2">
-              <Star className="h-5 w-5 text-primary" />
-              <h3 className="font-semibold text-neutral-900">
-                {showTechnicalDirectorRating 
-                  ? "Technical Director Rating" 
-                  : "Submit Review Rating"}
-              </h3>
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <Star className="h-5 w-5 text-primary" />
+                <h3 className="font-semibold text-neutral-900">
+                  {showTechnicalDirectorRating 
+                    ? "Technical Director Rating" 
+                    : "Submit Review Rating"}
+                </h3>
+              </div>
+              {review.currentGrade && (
+                <Badge variant="outline" className={`${getGradeColor(review.currentGrade)} text-xs`}>
+                  Previous: {review.currentGrade}/5
+                </Badge>
+              )}
             </div>
 
             {showTechnicalDirectorRating && (
               <div className="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-md">
                 <p className="text-xs text-blue-800">
-                  <strong>Reviewer:</strong> {review.reviewer}
+                  <strong>Reviewer:</strong> {review.reviewer} • <strong>Grade:</strong> {review.currentGrade}/5
                 </p>
                 <p className="text-xs text-blue-700 mt-1">
                   Review the submitted work and provide your technical assessment
