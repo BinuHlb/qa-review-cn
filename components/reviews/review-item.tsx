@@ -308,7 +308,7 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
   // Card view
   return (
     <Card 
-      className={`shadow-none border-none transition-all duration-300 cursor-pointer ${
+      className={`shadow-none border-none transition-all duration-300 cursor-pointer h-full flex flex-col ${
         isSelected 
           ? 'bg-primary/10 dark:bg-primary/20 hover:bg-primary/10 dark:hover:bg-primary/20 border-l-4 border-l-primary' 
           : 'bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800'
@@ -365,7 +365,7 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
           )}
         </div>
       </CardHeader>
-      <CardContent className="space-y-3">
+      <CardContent className="space-y-3 flex-1 flex flex-col">
         {/* Duration Timeline - Always Visible */}
         <div className="flex items-center gap-2 bg-white dark:bg-neutral-900/50 px-2 py-1 rounded-md">
           <Clock className="h-3 w-3 text-neutral-500 dark:text-neutral-400" />
@@ -389,7 +389,7 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
         </div>
 
         {/* Show More and Assign Button in Same Row */}
-        <div className="flex justify-between items-center pt-1">
+        <div className="flex justify-between items-center pt-1 mt-auto">
           <Button
             variant="ghost"
             size="sm"

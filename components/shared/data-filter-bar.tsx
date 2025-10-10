@@ -75,7 +75,7 @@ export function DataFilterBar({
               placeholder={searchPlaceholder}
               value={searchTerm}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="pl-9 h-9 bg-muted/50"
+              className="pl-9 h-9 bg-neutral-100 border-0 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
             />
           </div>
         </div>

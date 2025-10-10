@@ -1,6 +1,7 @@
 "use client"
 
 import { ReviewItem } from "./review-item"
+import { DataViewContainer } from "@/components/shared/data-view-container"
 import type { Review } from "@/types/entities"
 
 interface ReviewViewProps {
@@ -15,47 +16,22 @@ interface ReviewViewProps {
 }
 
 export function ReviewView({ reviews, viewMode, selectedReview, onView, onEdit, onAssign, onViewModeChange, onSelectReview }: ReviewViewProps) {
-  if (viewMode === "list") {
-    return (
-      <div className="space-y-1 animate-in fade-in-0 slide-in-from-bottom-2 duration-300">
-        {reviews.map((review, index) => (
-          <div
-            key={review.id}
-            className="animate-in fade-in-0 slide-in-from-left-2 duration-300"
-            style={{ animationDelay: `${index * 50}ms` }}
-          >
-            <ReviewItem
-              review={review}
-              viewMode="list"
-              isSelected={selectedReview?.id === review.id}
-              onView={onView}
-              onEdit={onEdit}
-              onAssign={onAssign}
-            />
-          </div>
-        ))}
-      </div>
-    )
-  }
-
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 animate-in fade-in-0 slide-in-from-bottom-2 duration-300">
-      {reviews.map((review, index) => (
-        <div
+    <DataViewContainer 
+      viewMode={viewMode}
+      listSpacing="space-y-1"
+    >
+      {reviews.map((review) => (
+        <ReviewItem
           key={review.id}
-          className="animate-in fade-in-0 slide-in-from-bottom-2 duration-300"
-          style={{ animationDelay: `${index * 50}ms` }}
-        >
-          <ReviewItem
-            review={review}
-            viewMode="card"
-            isSelected={selectedReview?.id === review.id}
-            onView={onView}
-            onEdit={onEdit}
-            onAssign={onAssign}
-          />
-        </div>
+          review={review}
+          viewMode={viewMode}
+          isSelected={selectedReview?.id === review.id}
+          onView={onView}
+          onEdit={onEdit}
+          onAssign={onAssign}
+        />
       ))}
-    </div>
+    </DataViewContainer>
   )
 }

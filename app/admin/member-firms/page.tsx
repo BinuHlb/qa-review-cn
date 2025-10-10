@@ -16,6 +16,7 @@ import {
 } from "@/lib/member-firms-mock-data"
 import { Building2, MapPin, Target, AlertTriangle } from "lucide-react"
 import { DataFilterBar } from "@/components/shared/data-filter-bar"
+import { DataViewContainer } from "@/components/shared/data-view-container"
 
 export default function AdminMemberFirmsPage() {
   const [memberFirms] = useState<MemberFirm[]>(mockMemberFirms)
@@ -228,7 +229,15 @@ export default function AdminMemberFirmsPage() {
 
             {/* Member Firms List */}
             <div className="flex-1 min-h-0 overflow-y-auto">
-              <div className={viewMode === "card" ? "grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4" : "space-y-3"}>
+              <DataViewContainer 
+                viewMode={viewMode}
+                cardGridCols={{
+                  sm: "grid-cols-1",
+                  md: "md:grid-cols-2",
+                  lg: "lg:grid-cols-2",
+                  xl: "xl:grid-cols-3"
+                }}
+              >
                 {filteredMemberFirms.map((firm) => (
                   <MemberFirmItem
                     key={firm.id}
@@ -240,7 +249,7 @@ export default function AdminMemberFirmsPage() {
                     onReview={handleReviewMemberFirm}
                   />
                 ))}
-              </div>
+              </DataViewContainer>
             </div>
           </div>
         </div>

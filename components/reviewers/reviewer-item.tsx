@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -12,7 +13,9 @@ import {
   UserPlus,
   Edit,
   Eye,
-  Trash2
+  Trash2,
+  ChevronDown,
+  ChevronUp
 } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -40,6 +43,8 @@ interface ReviewerItemProps {
 }
 
 export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onDelete }: ReviewerItemProps) {
+  const [isExpanded, setIsExpanded] = useState(false)
+
   if (viewMode === "list") {
     return (
       <Card className="shadow-none border-none bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-300">
@@ -57,9 +62,26 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
                     </AvatarFallback>
                   </Avatar>
                   <div className="min-w-0 flex-1">
-                    <h3 className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 truncate" title={reviewer.name}>
-                      {reviewer.name}
-                    </h3>
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 truncate" title={reviewer.name}>
+                        {reviewer.name}
+                      </h3>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setIsExpanded(!isExpanded)
+                        }}
+                        className="text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300 h-5 w-5 p-0 flex-shrink-0"
+                      >
+                        {isExpanded ? (
+                          <ChevronUp className="h-3 w-3" />
+                        ) : (
+                          <ChevronDown className="h-3 w-3" />
+                        )}
+                      </Button>
+                    </div>
                     <p className="text-xs text-neutral-600 dark:text-neutral-400 truncate" title={reviewer.email}>
                       {reviewer.email}
                     </p>
@@ -95,7 +117,10 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => onAssign?.(reviewer)}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    onAssign?.(reviewer)
+                  }}
                   className="text-xs h-7 px-2"
                 >
                   <UserPlus className="h-3 w-3 mr-1" />
@@ -105,7 +130,10 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => onView?.(reviewer)}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    onView?.(reviewer)
+                  }}
                   className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 h-7 w-7 p-0"
                 >
                   <Eye className="h-3 w-3" />
@@ -168,6 +196,89 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
                 </Badge>
               </div>
             </div>
+
+            {/* Expandable Content */}
+            <div className={`transition-all duration-300 overflow-hidden ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+              <div className="space-y-3 pt-3 border-t border-neutral-200 dark:border-neutral-700">
+                {/* Specialization */}
+                <div className="space-y-1">
+                  <div className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">Specialization</div>
+                  <div className="flex flex-wrap gap-1">
+                    {reviewer.specialization.map((spec, index) => (
+                      <Badge key={index} variant="outline" className="text-xs px-2 py-0.5">
+                        {spec}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Workload */}
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-neutral-500 dark:text-neutral-400 font-medium">Workload</span>
+                    <span className={`font-medium ${getWorkloadColor(reviewer.currentWorkload, reviewer.maxWorkload)}`}>
+                      {reviewer.currentWorkload}/{reviewer.maxWorkload}
+                    </span>
+                  </div>
+                  <div className="w-full bg-neutral-200 dark:bg-neutral-700 rounded-full h-2">
+                    <div 
+                      className={`h-2 rounded-full ${
+                        (reviewer.currentWorkload / reviewer.maxWorkload) >= 0.9 
+                          ? 'bg-red-500' 
+                          : (reviewer.currentWorkload / reviewer.maxWorkload) >= 0.75 
+                          ? 'bg-yellow-500' 
+                          : 'bg-green-500'
+                      }`}
+                      style={{ width: `${(reviewer.currentWorkload / reviewer.maxWorkload) * 100}%` }}
+                    />
+                  </div>
+                </div>
+
+                {/* Stats */}
+                <div className="grid grid-cols-2 gap-3 text-xs">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
+                      <Star className="h-3 w-3" />
+                      <span className="font-medium">Rating</span>
+                    </div>
+                    <div className="font-medium text-neutral-900 dark:text-neutral-100">
+                      {reviewer.averageRating}/5.0
+                    </div>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
+                      <Users className="h-3 w-3" />
+                      <span className="font-medium">Reviews</span>
+                    </div>
+                    <div className="font-medium text-neutral-900 dark:text-neutral-100">
+                      {reviewer.totalReviews}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Location and Experience */}
+                <div className="grid grid-cols-2 gap-3 text-xs">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
+                      <MapPin className="h-3 w-3" />
+                      <span className="font-medium">Location</span>
+                    </div>
+                    <div className="font-medium text-neutral-900 dark:text-neutral-100 truncate" title={reviewer.location}>
+                      {reviewer.location}
+                    </div>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
+                      <Calendar className="h-3 w-3" />
+                      <span className="font-medium">Experience</span>
+                    </div>
+                    <div className="font-medium text-neutral-900 dark:text-neutral-100">
+                      {reviewer.experience} years
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -176,7 +287,7 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
 
   // Card view
   return (
-    <Card className="shadow-none border-none bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-300 h-fit">
+    <Card className="shadow-none border-none bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-300 h-full flex flex-col">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -195,37 +306,39 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
               </CardDescription>
             </div>
           </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="h-7 w-7 p-0">
-                <MoreHorizontal className="h-3 w-3" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem onClick={() => onView?.(reviewer)}>
-                <Eye className="mr-2 h-4 w-4" />
-                View Details
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onEdit?.(reviewer)}>
-                <Edit className="mr-2 h-4 w-4" />
-                Edit Reviewer
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onAssign?.(reviewer)}>
-                <UserPlus className="mr-2 h-4 w-4" />
-                Assign Review
-              </DropdownMenuItem>
-              <DropdownMenuItem 
-                onClick={() => onDelete?.(reviewer)}
-                className="text-red-600"
-              >
-                <Trash2 className="mr-2 h-4 w-4" />
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="flex items-center gap-1">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="h-7 w-7 p-0">
+                  <MoreHorizontal className="h-3 w-3" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem onClick={() => onView?.(reviewer)}>
+                  <Eye className="mr-2 h-4 w-4" />
+                  View Details
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => onEdit?.(reviewer)}>
+                  <Edit className="mr-2 h-4 w-4" />
+                  Edit Reviewer
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => onAssign?.(reviewer)}>
+                  <UserPlus className="mr-2 h-4 w-4" />
+                  Assign Review
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => onDelete?.(reviewer)}
+                  className="text-red-600"
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
       </CardHeader>
-      <CardContent className="space-y-3">
+      <CardContent className="space-y-3 flex-1 flex flex-col">
         {/* Role and Status */}
         <div className="flex flex-wrap gap-1">
           <Badge className={`${getRoleColor(reviewer.role)} text-xs px-2 py-0.5`}>
@@ -236,7 +349,7 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
           </Badge>
         </div>
 
-        {/* Specialization */}
+        {/* Specialization - Always visible (first 2) */}
         <div className="space-y-1">
           <div className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">Specialization</div>
           <div className="flex flex-wrap gap-1">
@@ -253,7 +366,7 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
           </div>
         </div>
 
-        {/* Workload */}
+        {/* Workload - Always visible */}
         <div className="space-y-1">
           <div className="flex items-center justify-between text-xs">
             <span className="text-neutral-500 dark:text-neutral-400 font-medium">Workload</span>
@@ -275,77 +388,114 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 gap-3 text-xs">
-          <div className="space-y-1">
-            <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
-              <Star className="h-3 w-3" />
-              <span className="font-medium">Rating</span>
+        {/* Expandable Content */}
+        <div className={`transition-all duration-300 overflow-hidden ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+          <div className="space-y-3 pt-3 border-t border-neutral-200 dark:border-neutral-700">
+            {/* Stats */}
+            <div className="grid grid-cols-2 gap-3 text-xs">
+              <div className="space-y-1">
+                <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
+                  <Star className="h-3 w-3" />
+                  <span className="font-medium">Rating</span>
+                </div>
+                <div className="font-medium text-neutral-900 dark:text-neutral-100">
+                  {reviewer.averageRating}/5.0
+                </div>
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
+                  <Users className="h-3 w-3" />
+                  <span className="font-medium">Reviews</span>
+                </div>
+                <div className="font-medium text-neutral-900 dark:text-neutral-100">
+                  {reviewer.totalReviews}
+                </div>
+              </div>
             </div>
-            <div className="font-medium text-neutral-900 dark:text-neutral-100">
-              {reviewer.averageRating}/5.0
-            </div>
-          </div>
-          <div className="space-y-1">
-            <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
-              <Users className="h-3 w-3" />
-              <span className="font-medium">Reviews</span>
-            </div>
-            <div className="font-medium text-neutral-900 dark:text-neutral-100">
-              {reviewer.totalReviews}
+
+            {/* Location and Experience */}
+            <div className="grid grid-cols-2 gap-3 text-xs">
+              <div className="space-y-1">
+                <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
+                  <MapPin className="h-3 w-3" />
+                  <span className="font-medium">Location</span>
+                </div>
+                <div className="font-medium text-neutral-900 dark:text-neutral-100 truncate" title={reviewer.location}>
+                  {reviewer.location}
+                </div>
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
+                  <Calendar className="h-3 w-3" />
+                  <span className="font-medium">Experience</span>
+                </div>
+                <div className="font-medium text-neutral-900 dark:text-neutral-100">
+                  {reviewer.experience} years
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Location and Experience */}
-        <div className="grid grid-cols-2 gap-3 text-xs">
-          <div className="space-y-1">
-            <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
-              <MapPin className="h-3 w-3" />
-              <span className="font-medium">Location</span>
-            </div>
-            <div className="font-medium text-neutral-900 dark:text-neutral-100 truncate" title={reviewer.location}>
-              {reviewer.location}
-            </div>
-          </div>
-          <div className="space-y-1">
-            <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
-              <Calendar className="h-3 w-3" />
-              <span className="font-medium">Experience</span>
-            </div>
-            <div className="font-medium text-neutral-900 dark:text-neutral-100">
-              {reviewer.experience} years
-            </div>
-          </div>
-        </div>
-
-        {/* Actions */}
-        <div className="flex gap-2 pt-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => onAssign?.(reviewer)}
-            className="text-xs h-7 px-2 flex-1"
-          >
-            <UserPlus className="h-3 w-3 mr-1" />
-            Assign
-          </Button>
+        {/* Show More and Action Buttons in Same Row */}
+        <div className="flex justify-between items-center pt-1 mt-auto">
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => onView?.(reviewer)}
-            className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 h-7 w-7 p-0"
+            onClick={(e) => {
+              e.stopPropagation()
+              setIsExpanded(!isExpanded)
+            }}
+            className="text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300 h-6 px-2 text-xs"
           >
-            <Eye className="h-3 w-3" />
+            {isExpanded ? (
+              <>
+                <ChevronUp className="h-3 w-3 mr-1" />
+                Show Less
+              </>
+            ) : (
+              <>
+                <ChevronDown className="h-3 w-3 mr-1" />
+                Show More
+              </>
+            )}
           </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => onEdit?.(reviewer)}
-            className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 h-7 w-7 p-0"
-          >
-            <Edit className="h-3 w-3" />
-          </Button>
+          <div className="flex gap-1">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation()
+                onAssign?.(reviewer)
+              }}
+              className="text-xs h-7 px-3"
+            >
+              <UserPlus className="h-3 w-3 mr-1" />
+              Assign
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation()
+                onView?.(reviewer)
+              }}
+              className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 h-7 w-7 p-0"
+            >
+              <Eye className="h-3 w-3" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation()
+                onEdit?.(reviewer)
+              }}
+              className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 h-7 w-7 p-0"
+            >
+              <Edit className="h-3 w-3" />
+            </Button>
+          </div>
         </div>
       </CardContent>
     </Card>
