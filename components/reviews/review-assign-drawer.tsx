@@ -375,7 +375,7 @@ export function ReviewAssignDrawer({
         </div>
 
         {/* Footer Actions */}
-        <div className="px-6 py-4 border-t bg-background">
+        <div className="px-6 py-4 border-t bg-muted/30">
           <div className="flex gap-3">
             <Button
               type="button"

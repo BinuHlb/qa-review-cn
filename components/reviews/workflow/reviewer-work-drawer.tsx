@@ -477,7 +477,7 @@ export function ReviewerWorkDrawer({
             <Button
               type="button"
               onClick={handleSubmitReview}
-              className="flex-1 bg-blue-600 hover:bg-blue-700"
+              className="flex-1"
               disabled={isSubmitting || !selectedGrade || comments.length < 50 || reviewedFiles.length === 0}
             >
               <Send className="h-4 w-4 mr-2" />

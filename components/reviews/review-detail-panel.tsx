@@ -140,44 +140,47 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
   const dateRange = formatDateRange(review.startDate, review.endDate)
 
   return (
-    <div className="h-full flex flex-col bg-gradient-to-br from-slate-50/50 to-white">
+    <div className="h-full flex flex-col bg-background overflow-hidden">
       {/* Modern Header */}
-      <div className="flex-shrink-0 p-6 border-b border-slate-200/60 bg-white/80 backdrop-blur-sm">
-        <div className="space-y-4">
+      <div className="flex-shrink-0 p-6 pb-4 border-b">
+        <div className="space-y-3">
           <div className="flex items-start justify-between">
-            <div className="space-y-2 flex-1">
+            <div className="flex-1">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-sm">
-                  <Building2 className="h-5 w-5 text-white" />
-                </div>
-                <div>
-                  <h2 className="text-xl font-bold text-slate-900 tracking-tight">{review.memberFirm}</h2>
-                  <p className="text-sm text-slate-500 font-medium">{review.type}</p>
+                <Avatar className="h-12 w-12 flex-shrink-0">
+                  <AvatarFallback className={`${generateAvatarColor(review.memberFirm)} text-sm font-semibold`}>
+                    {generateInitials(review.memberFirm)}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-bold text-lg text-neutral-900 truncate" title={review.memberFirm}>
+                    {review.memberFirm}
+                  </h3>
+                  <p className="text-sm text-neutral-500 truncate" title={review.type}>
+                    {review.type}
+                  </p>
                 </div>
               </div>
             </div>
             <Button
               onClick={() => onAssign?.(review)}
               size="sm"
-              className="ml-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 border-0 shadow-md"
+              className="ml-4"
             >
               <UserPlus className="h-4 w-4 mr-2" />
               Assign Reviewer
             </Button>
           </div>
 
-          {/* Enhanced Badges */}
+          {/* Badges */}
           <div className="flex flex-wrap gap-2">
-            <Badge className={`${getStatusColor(review.status)} shadow-sm border-0 px-3 py-1`}>
-              <CheckCircle className="h-3 w-3 mr-1.5" />
+            <Badge className={`${getStatusColor(review.status)} text-xs`}>
               {review.status}
             </Badge>
-            <Badge className={`${getGradeColor(review.currentGrade)} shadow-sm border-0 px-3 py-1`}>
-              <Award className="h-3 w-3 mr-1.5" />
-              {review.currentGrade}
+            <Badge className={`${getGradeColor(review.currentGrade)} text-xs`}>
+              Grade {review.currentGrade}
             </Badge>
-            <Badge className={`${getPriorityColor(review.priority)} shadow-sm border-0 px-3 py-1`}>
-              <Flag className="h-3 w-3 mr-1.5" />
+            <Badge className={`${getPriorityColor(review.priority)} text-xs`}>
               {review.priority} Priority
             </Badge>
           </div>
@@ -185,142 +188,91 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
       </div>
 
       {/* Scrollable Content */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-6 min-h-0">
-        {/* Enhanced Quick Info Cards */}
-        <div className="grid grid-cols-2 gap-4">
-          <Card className="border-slate-200/60 bg-white/60 backdrop-blur-sm shadow-sm">
-            <CardContent className="p-4">
-              <div className="flex items-start gap-3">
-                <div className="p-2.5 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-sm">
-                  <Building2 className="h-4 w-4 text-white" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs text-slate-500 mb-1.5 font-medium">Member Firm</p>
-                  <p className="font-semibold text-sm text-slate-900 truncate" title={review.memberFirm}>
-                    {review.memberFirm}
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+      <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4 min-h-0">
+        {/* Quick Info */}
+        <div className="grid grid-cols-2 gap-3">
+          <div className="p-3 bg-muted/50 rounded-lg">
+            <div className="flex items-center gap-2 mb-1">
+              <Building2 className="h-3.5 w-3.5 text-muted-foreground" />
+              <p className="text-xs text-muted-foreground font-medium">Member Firm</p>
+            </div>
+            <p className="font-semibold text-sm truncate" title={review.memberFirm}>
+              {review.memberFirm}
+            </p>
+          </div>
 
-          <Card className="border-slate-200/60 bg-white/60 backdrop-blur-sm shadow-sm">
-            <CardContent className="p-4">
-              <div className="flex items-start gap-3">
-                <div className="p-2.5 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl shadow-sm">
-                  <User className="h-4 w-4 text-white" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs text-slate-500 mb-1.5 font-medium">Reviewer</p>
-                  <p className="font-semibold text-sm text-slate-900 truncate" title={review.reviewer}>
-                    {review.reviewer}
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="p-3 bg-muted/50 rounded-lg">
+            <div className="flex items-center gap-2 mb-1">
+              <User className="h-3.5 w-3.5 text-muted-foreground" />
+              <p className="text-xs text-muted-foreground font-medium">Reviewer</p>
+            </div>
+            <p className="font-semibold text-sm truncate" title={review.reviewer}>
+              {review.reviewer}
+            </p>
+          </div>
         </div>
 
-        {/* Enhanced Review Details */}
-        <Card className="border-slate-200/60 bg-white/60 backdrop-blur-sm shadow-sm">
-          <CardHeader className="pb-4 bg-gradient-to-r from-slate-50/80 to-slate-100/50 rounded-t-lg">
-            <CardTitle className="text-base font-semibold text-slate-900 flex items-center gap-2">
-              <div className="p-1.5 bg-gradient-to-br from-slate-600 to-slate-700 rounded-lg">
-                <FileText className="h-4 w-4 text-white" />
-              </div>
-              Review Details
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4 p-5">
-            <div className="grid grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <div className="flex items-center gap-2.5 text-xs text-slate-500 font-medium">
-                  <div className="p-1 bg-slate-100 rounded-md">
-                    <MapPin className="h-3 w-3 text-slate-600" />
-                  </div>
-                  <span>Country</span>
-                </div>
-                <p className="text-sm font-semibold text-slate-900 ml-6">{review.country}</p>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center gap-2.5 text-xs text-slate-500 font-medium">
-                  <div className="p-1 bg-slate-100 rounded-md">
-                    <Calendar className="h-3 w-3 text-slate-600" />
-                  </div>
-                  <span>Review Period</span>
-                </div>
-                <p className="text-sm font-semibold text-slate-900 ml-6">
-                  {dateRange.start} - {dateRange.end}
-                </p>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center gap-2.5 text-xs text-slate-500 font-medium">
-                  <div className="p-1 bg-slate-100 rounded-md">
-                    <User className="h-3 w-3 text-slate-600" />
-                  </div>
-                  <span>Reviewer Status</span>
-                </div>
-                <div className="ml-6">
-                  <Badge className={`${getReviewerStatusColor(review.reviewerStatus)} text-xs px-2.5 py-1 shadow-sm border-0`}>
-                    {review.reviewerStatus}
-                  </Badge>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center gap-2.5 text-xs text-slate-500 font-medium">
-                  <div className="p-1 bg-slate-100 rounded-md">
-                    <Building2 className="h-3 w-3 text-slate-600" />
-                  </div>
-                  <span>Partner Status</span>
-                </div>
-                <div className="ml-6">
-                  <Badge className={`${getReviewerStatusColor(review.partnerStatus)} text-xs px-2.5 py-1 shadow-sm border-0`}>
-                    {review.partnerStatus}
-                  </Badge>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center gap-2.5 text-xs text-slate-500 font-medium">
-                  <div className="p-1 bg-slate-100 rounded-md">
-                    <Clock className="h-3 w-3 text-slate-600" />
-                  </div>
-                  <span>Last Updated</span>
-                </div>
-                <p className="text-sm font-semibold text-slate-900 ml-6">
-                  {new Date(review.lastUpdated).toLocaleDateString('en-US', { 
-                    month: 'short', 
-                    day: 'numeric', 
-                    year: 'numeric' 
-                  })}
-                </p>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center gap-2.5 text-xs text-slate-500 font-medium">
-                  <div className="p-1 bg-slate-100 rounded-md">
-                    <FileText className="h-3 w-3 text-slate-600" />
-                  </div>
-                  <span>Review ID</span>
-                </div>
-                <p className="text-sm font-semibold text-slate-900 ml-6 font-mono">{review.id}</p>
-              </div>
+        {/* Review Details */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <FileText className="h-4 w-4 text-muted-foreground" />
+            <h4 className="text-sm font-semibold">Review Details</h4>
+          </div>
+          <div className="grid grid-cols-2 gap-3 text-sm">
+            <div className="flex items-center gap-2">
+              <MapPin className="h-3.5 w-3.5 text-muted-foreground" />
+              <span className="text-xs text-muted-foreground">Country:</span>
+              <span className="font-medium">{review.country}</span>
             </div>
 
-            {review.description && (
-              <>
-                <Separator />
-                <div className="space-y-2">
-                  <p className="text-xs text-neutral-500 font-medium">Description</p>
-                  <p className="text-sm text-neutral-700">{review.description}</p>
-                </div>
-              </>
-            )}
-          </CardContent>
-        </Card>
+            <div className="flex items-center gap-2">
+              <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
+              <span className="text-xs text-muted-foreground">Period:</span>
+              <span className="font-medium text-xs">{dateRange.start} - {dateRange.end}</span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <User className="h-3.5 w-3.5 text-muted-foreground" />
+              <span className="text-xs text-muted-foreground">Reviewer Status:</span>
+              <Badge className={`${getReviewerStatusColor(review.reviewerStatus)} text-xs`}>
+                {review.reviewerStatus}
+              </Badge>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Building2 className="h-3.5 w-3.5 text-muted-foreground" />
+              <span className="text-xs text-muted-foreground">Partner Status:</span>
+              <Badge className={`${getReviewerStatusColor(review.partnerStatus)} text-xs`}>
+                {review.partnerStatus}
+              </Badge>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Clock className="h-3.5 w-3.5 text-muted-foreground" />
+              <span className="text-xs text-muted-foreground">Last Updated:</span>
+              <span className="font-medium text-xs">
+                {new Date(review.lastUpdated).toLocaleDateString('en-US', { 
+                  month: 'short', 
+                  day: 'numeric', 
+                  year: 'numeric' 
+                })}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <FileText className="h-3.5 w-3.5 text-muted-foreground" />
+              <span className="text-xs text-muted-foreground">Review ID:</span>
+              <span className="font-medium text-xs font-mono">{review.id}</span>
+            </div>
+          </div>
+
+          {review.description && (
+            <div className="pt-3 border-t">
+              <p className="text-xs text-muted-foreground font-medium mb-1.5">Description</p>
+              <p className="text-sm">{review.description}</p>
+            </div>
+          )}
+        </div>
 
         {/* File Attachments */}
         <AttachmentsSection
@@ -336,41 +288,40 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
         />
 
         {/* Comments Section */}
-        <Card className="shadow-sm">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base">Comments ({comments.length})</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <Send className="h-4 w-4 text-muted-foreground" />
+            <h4 className="text-sm font-semibold">Comments ({comments.length})</h4>
+          </div>
+          <div className="space-y-3">
             {/* Comments List */}
-            <div className="space-y-4 max-h-80 overflow-y-auto">
+            <div className="space-y-3 max-h-64 overflow-y-auto">
               {comments.map((comment) => (
-                <div key={comment.id} className="flex gap-3">
-                  <Avatar className="h-8 w-8 flex-shrink-0">
+                <div key={comment.id} className="flex gap-2.5 p-3 bg-muted/30 rounded-lg">
+                  <Avatar className="h-7 w-7 flex-shrink-0">
                     <AvatarFallback className={`${generateAvatarColor(comment.author)} text-xs`}>
                       {generateInitials(comment.author)}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 space-y-1">
                     <div className="flex items-baseline gap-2">
-                      <p className="text-sm font-semibold text-neutral-900">{comment.author}</p>
-                      <p className="text-xs text-neutral-400">{comment.timestamp}</p>
+                      <p className="text-xs font-semibold">{comment.author}</p>
+                      <p className="text-xs text-muted-foreground">{comment.timestamp}</p>
                     </div>
-                    <p className="text-sm text-neutral-700">{comment.content}</p>
+                    <p className="text-xs">{comment.content}</p>
                   </div>
                 </div>
               ))}
             </div>
 
-            <Separator />
-
             {/* Add Comment */}
-            <div className="space-y-2">
+            <div className="space-y-2 pt-3 border-t">
               <Textarea
                 placeholder="Add a comment..."
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
-                rows={3}
-                className="resize-none"
+                rows={2}
+                className="resize-none text-sm"
               />
               <div className="flex justify-end">
                 <Button onClick={handleAddComment} size="sm" disabled={!newComment.trim()}>
@@ -379,8 +330,8 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
                 </Button>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </div>
   )

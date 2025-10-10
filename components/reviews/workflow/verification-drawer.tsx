@@ -400,7 +400,7 @@ export function VerificationDrawer({
             <Button
               type="button"
               onClick={handleVerifyReview}
-              className="flex-1 bg-violet-600 hover:bg-violet-700"
+              className="flex-1"
               disabled={isSubmitting || !verifiedGrade || verificationNotes.length < 30}
             >
               <Send className="h-4 w-4 mr-2" />

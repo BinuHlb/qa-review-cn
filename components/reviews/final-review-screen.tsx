@@ -332,7 +332,7 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
                 <Button
                   variant="outline"
                   onClick={() => setShowRejectForm(!showRejectForm)}
-                  className="flex-1 h-9 text-sm font-medium border-input hover:bg-red-50 hover:border-red-300 hover:text-red-700"
+                  className="flex-1"
                 >
                   <ThumbsDown className="h-3.5 w-3.5 mr-1.5" />
                   Reject
@@ -341,11 +341,9 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
 
               {/* Compact Rejection Form */}
               {showRejectForm && (
-                <div ref={rejectFormRef} className="space-y-3 p-3 bg-gradient-to-br from-red-50 to-red-100/50 border border-red-200/60 rounded-lg">
-                  <div className="flex items-center gap-2 text-red-800">
-                    <div className="p-1 bg-red-500 rounded">
-                      <AlertCircle className="h-3 w-3 text-white" />
-                    </div>
+                <div ref={rejectFormRef} className="space-y-3 p-3 bg-red-50/50 border border-red-200/50 rounded-lg">
+                  <div className="flex items-center gap-2 text-destructive">
+                    <AlertCircle className="h-4 w-4" />
                     <span className="font-medium text-sm">Reject Review</span>
                   </div>
                   
@@ -369,16 +367,15 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
                       disabled={isRejecting || !rejectionReason.trim()}
                       variant="destructive"
                       size="sm"
-                      className="h-8 text-xs font-medium"
                     >
                       {isRejecting ? (
                         <>
-                          <Clock className="h-3 w-3 mr-1 animate-spin" />
+                          <Clock className="h-3.5 w-3.5 mr-1.5" />
                           Rejecting...
                         </>
                       ) : (
                         <>
-                          <ThumbsDown className="h-3 w-3 mr-1" />
+                          <ThumbsDown className="h-3.5 w-3.5 mr-1.5" />
                           Confirm Rejection
                         </>
                       )}
@@ -386,7 +383,6 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
                     <Button
                       variant="outline"
                       size="sm"
-                      className="h-8 text-xs"
                       onClick={() => {
                         setShowRejectForm(false)
                         setRejectionReason("")

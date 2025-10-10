@@ -9,9 +9,9 @@ import {
   SheetContent,
   SheetDescription,
   SheetHeader,
-  SheetTitle,
-  SheetFooter
+  SheetTitle
 } from "@/components/ui/sheet"
+import { DrawerFooter } from "@/components/shared/drawer-footer"
 import { 
   AlertCircle,
   CheckCircle,
@@ -400,7 +400,7 @@ export function AcceptanceDrawer({
                 <Button
                   type="button"
                   onClick={handleAccept}
-                  className="flex-1 bg-green-600 hover:bg-green-700"
+                  className="flex-1"
                   disabled={isSubmitting}
                 >
                   <CheckCircle className="h-4 w-4 mr-2" />

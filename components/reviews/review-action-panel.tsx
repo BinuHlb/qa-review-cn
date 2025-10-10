@@ -15,7 +15,7 @@ import {
   generateInitials,
   generateAvatarColor
 } from "@/lib/utils/review-utils"
-import { Star, Send } from "lucide-react"
+import { Star, Send, Upload, X, FileText } from "lucide-react"
 
 
 interface ReviewActionPanelProps {
@@ -71,6 +71,18 @@ export function ReviewActionPanel({
   const [attachments, setAttachments] = useState<Attachment[]>(
     (review.documents || initialAttachments) as Attachment[]
   )
+  const [additionalDocuments, setAdditionalDocuments] = useState<File[]>([])
+
+  const handleAdditionalDocsUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (files) {
+      setAdditionalDocuments(prev => [...prev, ...Array.from(files)])
+    }
+  }
+
+  const handleRemoveAdditionalDoc = (index: number) => {
+    setAdditionalDocuments(prev => prev.filter((_, i) => i !== index))
+  }
 
   const handleSubmitRating = async () => {
     if (!selectedGrade || !onSubmitRating) return
@@ -156,9 +168,9 @@ export function ReviewActionPanel({
 
 
   return (
-    <div className="h-full flex flex-col bg-background overflow-hidden p-6">
+    <div className="h-full flex flex-col bg-background overflow-hidden">
       {/* Selected Review Header */}
-      <div className="flex-shrink-0 pb-4 border-b">
+      <div className="flex-shrink-0 p-6 pb-4 border-b">
         <div className="flex items-center gap-3">
           <Avatar className="h-12 w-12 flex-shrink-0">
             <AvatarFallback className={`${generateAvatarColor(review.memberFirm)} text-sm font-semibold`}>
@@ -178,7 +190,7 @@ export function ReviewActionPanel({
 
       {/* Review Timeline - If enabled */}
       {showTimeline && (
-        <div className="flex-shrink-0">
+        <div className="flex-shrink-0 px-6 py-4">
           <ReviewTimeline
             review={review}
             reviewerGrade={reviewerGrade}
@@ -195,7 +207,7 @@ export function ReviewActionPanel({
       )}
 
       {/* Review Documents - Scrollable */}
-      <div className="flex-1 overflow-y-auto min-h-0 mt-4">
+      <div className="flex-1 overflow-y-auto min-h-0 px-6 py-4">
         <AttachmentsSection
           attachments={attachments}
           onUpload={handleFileUpload}
@@ -211,9 +223,9 @@ export function ReviewActionPanel({
 
       {/* Submit Rating Form - Fixed at Bottom */}
       {(showSubmitRating || showTechnicalDirectorRating) && (
-        <div className="flex-shrink-0 mt-4 pt-4 border-t">
-          <div className="bg-muted/50 rounded-lg p-4 space-y-4">
-            <div className="flex items-center justify-between mb-2">
+        <div className="flex-shrink-0 px-6 py-4 border-t">
+          <div className="bg-muted/50 rounded-lg p-4 space-y-3">
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Star className="h-5 w-5 text-primary" />
                 <h3 className="font-semibold text-neutral-900">
@@ -230,11 +242,11 @@ export function ReviewActionPanel({
             </div>
 
             {showTechnicalDirectorRating && (
-              <div className="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-md">
-                <p className="text-xs text-blue-800">
+              <div className="p-2.5 bg-blue-50/50 border border-blue-200/50 rounded text-xs text-muted-foreground">
+                <p className="text-blue-800">
                   <strong>Reviewer:</strong> {review.reviewer} • <strong>Grade:</strong> {review.currentGrade}/5
                 </p>
-                <p className="text-xs text-blue-700 mt-1">
+                <p className="text-blue-700 mt-1">
                   Review the submitted work and provide your technical assessment
                 </p>
               </div>
@@ -250,7 +262,7 @@ export function ReviewActionPanel({
             />
 
             {/* Review Notes */}
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <Label htmlFor="reviewNotes" className="text-xs font-medium text-muted-foreground">
                 {showTechnicalDirectorRating ? "Technical Feedback (Optional)" : "Review Notes (Optional)"}
               </Label>
@@ -267,11 +279,60 @@ export function ReviewActionPanel({
               />
             </div>
 
+            {/* Additional Documents */}
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="additional-docs" className="text-xs font-medium text-muted-foreground">
+                  Additional Documents (Optional)
+                </Label>
+                <label htmlFor="additional-docs-input" className="cursor-pointer">
+                  <div className="flex items-center gap-1.5 text-xs text-primary hover:text-primary/80">
+                    <Upload className="h-3.5 w-3.5" />
+                    <span>Upload</span>
+                  </div>
+                </label>
+                <input
+                  id="additional-docs-input"
+                  type="file"
+                  multiple
+                  className="hidden"
+                  onChange={handleAdditionalDocsUpload}
+                  accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png"
+                />
+              </div>
+              
+              {additionalDocuments.length > 0 && (
+                <div className="space-y-1.5 max-h-32 overflow-y-auto">
+                  {additionalDocuments.map((file, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-2 bg-white border rounded-md text-xs"
+                    >
+                      <div className="flex items-center gap-2 flex-1 min-w-0">
+                        <FileText className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+                        <span className="truncate text-foreground">{file.name}</span>
+                        <span className="text-muted-foreground flex-shrink-0">
+                          ({(file.size / 1024).toFixed(1)} KB)
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveAdditionalDoc(index)}
+                        className="ml-2 p-0.5 hover:bg-destructive/10 rounded"
+                      >
+                        <X className="h-3.5 w-3.5 text-destructive" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
             {/* Submit Button */}
             <Button
               onClick={showTechnicalDirectorRating ? handleTechnicalDirectorRating : handleSubmitRating}
               disabled={isSubmitting || !selectedGrade}
-              className="w-full h-9 bg-primary hover:bg-primary/90"
+              className="w-full"
             >
               <Send className="h-4 w-4 mr-2" />
               {isSubmitting 
