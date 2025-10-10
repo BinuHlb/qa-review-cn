@@ -81,7 +81,7 @@ export function ReviewListCompact({ reviews, selectedReview, onSelectReview }: R
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-sm text-neutral-900 truncate mb-0.5" title={review.memberFirm}>
+                      <h3 className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 truncate mb-0.5" title={review.memberFirm}>
                         {review.memberFirm}
                       </h3>
                       <p className="text-xs text-neutral-500 truncate" title={review.type}>
@@ -103,7 +103,7 @@ export function ReviewListCompact({ reviews, selectedReview, onSelectReview }: R
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-xs text-neutral-400">Reviewer</p>
-                    <p className="text-xs font-medium text-neutral-900 truncate" title={review.reviewer}>
+                    <p className="text-xs font-medium text-neutral-900 dark:text-neutral-100 truncate" title={review.reviewer}>
                       {review.reviewer}
                     </p>
                   </div>

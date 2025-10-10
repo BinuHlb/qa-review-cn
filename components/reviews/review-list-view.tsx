@@ -138,7 +138,7 @@ export function ReviewListView({ reviews, onEdit, onAssign }: ReviewListViewProp
           const dateRange = formatDateRange(review.startDate, review.endDate)
           
           return (
-            <Card key={review.id} className="shadow-none border-none bg-neutral-50 hover:bg-neutral-100 transition-colors">
+            <Card key={review.id} className="shadow-none border-none bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors">
               <CardContent className="p-3">
                 <div className="flex items-center justify-between gap-2 min-w-0">
                   {/* Main Info */}
@@ -151,23 +151,23 @@ export function ReviewListView({ reviews, onEdit, onAssign }: ReviewListViewProp
                         </AvatarFallback>
                       </Avatar>
                       <div className="min-w-0 flex-1">
-                        <h3 className="font-semibold text-sm text-neutral-900 truncate" title={review.memberFirm}>
+                        <h3 className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 truncate" title={review.memberFirm}>
                           {review.memberFirm}
                         </h3>
-                        <p className="text-xs text-neutral-600 truncate" title={review.type}>
+                        <p className="text-xs text-neutral-600 dark:text-neutral-400 truncate" title={review.type}>
                           {review.type}
                         </p>
                       </div>
                     </div>
                     
                     {/* Duration Timeline */}
-                    <div className="flex items-center gap-2 bg-white px-2 py-1 rounded-md flex-shrink-0">
-                      <Clock className="h-3 w-3 text-neutral-500" />
+                    <div className="flex items-center gap-2 bg-white dark:bg-neutral-900/50 px-2 py-1 rounded-md flex-shrink-0">
+                      <Clock className="h-3 w-3 text-neutral-500 dark:text-neutral-400" />
                       <div className="flex items-center gap-1 text-xs whitespace-nowrap">
-                        <span className="font-medium text-neutral-700">{dateRange.start}</span>
-                        <span className="text-neutral-400">→</span>
-                        <span className="font-medium text-neutral-700">{dateRange.end}</span>
-                        <span className="text-neutral-500">({dateRange.duration})</span>
+                        <span className="font-medium text-neutral-700 dark:text-neutral-300">{dateRange.start}</span>
+                        <span className="text-neutral-400 dark:text-neutral-500">→</span>
+                        <span className="font-medium text-neutral-700 dark:text-neutral-300">{dateRange.end}</span>
+                        <span className="text-neutral-500 dark:text-neutral-400">({dateRange.duration})</span>
                       </div>
                     </div>
                     
@@ -199,7 +199,7 @@ export function ReviewListView({ reviews, onEdit, onAssign }: ReviewListViewProp
                       variant="ghost"
                       size="sm"
                       onClick={() => handleViewDetails(review)}
-                      className="text-neutral-600 hover:text-neutral-900 h-7 w-7 p-0"
+                      className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 h-7 w-7 p-0"
                     >
                       <Eye className="h-3 w-3" />
                     </Button>
@@ -209,7 +209,7 @@ export function ReviewListView({ reviews, onEdit, onAssign }: ReviewListViewProp
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="text-neutral-600 hover:text-neutral-900 h-7 w-7 p-0"
+                          className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 h-7 w-7 p-0"
                         >
                           <MoreHorizontal className="h-3 w-3" />
                         </Button>
@@ -239,12 +239,12 @@ export function ReviewListView({ reviews, onEdit, onAssign }: ReviewListViewProp
 
       {/* Review Detail Dialog */}
       <Dialog open={!!selectedReview} onOpenChange={handleCloseDialog}>
-        <DialogContent className="max-w-2xl bg-white">
+        <DialogContent className="max-w-2xl bg-white dark:bg-neutral-900">
           <DialogHeader>
-            <DialogTitle className="text-xl font-semibold text-neutral-800">
+            <DialogTitle className="text-xl font-semibold text-neutral-800 dark:text-neutral-100">
               Review Details
             </DialogTitle>
-            <DialogDescription className="text-neutral-600">
+            <DialogDescription className="text-neutral-600 dark:text-neutral-400">
               Complete information for this QA review
             </DialogDescription>
           </DialogHeader>
@@ -254,21 +254,21 @@ export function ReviewListView({ reviews, onEdit, onAssign }: ReviewListViewProp
               {/* Basic Information */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-neutral-600">Member Firm</label>
-                  <div className="flex items-center gap-2 p-3 bg-neutral-50 rounded-lg">
+                  <label className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Member Firm</label>
+                  <div className="flex items-center gap-2 p-3 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
                     <Avatar className="h-6 w-6">
                       <AvatarImage src="" alt={selectedReview.memberFirm} />
                       <AvatarFallback className={`${generateFirmAvatarColor(selectedReview.memberFirm)} text-xs font-semibold`}>
                         {generateFirmInitials(selectedReview.memberFirm)}
                       </AvatarFallback>
                     </Avatar>
-                    <span className="text-neutral-800">{selectedReview.memberFirm}</span>
+                    <span className="text-neutral-800 dark:text-neutral-200">{selectedReview.memberFirm}</span>
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-neutral-600">Review Type</label>
-                  <div className="p-3 bg-neutral-50 rounded-lg">
-                    <span className="text-neutral-800">{selectedReview.type}</span>
+                  <label className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Review Type</label>
+                  <div className="p-3 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                    <span className="text-neutral-800 dark:text-neutral-200">{selectedReview.type}</span>
                   </div>
                 </div>
               </div>
@@ -276,17 +276,17 @@ export function ReviewListView({ reviews, onEdit, onAssign }: ReviewListViewProp
               {/* Reviewer Information */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-neutral-600">Reviewer</label>
-                  <div className="flex items-center gap-2 p-3 bg-neutral-50 rounded-lg">
-                    <User className="h-4 w-4 text-neutral-500" />
-                    <span className="text-neutral-800">{selectedReview.reviewer}</span>
+                  <label className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Reviewer</label>
+                  <div className="flex items-center gap-2 p-3 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                    <User className="h-4 w-4 text-neutral-500 dark:text-neutral-400" />
+                    <span className="text-neutral-800 dark:text-neutral-200">{selectedReview.reviewer}</span>
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-neutral-600">Country</label>
-                  <div className="flex items-center gap-2 p-3 bg-neutral-50 rounded-lg">
-                    <MapPin className="h-4 w-4 text-neutral-500" />
-                    <span className="text-neutral-800">{selectedReview.country}</span>
+                  <label className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Country</label>
+                  <div className="flex items-center gap-2 p-3 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                    <MapPin className="h-4 w-4 text-neutral-500 dark:text-neutral-400" />
+                    <span className="text-neutral-800 dark:text-neutral-200">{selectedReview.country}</span>
                   </div>
                 </div>
               </div>
@@ -294,16 +294,16 @@ export function ReviewListView({ reviews, onEdit, onAssign }: ReviewListViewProp
               {/* Status Information */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-neutral-600">Reviewer Status</label>
-                  <div className="p-3 bg-neutral-50 rounded-lg">
+                  <label className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Reviewer Status</label>
+                  <div className="p-3 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
                     <Badge variant="outline" className={`${getReviewerStatusColor(selectedReview.reviewerStatus)}`}>
                       {selectedReview.reviewerStatus}
                     </Badge>
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-neutral-600">Partner Status</label>
-                  <div className="p-3 bg-neutral-50 rounded-lg">
+                  <label className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Partner Status</label>
+                  <div className="p-3 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
                     <Badge variant="outline" className={`${getReviewerStatusColor(selectedReview.partnerStatus)}`}>
                       {selectedReview.partnerStatus}
                     </Badge>
@@ -314,17 +314,17 @@ export function ReviewListView({ reviews, onEdit, onAssign }: ReviewListViewProp
               {/* Dates */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-neutral-600">Start Date</label>
-                  <div className="flex items-center gap-2 p-3 bg-neutral-50 rounded-lg">
-                    <Calendar className="h-4 w-4 text-neutral-500" />
-                    <span className="text-neutral-800">{new Date(selectedReview.startDate).toLocaleDateString()}</span>
+                  <label className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Start Date</label>
+                  <div className="flex items-center gap-2 p-3 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                    <Calendar className="h-4 w-4 text-neutral-500 dark:text-neutral-400" />
+                    <span className="text-neutral-800 dark:text-neutral-200">{new Date(selectedReview.startDate).toLocaleDateString()}</span>
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-neutral-600">End Date</label>
-                  <div className="flex items-center gap-2 p-3 bg-neutral-50 rounded-lg">
-                    <Calendar className="h-4 w-4 text-neutral-500" />
-                    <span className="text-neutral-800">{new Date(selectedReview.endDate).toLocaleDateString()}</span>
+                  <label className="text-sm font-medium text-neutral-600 dark:text-neutral-400">End Date</label>
+                  <div className="flex items-center gap-2 p-3 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                    <Calendar className="h-4 w-4 text-neutral-500 dark:text-neutral-400" />
+                    <span className="text-neutral-800 dark:text-neutral-200">{new Date(selectedReview.endDate).toLocaleDateString()}</span>
                   </div>
                 </div>
               </div>
@@ -332,16 +332,16 @@ export function ReviewListView({ reviews, onEdit, onAssign }: ReviewListViewProp
               {/* Grade and Status */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-neutral-600">Current Grade</label>
-                  <div className="p-3 bg-neutral-50 rounded-lg">
+                  <label className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Current Grade</label>
+                  <div className="p-3 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
                     <Badge className={`${getGradeColor(selectedReview.currentGrade)}`}>
                       {selectedReview.currentGrade}
                     </Badge>
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-neutral-600">Overall Status</label>
-                  <div className="p-3 bg-neutral-50 rounded-lg">
+                  <label className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Overall Status</label>
+                  <div className="p-3 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
                     <Badge className={`${getStatusColor(selectedReview.status)}`}>
                       {selectedReview.status}
                     </Badge>
@@ -350,7 +350,7 @@ export function ReviewListView({ reviews, onEdit, onAssign }: ReviewListViewProp
               </div>
 
               {/* Review Documents */}
-              <div className="border-t pt-4">
+              <div className="border-t dark:border-neutral-700 pt-4">
                 <AttachmentsSection
                   attachments={dialogAttachments}
                   onUpload={handleFileUpload}
@@ -366,7 +366,7 @@ export function ReviewListView({ reviews, onEdit, onAssign }: ReviewListViewProp
               </div>
 
               {/* Actions */}
-              <div className="flex justify-end gap-3 pt-4 border-t border-neutral-200">
+              <div className="flex justify-end gap-3 pt-4 border-t border-neutral-200 dark:border-neutral-700">
                 <Button variant="outline" onClick={handleCloseDialog}>
                   Close
                 </Button>

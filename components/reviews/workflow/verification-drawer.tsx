@@ -160,7 +160,7 @@ export function VerificationDrawer({
               </div>
 
               {/* Reviewer Grade */}
-              <div className="flex items-center justify-between p-4 bg-white rounded-lg border-2 border-blue-300">
+              <div className="flex items-center justify-between p-4 bg-white dark:bg-neutral-800 rounded-lg border-2 border-blue-300 dark:border-blue-700">
                 <div>
                   <p className="text-xs text-muted-foreground">Reviewer&apos;s Grade</p>
                   <p className="text-2xl font-bold text-blue-600">

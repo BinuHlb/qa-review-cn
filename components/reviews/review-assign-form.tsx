@@ -97,9 +97,9 @@ export function ReviewAssignForm({
   }
 
   return (
-    <div className="h-full flex flex-col bg-white">
+    <div className="h-full flex flex-col bg-white dark:bg-neutral-900">
       {/* Header */}
-      <div className="p-6 border-b">
+      <div className="p-6 border-b dark:border-neutral-700">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <Avatar className="h-12 w-12">
@@ -108,7 +108,7 @@ export function ReviewAssignForm({
               </AvatarFallback>
             </Avatar>
             <div>
-              <h2 className="text-xl font-bold text-neutral-900">Assign Review</h2>
+              <h2 className="text-xl font-bold text-neutral-900 dark:text-neutral-100">Assign Review</h2>
               <p className="text-sm text-neutral-500">{review.memberFirm}</p>
             </div>
           </div>
@@ -151,15 +151,15 @@ export function ReviewAssignForm({
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
                   <p className="text-neutral-500 mb-1">Review ID</p>
-                  <p className="font-medium text-neutral-900">{review.id}</p>
+                  <p className="font-medium text-neutral-900 dark:text-neutral-100">{review.id}</p>
                 </div>
                 <div>
                   <p className="text-neutral-500 mb-1">Country</p>
-                  <p className="font-medium text-neutral-900">{review.country}</p>
+                  <p className="font-medium text-neutral-900 dark:text-neutral-100">{review.country}</p>
                 </div>
                 <div>
                   <p className="text-neutral-500 mb-1">Current Reviewer</p>
-                  <p className="font-medium text-neutral-900">{review.reviewer}</p>
+                  <p className="font-medium text-neutral-900 dark:text-neutral-100">{review.reviewer}</p>
                 </div>
                 <div>
                   <p className="text-neutral-500 mb-1">Priority</p>

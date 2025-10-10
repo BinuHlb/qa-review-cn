@@ -42,7 +42,7 @@ interface ReviewerItemProps {
 export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onDelete }: ReviewerItemProps) {
   if (viewMode === "list") {
     return (
-      <Card className="shadow-none border-none bg-neutral-50 hover:bg-neutral-100 transition-all duration-300">
+      <Card className="shadow-none border-none bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-300">
         <CardContent className="p-3">
           <div className="space-y-3">
             {/* Main Row - Mobile Responsive */}
@@ -57,10 +57,10 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
                     </AvatarFallback>
                   </Avatar>
                   <div className="min-w-0 flex-1">
-                    <h3 className="font-semibold text-sm text-neutral-900 truncate" title={reviewer.name}>
+                    <h3 className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 truncate" title={reviewer.name}>
                       {reviewer.name}
                     </h3>
-                    <p className="text-xs text-neutral-600 truncate" title={reviewer.email}>
+                    <p className="text-xs text-neutral-600 dark:text-neutral-400 truncate" title={reviewer.email}>
                       {reviewer.email}
                     </p>
                   </div>
@@ -70,8 +70,8 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
               {/* Secondary Info - Hidden on mobile, visible on larger screens */}
               <div className="hidden sm:flex items-center gap-3 flex-shrink-0">
                 {/* Workload */}
-                <div className="flex items-center gap-2 bg-white px-2 py-1 rounded-md">
-                  <Users className="h-3 w-3 text-neutral-500" />
+                <div className="flex items-center gap-2 bg-white dark:bg-neutral-900/50 px-2 py-1 rounded-md">
+                  <Users className="h-3 w-3 text-neutral-500 dark:text-neutral-400" />
                   <div className="flex items-center gap-1 text-xs whitespace-nowrap">
                     <span className={`font-medium ${getWorkloadColor(reviewer.currentWorkload, reviewer.maxWorkload)}`}>
                       {reviewer.currentWorkload}/{reviewer.maxWorkload}
@@ -106,7 +106,7 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
                   variant="ghost"
                   size="sm"
                   onClick={() => onView?.(reviewer)}
-                  className="text-neutral-600 hover:text-neutral-900 h-7 w-7 p-0"
+                  className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 h-7 w-7 p-0"
                 >
                   <Eye className="h-3 w-3" />
                 </Button>
@@ -116,7 +116,7 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-neutral-600 hover:text-neutral-900 h-7 w-7 p-0"
+                      className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 h-7 w-7 p-0"
                     >
                       <MoreHorizontal className="h-3 w-3" />
                     </Button>
@@ -149,8 +149,8 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
             {/* Mobile Workload and Status - Visible only on mobile */}
             <div className="flex sm:hidden items-center justify-between gap-2">
               {/* Workload */}
-              <div className="flex items-center gap-2 bg-white px-2 py-1 rounded-md">
-                <Users className="h-3 w-3 text-neutral-500" />
+              <div className="flex items-center gap-2 bg-white dark:bg-neutral-900/50 px-2 py-1 rounded-md">
+                <Users className="h-3 w-3 text-neutral-500 dark:text-neutral-400" />
                 <div className="flex items-center gap-1 text-xs whitespace-nowrap">
                   <span className={`font-medium ${getWorkloadColor(reviewer.currentWorkload, reviewer.maxWorkload)}`}>
                     {reviewer.currentWorkload}/{reviewer.maxWorkload}
@@ -176,7 +176,7 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
 
   // Card view
   return (
-    <Card className="shadow-none border-none bg-neutral-50 hover:bg-neutral-100 transition-all duration-300 h-fit">
+    <Card className="shadow-none border-none bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-300 h-fit">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -238,7 +238,7 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
 
         {/* Specialization */}
         <div className="space-y-1">
-          <div className="text-xs text-neutral-500 font-medium">Specialization</div>
+          <div className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">Specialization</div>
           <div className="flex flex-wrap gap-1">
             {reviewer.specialization.slice(0, 2).map((spec, index) => (
               <Badge key={index} variant="outline" className="text-xs px-2 py-0.5">
@@ -256,12 +256,12 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
         {/* Workload */}
         <div className="space-y-1">
           <div className="flex items-center justify-between text-xs">
-            <span className="text-neutral-500 font-medium">Workload</span>
+            <span className="text-neutral-500 dark:text-neutral-400 font-medium">Workload</span>
             <span className={`font-medium ${getWorkloadColor(reviewer.currentWorkload, reviewer.maxWorkload)}`}>
               {reviewer.currentWorkload}/{reviewer.maxWorkload}
             </span>
           </div>
-          <div className="w-full bg-neutral-200 rounded-full h-2">
+          <div className="w-full bg-neutral-200 dark:bg-neutral-700 rounded-full h-2">
             <div 
               className={`h-2 rounded-full ${
                 (reviewer.currentWorkload / reviewer.maxWorkload) >= 0.9 
@@ -278,20 +278,20 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
         {/* Stats */}
         <div className="grid grid-cols-2 gap-3 text-xs">
           <div className="space-y-1">
-            <div className="flex items-center gap-1 text-neutral-500">
+            <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
               <Star className="h-3 w-3" />
               <span className="font-medium">Rating</span>
             </div>
-            <div className="font-medium text-neutral-900">
+            <div className="font-medium text-neutral-900 dark:text-neutral-100">
               {reviewer.averageRating}/5.0
             </div>
           </div>
           <div className="space-y-1">
-            <div className="flex items-center gap-1 text-neutral-500">
+            <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
               <Users className="h-3 w-3" />
               <span className="font-medium">Reviews</span>
             </div>
-            <div className="font-medium text-neutral-900">
+            <div className="font-medium text-neutral-900 dark:text-neutral-100">
               {reviewer.totalReviews}
             </div>
           </div>
@@ -300,20 +300,20 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
         {/* Location and Experience */}
         <div className="grid grid-cols-2 gap-3 text-xs">
           <div className="space-y-1">
-            <div className="flex items-center gap-1 text-neutral-500">
+            <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
               <MapPin className="h-3 w-3" />
               <span className="font-medium">Location</span>
             </div>
-            <div className="font-medium text-neutral-900 truncate" title={reviewer.location}>
+            <div className="font-medium text-neutral-900 dark:text-neutral-100 truncate" title={reviewer.location}>
               {reviewer.location}
             </div>
           </div>
           <div className="space-y-1">
-            <div className="flex items-center gap-1 text-neutral-500">
+            <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
               <Calendar className="h-3 w-3" />
               <span className="font-medium">Experience</span>
             </div>
-            <div className="font-medium text-neutral-900">
+            <div className="font-medium text-neutral-900 dark:text-neutral-100">
               {reviewer.experience} years
             </div>
           </div>
@@ -334,7 +334,7 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
             variant="ghost"
             size="sm"
             onClick={() => onView?.(reviewer)}
-            className="text-neutral-600 hover:text-neutral-900 h-7 w-7 p-0"
+            className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 h-7 w-7 p-0"
           >
             <Eye className="h-3 w-3" />
           </Button>
@@ -342,7 +342,7 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
             variant="ghost"
             size="sm"
             onClick={() => onEdit?.(reviewer)}
-            className="text-neutral-600 hover:text-neutral-900 h-7 w-7 p-0"
+            className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 h-7 w-7 p-0"
           >
             <Edit className="h-3 w-3" />
           </Button>

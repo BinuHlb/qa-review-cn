@@ -112,7 +112,7 @@ export function ReviewTimeline({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-2 pb-2 border-b">
+      <div className="flex items-center gap-2 pb-2 border-b dark:border-neutral-700">
         <h3 className="font-semibold text-sm text-foreground">Review Timeline</h3>
       </div>
 

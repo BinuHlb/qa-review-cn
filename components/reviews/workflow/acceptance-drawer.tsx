@@ -369,7 +369,7 @@ export function AcceptanceDrawer({
                   value={rejectionReason}
                   onChange={(e) => setRejectionReason(e.target.value)}
                   rows={4}
-                  className="resize-none bg-white"
+                  className="resize-none bg-white dark:bg-neutral-800"
                 />
                 <p className="text-xs text-muted-foreground">
                   This will be sent to the admin and the other party will be notified.

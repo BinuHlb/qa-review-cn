@@ -180,14 +180,14 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
   }
 
   const header = (
-    <div className="bg-white border-b px-4 py-3">
+    <div className="bg-white dark:bg-neutral-900 border-b dark:border-neutral-700 px-4 py-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Button variant="ghost" size="sm" onClick={onBack} className="h-8 w-8 p-0">
             ←
           </Button>
           <div>
-            <h2 className="text-lg font-bold text-neutral-900">Final Review</h2>
+            <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100">Final Review</h2>
             <p className="text-xs text-muted-foreground">ID: {review.id}</p>
           </div>
         </div>
@@ -252,7 +252,7 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
               <div className="p-1.5 bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg">
                 <Star className="h-4 w-4 text-white" />
               </div>
-              <h3 className="font-semibold text-neutral-900">Final Review & Grading</h3>
+              <h3 className="font-semibold text-neutral-900 dark:text-neutral-100">Final Review & Grading</h3>
             </div>
             {review.currentGrade && (
               <Badge variant="outline" className={`${getGradeColor(review.currentGrade)} text-xs`}>
@@ -274,13 +274,13 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
                       onClick={() => setProspectDecision('pass')}
                       className={`relative flex items-center justify-center p-4 rounded-lg border-2 transition-all duration-200 hover:scale-105 hover:shadow-md active:scale-95 ${
                         prospectDecision === 'pass'
-                          ? 'border-green-500 bg-green-50 shadow-sm'
-                          : 'border-muted hover:border-green-300 bg-white'
+                          ? 'border-green-500 bg-green-50 dark:bg-green-900/20 shadow-sm'
+                          : 'border-muted hover:border-green-300 bg-white dark:bg-neutral-800'
                       }`}
                     >
                       <div className="flex flex-col items-center gap-1.5">
-                        <ThumbsUp className={`h-6 w-6 ${prospectDecision === 'pass' ? 'text-green-600' : 'text-muted-foreground'}`} />
-                        <span className={`text-sm font-semibold ${prospectDecision === 'pass' ? 'text-green-700' : 'text-muted-foreground'}`}>
+                        <ThumbsUp className={`h-6 w-6 ${prospectDecision === 'pass' ? 'text-green-600 dark:text-green-500' : 'text-muted-foreground'}`} />
+                        <span className={`text-sm font-semibold ${prospectDecision === 'pass' ? 'text-green-700 dark:text-green-400' : 'text-muted-foreground'}`}>
                           Pass
                         </span>
                       </div>
@@ -294,13 +294,13 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
                       onClick={() => setProspectDecision('fail')}
                       className={`relative flex items-center justify-center p-4 rounded-lg border-2 transition-all duration-200 hover:scale-105 hover:shadow-md active:scale-95 ${
                         prospectDecision === 'fail'
-                          ? 'border-red-500 bg-red-50 shadow-sm'
-                          : 'border-muted hover:border-red-300 bg-white'
+                          ? 'border-red-500 bg-red-50 dark:bg-red-900/20 shadow-sm'
+                          : 'border-muted hover:border-red-300 bg-white dark:bg-neutral-800'
                       }`}
                     >
                       <div className="flex flex-col items-center gap-1.5">
-                        <ThumbsDown className={`h-6 w-6 ${prospectDecision === 'fail' ? 'text-red-600' : 'text-muted-foreground'}`} />
-                        <span className={`text-sm font-semibold ${prospectDecision === 'fail' ? 'text-red-700' : 'text-muted-foreground'}`}>
+                        <ThumbsDown className={`h-6 w-6 ${prospectDecision === 'fail' ? 'text-red-600 dark:text-red-500' : 'text-muted-foreground'}`} />
+                        <span className={`text-sm font-semibold ${prospectDecision === 'fail' ? 'text-red-700 dark:text-red-400' : 'text-muted-foreground'}`}>
                           Fail
                         </span>
                       </div>
@@ -331,11 +331,11 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
                   value={adminNotes}
                   onChange={(e) => setAdminNotes(e.target.value)}
                   rows={2}
-                  className="text-sm resize-none bg-white border-input"
+                  className="text-sm resize-none bg-white dark:bg-neutral-800 border-input"
                 />
               </div>
 
-              <div className="border-t border-muted pt-3 mt-3" />
+              <div className="border-t border-muted dark:border-neutral-700 pt-3 mt-3" />
 
               {/* Compact Action Buttons */}
               <div className="flex gap-2">
@@ -369,7 +369,7 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
 
               {/* Compact Rejection Form */}
               {showRejectForm && (
-                <div ref={rejectFormRef} className="space-y-3 p-3 bg-red-50/50 border border-red-200/50 rounded-lg">
+                <div ref={rejectFormRef} className="space-y-3 p-3 bg-red-50/50 dark:bg-red-900/10 border border-red-200/50 dark:border-red-800/50 rounded-lg">
                   <div className="flex items-center gap-2 text-destructive">
                     <AlertCircle className="h-4 w-4" />
                     <span className="font-medium text-sm">Reject Review</span>
@@ -385,7 +385,7 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
                       value={rejectionReason}
                       onChange={(e) => setRejectionReason(e.target.value)}
                       rows={2}
-                      className="border-red-300 focus:border-red-500 text-sm resize-none bg-white"
+                      className="border-red-300 focus:border-red-500 text-sm resize-none bg-white dark:bg-neutral-800"
                     />
                   </div>
 

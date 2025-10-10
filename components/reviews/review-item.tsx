@@ -85,8 +85,8 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
       <Card 
         className={`shadow-none border-none transition-all duration-300 cursor-pointer ${
           isSelected 
-            ? 'bg-primary/10 hover:bg-primary/10 border-l-4 border-l-primary' 
-            : 'bg-neutral-50 hover:bg-neutral-100'
+            ? 'bg-primary/10 dark:bg-primary/20 hover:bg-primary/10 dark:hover:bg-primary/20 border-l-4 border-l-primary' 
+            : 'bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800'
         }`}
         onClick={() => onView?.(review)}
       >
@@ -105,7 +105,7 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
                   </Avatar>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <h3 className="font-semibold text-sm text-neutral-900 truncate" title={review.memberFirm}>
+                      <h3 className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 truncate" title={review.memberFirm}>
                         {review.memberFirm}
                       </h3>
                 <Button
@@ -124,7 +124,7 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
                         )}
                       </Button>
                     </div>
-                    <p className="text-xs text-neutral-600 truncate" title={review.type}>
+                    <p className="text-xs text-neutral-600 dark:text-neutral-400 truncate" title={review.type}>
                       {review.type}
                     </p>
                   </div>
@@ -134,13 +134,13 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
               {/* Secondary Info - Hidden on mobile, visible on larger screens */}
               <div className="hidden sm:flex items-center gap-3 flex-shrink-0">
                 {/* Duration Timeline */}
-                <div className="flex items-center gap-2 bg-white px-2 py-1 rounded-md">
-                  <Clock className="h-3 w-3 text-neutral-500" />
+                <div className="flex items-center gap-2 bg-white dark:bg-neutral-900/50 px-2 py-1 rounded-md">
+                  <Clock className="h-3 w-3 text-neutral-500 dark:text-neutral-400" />
                   <div className="flex items-center gap-1 text-xs whitespace-nowrap">
-                    <span className="font-medium text-neutral-700">{dateRange.start}</span>
-                    <span className="text-neutral-400">→</span>
-                    <span className="font-medium text-neutral-700">{dateRange.end}</span>
-                    <span className="text-neutral-500">({dateRange.duration})</span>
+                    <span className="font-medium text-neutral-700 dark:text-neutral-300">{dateRange.start}</span>
+                    <span className="text-neutral-400 dark:text-neutral-500">→</span>
+                    <span className="font-medium text-neutral-700 dark:text-neutral-300">{dateRange.end}</span>
+                    <span className="text-neutral-500 dark:text-neutral-400">({dateRange.duration})</span>
                   </div>
                 </div>
                 
@@ -180,7 +180,7 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
                         variant="ghost"
                         size="sm"
                         onClick={(e) => e.stopPropagation()}
-                        className="text-neutral-600 hover:text-neutral-900 h-7 w-7 p-0"
+                        className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 h-7 w-7 p-0"
                       >
                         <MoreHorizontal className="h-3 w-3" />
                       </Button>
@@ -216,13 +216,13 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
             {/* Mobile Duration and Status - Visible only on mobile */}
             <div className="flex sm:hidden items-center justify-between gap-2">
               {/* Duration Timeline */}
-              <div className="flex items-center gap-2 bg-white px-2 py-1 rounded-md">
-                <Clock className="h-3 w-3 text-neutral-500" />
+              <div className="flex items-center gap-2 bg-white dark:bg-neutral-900/50 px-2 py-1 rounded-md">
+                <Clock className="h-3 w-3 text-neutral-500 dark:text-neutral-400" />
                 <div className="flex items-center gap-1 text-xs whitespace-nowrap">
-                  <span className="font-medium text-neutral-700">{dateRange.start}</span>
-                  <span className="text-neutral-400">→</span>
-                  <span className="font-medium text-neutral-700">{dateRange.end}</span>
-                  <span className="text-neutral-500">({dateRange.duration})</span>
+                  <span className="font-medium text-neutral-700 dark:text-neutral-300">{dateRange.start}</span>
+                  <span className="text-neutral-400 dark:text-neutral-500">→</span>
+                  <span className="font-medium text-neutral-700 dark:text-neutral-300">{dateRange.end}</span>
+                  <span className="text-neutral-500 dark:text-neutral-400">({dateRange.duration})</span>
                 </div>
               </div>
               
@@ -240,23 +240,23 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
 
             {/* Expandable Content */}
             <div className={`transition-all duration-300 overflow-hidden ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-              <div className="space-y-3 pt-2 border-t border-neutral-200">
+              <div className="space-y-3 pt-2 border-t border-neutral-200 dark:border-neutral-700">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                   <div className="space-y-1">
-                    <div className="flex items-center gap-1 text-xs text-neutral-500">
+                    <div className="flex items-center gap-1 text-xs text-neutral-500 dark:text-neutral-400">
                       <User className="h-3 w-3" />
                       <span className="font-medium">Reviewer</span>
                     </div>
-                    <div className="text-xs font-medium text-neutral-900 truncate" title={review.reviewer}>
+                    <div className="text-xs font-medium text-neutral-900 dark:text-neutral-100 truncate" title={review.reviewer}>
                       {review.reviewer}
                     </div>
                   </div>
                   <div className="space-y-1">
-                    <div className="flex items-center gap-1 text-xs text-neutral-500">
+                    <div className="flex items-center gap-1 text-xs text-neutral-500 dark:text-neutral-400">
                       <MapPin className="h-3 w-3" />
                       <span className="font-medium">Country</span>
                     </div>
-                    <div className="text-xs font-medium text-neutral-900 truncate" title={review.country}>
+                    <div className="text-xs font-medium text-neutral-900 dark:text-neutral-100 truncate" title={review.country}>
                       {review.country}
                     </div>
                   </div>
@@ -291,7 +291,7 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
                 </div>
 
                 {review.description && (
-                  <div className="text-xs text-neutral-600 line-clamp-2">
+                  <div className="text-xs text-neutral-600 dark:text-neutral-400 line-clamp-2">
                     {review.description}
                   </div>
                 )}
@@ -310,8 +310,8 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
     <Card 
       className={`shadow-none border-none transition-all duration-300 cursor-pointer ${
         isSelected 
-          ? 'bg-primary/10 hover:bg-primary/10 border-l-4 border-l-primary' 
-          : 'bg-neutral-50 hover:bg-neutral-100'
+          ? 'bg-primary/10 dark:bg-primary/20 hover:bg-primary/10 dark:hover:bg-primary/20 border-l-4 border-l-primary' 
+          : 'bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800'
       }`}
       onClick={() => onView?.(review)}
     >
@@ -367,13 +367,13 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
       </CardHeader>
       <CardContent className="space-y-3">
         {/* Duration Timeline - Always Visible */}
-        <div className="flex items-center gap-2 bg-white px-2 py-1 rounded-md">
-          <Clock className="h-3 w-3 text-neutral-500" />
+        <div className="flex items-center gap-2 bg-white dark:bg-neutral-900/50 px-2 py-1 rounded-md">
+          <Clock className="h-3 w-3 text-neutral-500 dark:text-neutral-400" />
           <div className="flex items-center gap-1 text-xs">
-            <span className="font-medium text-neutral-700">{dateRange.start}</span>
-            <span className="text-neutral-400">→</span>
-            <span className="font-medium text-neutral-700">{dateRange.end}</span>
-            <span className="text-neutral-500">({dateRange.duration})</span>
+            <span className="font-medium text-neutral-700 dark:text-neutral-300">{dateRange.start}</span>
+            <span className="text-neutral-400 dark:text-neutral-500">→</span>
+            <span className="font-medium text-neutral-700 dark:text-neutral-300">{dateRange.end}</span>
+            <span className="text-neutral-500 dark:text-neutral-400">({dateRange.duration})</span>
           </div>
         </div>
 
@@ -429,27 +429,27 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
 
         {/* Expandable Content */}
         <div className={`transition-all duration-300 overflow-hidden ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-          <div className="space-y-3 pt-2 border-t border-neutral-200">
-            <div className="grid grid-cols-2 gap-3 text-sm">
-              <div className="space-y-1">
-                <div className="flex items-center gap-1 text-xs text-neutral-500">
-                  <User className="h-3 w-3" />
-                  <span className="font-medium">Reviewer</span>
+          <div className="space-y-3 pt-2 border-t border-neutral-200 dark:border-neutral-700">
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-1 text-xs text-neutral-500 dark:text-neutral-400">
+                    <User className="h-3 w-3" />
+                    <span className="font-medium">Reviewer</span>
+                  </div>
+                  <div className="text-xs font-medium text-neutral-900 dark:text-neutral-100 truncate" title={review.reviewer}>
+                    {review.reviewer}
+                  </div>
                 </div>
-                <div className="text-xs font-medium text-neutral-900 truncate" title={review.reviewer}>
-                  {review.reviewer}
+                <div className="space-y-1">
+                  <div className="flex items-center gap-1 text-xs text-neutral-500 dark:text-neutral-400">
+                    <MapPin className="h-3 w-3" />
+                    <span className="font-medium">Country</span>
+                  </div>
+                  <div className="text-xs font-medium text-neutral-900 dark:text-neutral-100 truncate" title={review.country}>
+                    {review.country}
+                  </div>
                 </div>
               </div>
-              <div className="space-y-1">
-                <div className="flex items-center gap-1 text-xs text-neutral-500">
-                  <MapPin className="h-3 w-3" />
-                  <span className="font-medium">Country</span>
-                </div>
-                <div className="text-xs font-medium text-neutral-900 truncate" title={review.country}>
-                  {review.country}
-                </div>
-              </div>
-            </div>
 
             {/* Additional Status Badges */}
             <div className="flex flex-wrap gap-1">
@@ -480,7 +480,7 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
             </div>
 
             {review.description && (
-              <div className="text-xs text-neutral-600 line-clamp-2">
+              <div className="text-xs text-neutral-600 dark:text-neutral-400 line-clamp-2">
                 {review.description}
               </div>
             )}

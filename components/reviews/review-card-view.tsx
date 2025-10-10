@@ -40,7 +40,7 @@ export function ReviewCardView({ reviews, onView, onEdit, onAssign }: ReviewCard
         const dateRange = formatDateRange(review.startDate, review.endDate)
         
         return (
-          <Card key={review.id} className="shadow-none border-none bg-neutral-50 hover:bg-neutral-100 transition-colors">
+          <Card key={review.id} className="shadow-none border-none bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors">
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -84,32 +84,32 @@ export function ReviewCardView({ reviews, onView, onEdit, onAssign }: ReviewCard
             </CardHeader>
             <CardContent className="space-y-3">
               {/* Duration Timeline */}
-              <div className="flex items-center gap-2 bg-white px-2 py-1 rounded-md">
-                <Clock className="h-3 w-3 text-neutral-500" />
+              <div className="flex items-center gap-2 bg-white dark:bg-neutral-900/50 px-2 py-1 rounded-md">
+                <Clock className="h-3 w-3 text-neutral-500 dark:text-neutral-400" />
                 <div className="flex items-center gap-1 text-xs">
-                  <span className="font-medium text-neutral-700">{dateRange.start}</span>
-                  <span className="text-neutral-400">→</span>
-                  <span className="font-medium text-neutral-700">{dateRange.end}</span>
-                  <span className="text-neutral-500">({dateRange.duration})</span>
+                  <span className="font-medium text-neutral-700 dark:text-neutral-300">{dateRange.start}</span>
+                  <span className="text-neutral-400 dark:text-neutral-500">→</span>
+                  <span className="font-medium text-neutral-700 dark:text-neutral-300">{dateRange.end}</span>
+                  <span className="text-neutral-500 dark:text-neutral-400">({dateRange.duration})</span>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3 text-sm">
                 <div className="space-y-1">
-                  <div className="flex items-center gap-1 text-xs text-neutral-500">
+                  <div className="flex items-center gap-1 text-xs text-neutral-500 dark:text-neutral-400">
                     <User className="h-3 w-3" />
                     <span className="font-medium">Reviewer</span>
                   </div>
-                  <div className="text-xs font-medium text-neutral-900 truncate" title={review.reviewer}>
+                  <div className="text-xs font-medium text-neutral-900 dark:text-neutral-100 truncate" title={review.reviewer}>
                     {review.reviewer}
                   </div>
                 </div>
                 <div className="space-y-1">
-                  <div className="flex items-center gap-1 text-xs text-neutral-500">
+                  <div className="flex items-center gap-1 text-xs text-neutral-500 dark:text-neutral-400">
                     <MapPin className="h-3 w-3" />
                     <span className="font-medium">Country</span>
                   </div>
-                  <div className="text-xs font-medium text-neutral-900 truncate" title={review.country}>
+                  <div className="text-xs font-medium text-neutral-900 dark:text-neutral-100 truncate" title={review.country}>
                     {review.country}
                   </div>
                 </div>
@@ -132,13 +132,13 @@ export function ReviewCardView({ reviews, onView, onEdit, onAssign }: ReviewCard
               {/* Status Section */}
               <div className="grid grid-cols-2 gap-2 text-xs">
                 <div>
-                  <span className="text-neutral-500 font-medium">Reviewer:</span>
+                  <span className="text-neutral-500 dark:text-neutral-400 font-medium">Reviewer:</span>
                   <Badge variant="outline" className={`ml-1 ${getReviewerStatusColor(review.reviewerStatus)} text-xs px-2 py-0.5`}>
                     {review.reviewerStatus}
                   </Badge>
                 </div>
                 <div>
-                  <span className="text-neutral-500 font-medium">Partner:</span>
+                  <span className="text-neutral-500 dark:text-neutral-400 font-medium">Partner:</span>
                   <Badge variant="outline" className={`ml-1 ${getReviewerStatusColor(review.partnerStatus)} text-xs px-2 py-0.5`}>
                     {review.partnerStatus}
                   </Badge>
@@ -146,7 +146,7 @@ export function ReviewCardView({ reviews, onView, onEdit, onAssign }: ReviewCard
               </div>
 
               {review.description && (
-                <div className="text-xs text-neutral-600 line-clamp-2">
+                <div className="text-xs text-neutral-600 dark:text-neutral-400 line-clamp-2">
                   {review.description}
                 </div>
               )}
@@ -166,7 +166,7 @@ export function ReviewCardView({ reviews, onView, onEdit, onAssign }: ReviewCard
                   variant="ghost"
                   size="sm"
                   onClick={() => onView?.(review)}
-                  className="text-neutral-600 hover:text-neutral-900 h-7 w-7 p-0"
+                  className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 h-7 w-7 p-0"
                 >
                   <Eye className="h-3 w-3" />
                 </Button>

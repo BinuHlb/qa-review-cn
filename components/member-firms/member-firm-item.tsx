@@ -45,7 +45,7 @@ interface MemberFirmItemProps {
 export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete, onReview }: MemberFirmItemProps) {
   if (viewMode === "list") {
     return (
-      <Card className="shadow-none border-none bg-neutral-50 hover:bg-neutral-100 transition-all duration-300">
+      <Card className="shadow-none border-none bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-300">
         <CardContent className="p-3">
           <div className="space-y-3">
             {/* Main Row - Mobile Responsive */}
@@ -60,10 +60,10 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
                     </AvatarFallback>
                   </Avatar>
                   <div className="min-w-0 flex-1">
-                    <h3 className="font-semibold text-sm text-neutral-900 truncate" title={memberFirm.name}>
+                    <h3 className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 truncate" title={memberFirm.name}>
                       {memberFirm.name}
                     </h3>
-                    <p className="text-xs text-neutral-600 truncate" title={memberFirm.location}>
+                    <p className="text-xs text-neutral-600 dark:text-neutral-400 truncate" title={memberFirm.location}>
                       {memberFirm.location}
                     </p>
                   </div>
@@ -73,8 +73,8 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
               {/* Secondary Info - Hidden on mobile, visible on larger screens */}
               <div className="hidden sm:flex items-center gap-3 flex-shrink-0">
                 {/* Compliance Score */}
-                <div className="flex items-center gap-2 bg-white px-2 py-1 rounded-md">
-                  <Star className="h-3 w-3 text-neutral-500" />
+                <div className="flex items-center gap-2 bg-white dark:bg-neutral-900/50 px-2 py-1 rounded-md">
+                  <Star className="h-3 w-3 text-neutral-500 dark:text-neutral-400" />
                   <div className="flex items-center gap-1 text-xs whitespace-nowrap">
                     <span className={`font-medium ${getComplianceScoreColor(memberFirm.complianceScore)}`}>
                       {memberFirm.complianceScore}%
@@ -110,7 +110,7 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-neutral-600 hover:text-neutral-900 h-7 w-7 p-0"
+                      className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 h-7 w-7 p-0"
                     >
                       <MoreHorizontal className="h-3 w-3" />
                     </Button>
@@ -143,8 +143,8 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
             {/* Mobile Compliance and Status - Visible only on mobile */}
             <div className="flex sm:hidden items-center justify-between gap-2">
               {/* Compliance Score */}
-              <div className="flex items-center gap-2 bg-white px-2 py-1 rounded-md">
-                <Star className="h-3 w-3 text-neutral-500" />
+              <div className="flex items-center gap-2 bg-white dark:bg-neutral-900/50 px-2 py-1 rounded-md">
+                <Star className="h-3 w-3 text-neutral-500 dark:text-neutral-400" />
                 <div className="flex items-center gap-1 text-xs whitespace-nowrap">
                   <span className={`font-medium ${getComplianceScoreColor(memberFirm.complianceScore)}`}>
                     {memberFirm.complianceScore}%
@@ -170,7 +170,7 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
 
   // Card view
   return (
-    <Card className="shadow-none border-none bg-neutral-50 hover:bg-neutral-100 transition-all duration-300 h-fit">
+    <Card className="shadow-none border-none bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-300 h-fit">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -236,7 +236,7 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
 
         {/* Specialization */}
         <div className="space-y-1">
-          <div className="text-xs text-neutral-500 font-medium">Specializations</div>
+          <div className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">Specializations</div>
           <div className="flex flex-wrap gap-1">
             {memberFirm.specializations.slice(0, 2).map((spec, index) => (
               <Badge key={index} variant="outline" className="text-xs px-2 py-0.5 truncate max-w-[120px]" title={spec}>
@@ -254,20 +254,20 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
         {/* Stats */}
         <div className="grid grid-cols-2 gap-3 text-xs">
           <div className="space-y-1">
-            <div className="flex items-center gap-1 text-neutral-500">
+            <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
               <Users className="h-3 w-3" />
               <span className="font-medium">Employees</span>
             </div>
-            <div className="font-medium text-neutral-900">
+            <div className="font-medium text-neutral-900 dark:text-neutral-100">
               {memberFirm.employeeCount}
             </div>
           </div>
           <div className="space-y-1">
-            <div className="flex items-center gap-1 text-neutral-500">
+            <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
               <Building className="h-3 w-3" />
               <span className="font-medium">Partners</span>
             </div>
-            <div className="font-medium text-neutral-900">
+            <div className="font-medium text-neutral-900 dark:text-neutral-100">
               {memberFirm.partnerCount}
             </div>
           </div>
@@ -276,7 +276,7 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
         {/* Compliance and Reviews */}
         <div className="grid grid-cols-2 gap-3 text-xs">
           <div className="space-y-1">
-            <div className="flex items-center gap-1 text-neutral-500">
+            <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
               <Star className="h-3 w-3" />
               <span className="font-medium">Compliance</span>
             </div>
@@ -285,11 +285,11 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
             </div>
           </div>
           <div className="space-y-1">
-            <div className="flex items-center gap-1 text-neutral-500">
+            <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
               <Calendar className="h-3 w-3" />
               <span className="font-medium">Reviews</span>
             </div>
-            <div className="font-medium text-neutral-900">
+            <div className="font-medium text-neutral-900 dark:text-neutral-100">
               {memberFirm.totalReviews}
             </div>
           </div>
@@ -297,16 +297,16 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
 
         {/* Contact Info */}
         <div className="space-y-1">
-          <div className="text-xs text-neutral-500 font-medium">Contact</div>
+          <div className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">Contact</div>
           <div className="space-y-1">
-            <div className="flex items-center gap-1 text-xs min-w-0">
-              <Mail className="h-3 w-3 text-neutral-500 flex-shrink-0" />
+            <div className="flex items-center gap-1 text-xs min-w-0 text-neutral-700 dark:text-neutral-300">
+              <Mail className="h-3 w-3 text-neutral-500 dark:text-neutral-400 flex-shrink-0" />
               <span className="truncate" title={memberFirm.contactEmail}>
                 {memberFirm.contactEmail}
               </span>
             </div>
-            <div className="flex items-center gap-1 text-xs min-w-0">
-              <Phone className="h-3 w-3 text-neutral-500 flex-shrink-0" />
+            <div className="flex items-center gap-1 text-xs min-w-0 text-neutral-700 dark:text-neutral-300">
+              <Phone className="h-3 w-3 text-neutral-500 dark:text-neutral-400 flex-shrink-0" />
               <span className="truncate" title={memberFirm.contactPhone}>
                 {memberFirm.contactPhone}
               </span>
@@ -329,7 +329,7 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
             variant="ghost"
             size="sm"
             onClick={() => onEdit?.(memberFirm)}
-            className="text-neutral-600 hover:text-neutral-900 h-7 w-7 p-0 flex-shrink-0"
+            className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 h-7 w-7 p-0 flex-shrink-0"
           >
             <Edit className="h-3 w-3" />
           </Button>

@@ -136,7 +136,7 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
   return (
     <div className="h-full flex flex-col bg-background overflow-hidden">
       {/* Modern Header */}
-      <div className="flex-shrink-0 p-6 pb-4 border-b">
+      <div className="flex-shrink-0 p-6 pb-4 border-b dark:border-neutral-700">
         <div className="space-y-3">
           <div className="flex items-start justify-between">
             <div className="flex-1">
@@ -147,7 +147,7 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-bold text-lg text-neutral-900 truncate" title={review.memberFirm}>
+                  <h3 className="font-bold text-lg text-neutral-900 dark:text-neutral-100 truncate" title={review.memberFirm}>
                     {review.memberFirm}
                   </h3>
                   <p className="text-sm text-neutral-500 truncate" title={review.type}>
@@ -261,7 +261,7 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
           </div>
 
           {review.description && (
-            <div className="pt-3 border-t">
+            <div className="pt-3 border-t dark:border-neutral-700">
               <p className="text-xs text-muted-foreground font-medium mb-1.5">Description</p>
               <p className="text-sm">{review.description}</p>
             </div>
@@ -309,7 +309,7 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
             </div>
 
             {/* Add Comment */}
-            <div className="space-y-2 pt-3 border-t">
+            <div className="space-y-2 pt-3 border-t dark:border-neutral-700">
               <Textarea
                 placeholder="Add a comment..."
                 value={newComment}

@@ -159,7 +159,7 @@ export function ReviewActionPanel({
   return (
     <div className="h-full flex flex-col bg-background overflow-hidden">
       {/* Selected Review Header */}
-      <div className="flex-shrink-0 p-6 pb-4 border-b">
+      <div className="flex-shrink-0 p-6 pb-4 border-b dark:border-neutral-700">
         <div className="flex items-center gap-3">
           <Avatar className="h-12 w-12 flex-shrink-0">
             <AvatarFallback className={`${generateAvatarColor(review.memberFirm)} text-sm font-semibold`}>
@@ -167,7 +167,7 @@ export function ReviewActionPanel({
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
-            <h3 className="font-bold text-lg text-neutral-900 truncate" title={review.memberFirm}>
+            <h3 className="font-bold text-lg text-neutral-900 dark:text-neutral-100 truncate" title={review.memberFirm}>
               {review.memberFirm}
             </h3>
             <p className="text-sm text-neutral-500 truncate" title={review.type}>
@@ -212,12 +212,12 @@ export function ReviewActionPanel({
 
       {/* Submit Rating Form - Fixed at Bottom */}
       {(showSubmitRating || showTechnicalDirectorRating) && (
-        <div className="flex-shrink-0 px-6 py-4 border-t">
+        <div className="flex-shrink-0 px-6 py-4 border-t dark:border-neutral-700">
           <div className="bg-muted/50 rounded-lg p-4 space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Star className="h-5 w-5 text-primary" />
-                <h3 className="font-semibold text-neutral-900">
+                <h3 className="font-semibold text-neutral-900 dark:text-neutral-100">
                   {showTechnicalDirectorRating 
                     ? "Technical Director Rating" 
                     : "Submit Review Rating"}
@@ -264,7 +264,7 @@ export function ReviewActionPanel({
                 value={reviewNotes}
                 onChange={(e) => setReviewNotes(e.target.value)}
                 rows={3}
-                className="text-sm resize-none bg-white"
+                className="text-sm resize-none bg-white dark:bg-neutral-800"
               />
             </div>
 
@@ -279,7 +279,7 @@ export function ReviewActionPanel({
                 value={additionalDocsRequest}
                 onChange={(e) => setAdditionalDocsRequest(e.target.value)}
                 rows={3}
-                className="text-sm resize-none bg-white"
+                className="text-sm resize-none bg-white dark:bg-neutral-800"
               />
               {additionalDocsRequest && (
                 <p className="text-xs text-blue-600 flex items-center gap-1">
