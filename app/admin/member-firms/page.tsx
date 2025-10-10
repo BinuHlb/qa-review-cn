@@ -14,10 +14,8 @@ import {
   mockMemberFirms, 
   type MemberFirm
 } from "@/lib/member-firms-mock-data"
-import { Building2, Search, RotateCcw, List, Grid3X3, MapPin, Target, AlertTriangle } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Button } from "@/components/ui/button"
+import { Building2, MapPin, Target, AlertTriangle } from "lucide-react"
+import { DataFilterBar } from "@/components/shared/data-filter-bar"
 
 export default function AdminMemberFirmsPage() {
   const [memberFirms] = useState<MemberFirm[]>(mockMemberFirms)
@@ -103,6 +101,65 @@ export default function AdminMemberFirmsPage() {
     setRiskLevelFilter("all")
   }, [])
 
+  // Filter configuration for DataFilterBar
+  const filters = useMemo(() => [
+    {
+      key: "status",
+      placeholder: "Status",
+      icon: Target,
+      options: [
+        { value: "all", label: "All Statuses" },
+        ...uniqueStatuses.map(status => ({ value: status, label: status.charAt(0).toUpperCase() + status.slice(1) }))
+      ]
+    },
+    {
+      key: "type",
+      placeholder: "Type",
+      icon: Building2,
+      options: [
+        { value: "all", label: "All Types" },
+        ...uniqueTypes.map(type => ({ 
+          value: type, 
+          label: type === 'current_member' ? 'Current Member' : 'Prospect' 
+        }))
+      ]
+    },
+    {
+      key: "region",
+      placeholder: "Region",
+      icon: MapPin,
+      options: [
+        { value: "all", label: "All Regions" },
+        ...uniqueRegions.map(region => ({ value: region, label: region }))
+      ]
+    },
+    {
+      key: "riskLevel",
+      placeholder: "Risk Level",
+      icon: AlertTriangle,
+      options: [
+        { value: "all", label: "All Risk Levels" },
+        ...uniqueRiskLevels.map(level => ({ value: level, label: level.charAt(0).toUpperCase() + level.slice(1) }))
+      ]
+    }
+  ], [uniqueStatuses, uniqueTypes, uniqueRegions, uniqueRiskLevels])
+
+  const filterValues = useMemo(() => ({
+    status: statusFilter,
+    type: typeFilter,
+    region: regionFilter,
+    riskLevel: riskLevelFilter
+  }), [statusFilter, typeFilter, regionFilter, riskLevelFilter])
+
+  const handleFilterChange = useCallback((key: string, value: string) => {
+    switch (key) {
+      case "status": setStatusFilter(value); break
+      case "type": setTypeFilter(value); break
+      case "region": setRegionFilter(value); break
+      case "riskLevel": setRiskLevelFilter(value); break
+    }
+  }, [])
+
   const handleViewMemberFirm = (memberFirm: MemberFirm) => {
     console.log("View member firm:", memberFirm)
     // TODO: Implement view member firm functionality
@@ -152,124 +209,21 @@ export default function AdminMemberFirmsPage() {
           <div className="flex-1 flex flex-col overflow-hidden p-6">
             {/* Header with Filters */}
             <div className="flex-shrink-0 mb-6">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <p className="text-sm text-gray-600">
-                    {filteredMemberFirms.length} of {memberFirms.length} member firms
-                  </p>
-                </div>
-                <div className="flex items-center gap-1 p-1 bg-muted rounded-md">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setViewMode("list")}
-                    className={`h-8 px-3 ${viewMode === "list" ? "bg-background shadow-sm" : ""}`}
-                  >
-                    <List className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setViewMode("card")}
-                    className={`h-8 px-3 ${viewMode === "card" ? "bg-background shadow-sm" : ""}`}
-                  >
-                    <Grid3X3 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-
-              {/* Filters */}
-              <div className="flex flex-wrap items-center gap-2">
-                {/* Search */}
-                <div className="flex-1 min-w-[200px]">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      placeholder="Search member firms..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-9 h-9"
-                    />
-                  </div>
-                </div>
-
-                {/* Status Filter */}
-                <Select value={statusFilter} onValueChange={setStatusFilter}>
-                  <SelectTrigger className="w-[130px] h-9">
-                    <Target className="h-4 w-4 mr-2 text-muted-foreground" />
-                    <SelectValue placeholder="Status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Statuses</SelectItem>
-                    {uniqueStatuses.map((status) => (
-                      <SelectItem key={status} value={status} className="capitalize">
-                        {status}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                {/* Type Filter */}
-                <Select value={typeFilter} onValueChange={setTypeFilter}>
-                  <SelectTrigger className="w-[140px] h-9">
-                    <Building2 className="h-4 w-4 mr-2 text-muted-foreground" />
-                    <SelectValue placeholder="Type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Types</SelectItem>
-                    {uniqueTypes.map((type) => (
-                      <SelectItem key={type} value={type}>
-                        {type === 'current_member' ? 'Current Member' : 'Prospect'}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                {/* Region Filter */}
-                <Select value={regionFilter} onValueChange={setRegionFilter}>
-                  <SelectTrigger className="w-[140px] h-9">
-                    <MapPin className="h-4 w-4 mr-2 text-muted-foreground" />
-                    <SelectValue placeholder="Region" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Regions</SelectItem>
-                    {uniqueRegions.map((region) => (
-                      <SelectItem key={region} value={region}>
-                        {region}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                {/* Risk Level Filter */}
-                <Select value={riskLevelFilter} onValueChange={setRiskLevelFilter}>
-                  <SelectTrigger className="w-[130px] h-9">
-                    <AlertTriangle className="h-4 w-4 mr-2 text-muted-foreground" />
-                    <SelectValue placeholder="Risk" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Risk Levels</SelectItem>
-                    {uniqueRiskLevels.map((risk) => (
-                      <SelectItem key={risk} value={risk} className="capitalize">
-                        {risk}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                {/* Clear Filters */}
-                {hasActiveFilters && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={clearFilters}
-                    className="h-9 px-3"
-                  >
-                    <RotateCcw className="h-4 w-4 mr-2" />
-                    Clear
-                  </Button>
-                )}
-              </div>
+              <DataFilterBar
+                searchTerm={searchTerm}
+                searchPlaceholder="Search member firms..."
+                onSearchChange={setSearchTerm}
+                filters={filters}
+                filterValues={filterValues}
+                onFilterChange={handleFilterChange}
+                showViewToggle={true}
+                viewMode={viewMode}
+                onViewModeChange={setViewMode}
+                hasActiveFilters={hasActiveFilters}
+                onClearFilters={clearFilters}
+                resultCount={filteredMemberFirms.length}
+                totalCount={memberFirms.length}
+              />
             </div>
 
             {/* Member Firms List */}

@@ -153,11 +153,105 @@ interface ReviewActionPanelProps {
 
 ---
 
+### 4. **DataFilterBar** (`components/shared/data-filter-bar.tsx`)
+
+Reusable, configurable filter bar for data filtering across the application.
+
+**Features:**
+- Search input with icon
+- Multiple configurable filter selects
+- Optional view mode toggle (list/card)
+- Clear filters button
+- Result count display
+- Consistent `bg-muted/50` styling on all inputs
+- Fully responsive and type-safe
+
+**Props:**
+```typescript
+interface DataFilterBarProps {
+  searchTerm: string
+  searchPlaceholder?: string
+  onSearchChange: (value: string) => void
+  filters: FilterConfig[]
+  filterValues: Record<string, string>
+  onFilterChange: (key: string, value: string) => void
+  showViewToggle?: boolean
+  viewMode?: "list" | "card"
+  onViewModeChange?: (mode: "list" | "card") => void
+  hasActiveFilters: boolean
+  onClearFilters: () => void
+  resultCount?: number
+  totalCount?: number
+}
+
+interface FilterConfig {
+  key: string
+  placeholder: string
+  icon?: LucideIcon
+  width?: string
+  options: Array<{ value: string; label: string }>
+}
+```
+
+**Usage:**
+```tsx
+import { DataFilterBar } from "@/components/shared/data-filter-bar"
+import { Calendar, Award, MapPin } from "lucide-react"
+
+const filters = [
+  {
+    key: "year",
+    placeholder: "Year",
+    icon: Calendar,
+    width: "w-[130px]",
+    options: [
+      { value: "all", label: "All Years" },
+      { value: "2024", label: "2024" },
+    ]
+  },
+  {
+    key: "grade",
+    placeholder: "Grade",
+    icon: Award,
+    options: [
+      { value: "all", label: "All Grades" },
+      { value: "1", label: "Grade 1" },
+    ]
+  }
+]
+
+<DataFilterBar
+  searchTerm={searchTerm}
+  searchPlaceholder="Search reviews..."
+  onSearchChange={setSearchTerm}
+  filters={filters}
+  filterValues={filterValues}
+  onFilterChange={(key, value) => 
+    setFilterValues(prev => ({ ...prev, [key]: value }))
+  }
+  showViewToggle={true}
+  viewMode={viewMode}
+  onViewModeChange={setViewMode}
+  hasActiveFilters={hasActiveFilters}
+  onClearFilters={handleClearFilters}
+  resultCount={filteredData.length}
+  totalCount={allData.length}
+/>
+```
+
+**Pages Using DataFilterBar:**
+- `/admin/reviews` - Review filters
+- `/director/reviews` - Technical director filters
+- All pages with list filtering UI
+
+---
+
 ## Architecture Benefits
 
 ### ✅ **Reusability**
 - Single source of truth for document viewing
 - Timeline component works across all review stages
+- DataFilterBar eliminates filter UI duplication across pages
 - No code duplication
 
 ### ✅ **Scalability**
@@ -190,6 +284,7 @@ components/
 ├── shared/
 │   ├── document-viewer.tsx       # Reusable document viewer
 │   ├── review-timeline.tsx       # Workflow timeline
+│   ├── data-filter-bar.tsx       # Reusable filter component
 │   └── status-badge.tsx          # Interactive status badges
 └── reviews/
     ├── review-action-panel.tsx   # Uses document-viewer & timeline

@@ -49,7 +49,7 @@ export function ReduxReviewFilters() {
             placeholder="Search reviews..."
             value={filters.searchTerm}
             onChange={(e) => handleSearchChange(e.target.value)}
-            className="pl-9"
+            className="pl-9 bg-muted/50"
           />
         </div>
         <div className="flex gap-2">
@@ -84,7 +84,7 @@ export function ReduxReviewFilters() {
 
       <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
         <Select value={filters.statusFilter} onValueChange={handleStatusChange}>
-          <SelectTrigger>
+          <SelectTrigger className="bg-muted/50">
             <SelectValue placeholder="Status" />
           </SelectTrigger>
           <SelectContent>
@@ -98,7 +98,7 @@ export function ReduxReviewFilters() {
         </Select>
 
         <Select value={filters.gradeFilter} onValueChange={handleGradeChange}>
-          <SelectTrigger>
+          <SelectTrigger className="bg-muted/50">
             <SelectValue placeholder="Grade" />
           </SelectTrigger>
           <SelectContent>
@@ -112,7 +112,7 @@ export function ReduxReviewFilters() {
         </Select>
 
         <Select value={filters.priorityFilter} onValueChange={handlePriorityChange}>
-          <SelectTrigger>
+          <SelectTrigger className="bg-muted/50">
             <SelectValue placeholder="Priority" />
           </SelectTrigger>
           <SelectContent>
@@ -126,7 +126,7 @@ export function ReduxReviewFilters() {
         </Select>
 
         <Select value={filters.countryFilter} onValueChange={handleCountryChange}>
-          <SelectTrigger>
+          <SelectTrigger className="bg-muted/50">
             <SelectValue placeholder="Country" />
           </SelectTrigger>
           <SelectContent>

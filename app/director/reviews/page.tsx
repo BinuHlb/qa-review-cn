@@ -10,10 +10,8 @@ import { DashboardHeader } from "@/components/dashboard-header"
 import { EmptyState } from "@/components/shared/empty-state"
 import { ReviewView } from "@/components/reviews/review-view"
 import { ReviewActionPanel } from "@/components/reviews/review-action-panel"
-import { Shield, Search, RotateCcw, List, Grid3X3, CheckCircle2, Award, Flag, MapPin } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Button } from "@/components/ui/button"
+import { Shield, CheckCircle2, Award, Flag, MapPin } from "lucide-react"
+import { DataFilterBar } from "@/components/shared/data-filter-bar"
 
 import { mockReviews } from "@/lib/mock-data"
 import type { Review } from "@/types/entities"
@@ -126,6 +124,62 @@ export default function DirectorReviewsPage() {
     setReviewerFilter("all")
   }, [])
 
+  // Filter configuration for DataFilterBar
+  const filters = useMemo(() => [
+    {
+      key: "status",
+      placeholder: "Status",
+      icon: CheckCircle2,
+      options: [
+        { value: "all", label: "All Status" },
+        ...uniqueStatuses.map(status => ({ value: status, label: status }))
+      ]
+    },
+    {
+      key: "grade",
+      placeholder: "Grade",
+      icon: Award,
+      options: [
+        { value: "all", label: "All Grades" },
+        ...uniqueGrades.map(grade => ({ value: grade, label: `Grade ${grade}` }))
+      ]
+    },
+    {
+      key: "priority",
+      placeholder: "Priority",
+      icon: Flag,
+      options: [
+        { value: "all", label: "All Priority" },
+        ...uniquePriorities.map(priority => ({ value: priority, label: priority }))
+      ]
+    },
+    {
+      key: "reviewer",
+      placeholder: "Reviewer",
+      icon: MapPin,
+      options: [
+        { value: "all", label: "All Reviewers" },
+        ...uniqueReviewers.map(reviewer => ({ value: reviewer, label: reviewer }))
+      ]
+    }
+  ], [uniqueStatuses, uniqueGrades, uniquePriorities, uniqueReviewers])
+
+  const filterValues = useMemo(() => ({
+    status: statusFilter,
+    grade: gradeFilter,
+    priority: priorityFilter,
+    reviewer: reviewerFilter
+  }), [statusFilter, gradeFilter, priorityFilter, reviewerFilter])
+
+  const handleFilterChange = useCallback((key: string, value: string) => {
+    switch (key) {
+      case "status": setStatusFilter(value); break
+      case "grade": setGradeFilter(value); break
+      case "priority": setPriorityFilter(value); break
+      case "reviewer": setReviewerFilter(value); break
+    }
+  }, [])
+
   // Attachment handlers
   const handleAttachmentUpload = useCallback(async (reviewId: string, files: File[]): Promise<Attachment[]> => {
     await new Promise(resolve => setTimeout(resolve, 1000))
@@ -217,125 +271,21 @@ export default function DirectorReviewsPage() {
           <div className="flex-1 flex flex-col overflow-hidden p-6">
             {/* Header with Filters */}
             <div className="flex-shrink-0 mb-6">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <p className="text-sm text-gray-600">
-                    {filteredReviews.length} of {reviews.length} submitted reviews
-                  </p>
-                </div>
-                <div className="flex items-center gap-1 p-1 bg-muted rounded-md">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setViewMode("list")}
-                    className={`h-8 px-3 ${viewMode === "list" ? "bg-background shadow-sm" : ""}`}
-                  >
-                    <List className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setViewMode("card")}
-                    className={`h-8 px-3 ${viewMode === "card" ? "bg-background shadow-sm" : ""}`}
-                  >
-                    <Grid3X3 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-
-              {/* Filters */}
-              <div className="flex flex-wrap items-center gap-2">
-                {/* Search */}
-                <div className="flex-1 min-w-[200px]">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      id="search"
-                      name="search"
-                      placeholder="Search..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-9 h-9"
-                    />
-                  </div>
-                </div>
-
-                {/* Status Filter */}
-                <Select name="status" value={statusFilter} onValueChange={setStatusFilter}>
-                  <SelectTrigger id="status-filter" className="w-[140px] h-9">
-                    <CheckCircle2 className="h-4 w-4 mr-2 text-muted-foreground" />
-                    <SelectValue placeholder="Status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Status</SelectItem>
-                    {uniqueStatuses.map((status) => (
-                      <SelectItem key={status} value={status}>
-                        {status}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                {/* Grade Filter */}
-                <Select name="grade" value={gradeFilter} onValueChange={setGradeFilter}>
-                  <SelectTrigger id="grade-filter" className="w-[130px] h-9">
-                    <Award className="h-4 w-4 mr-2 text-muted-foreground" />
-                    <SelectValue placeholder="Grade" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Grades</SelectItem>
-                    {uniqueGrades.map((grade) => (
-                      <SelectItem key={grade} value={grade}>
-                        Grade {grade}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                {/* Priority Filter */}
-                <Select name="priority" value={priorityFilter} onValueChange={setPriorityFilter}>
-                  <SelectTrigger id="priority-filter" className="w-[130px] h-9">
-                    <Flag className="h-4 w-4 mr-2 text-muted-foreground" />
-                    <SelectValue placeholder="Priority" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Priority</SelectItem>
-                    {uniquePriorities.map((priority) => (
-                      <SelectItem key={priority} value={priority}>
-                        {priority}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                {/* Reviewer Filter */}
-                <Select name="reviewer" value={reviewerFilter} onValueChange={setReviewerFilter}>
-                  <SelectTrigger id="reviewer-filter" className="w-[140px] h-9">
-                    <MapPin className="h-4 w-4 mr-2 text-muted-foreground" />
-                    <SelectValue placeholder="Reviewer" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Reviewers</SelectItem>
-                    {uniqueReviewers.map((reviewer) => (
-                      <SelectItem key={reviewer} value={reviewer}>
-                        {reviewer}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                {/* Clear Filters */}
-                {hasActiveFilters && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={clearFilters}
-                    className="h-9 px-3"
-                  >
-                    <RotateCcw className="h-4 w-4" />
-                  </Button>
-                )}
-              </div>
+              <DataFilterBar
+                searchTerm={searchTerm}
+                searchPlaceholder="Search reviews..."
+                onSearchChange={setSearchTerm}
+                filters={filters}
+                filterValues={filterValues}
+                onFilterChange={handleFilterChange}
+                showViewToggle={true}
+                viewMode={viewMode}
+                onViewModeChange={setViewMode}
+                hasActiveFilters={hasActiveFilters}
+                onClearFilters={clearFilters}
+                resultCount={filteredReviews.length}
+                totalCount={reviews.length}
+              />
             </div>
 
             {/* Review List */}

@@ -91,7 +91,7 @@ export function ReviewFilters({ reviews, onFilteredReviews, viewMode, onViewMode
             placeholder="Search reviews..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-9"
+            className="pl-9 bg-muted/50"
           />
         </div>
         <div className="flex gap-2">
@@ -130,7 +130,7 @@ export function ReviewFilters({ reviews, onFilteredReviews, viewMode, onViewMode
 
       <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
         <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger>
+          <SelectTrigger className="bg-muted/50">
             <SelectValue placeholder="Status" />
           </SelectTrigger>
           <SelectContent>
@@ -144,7 +144,7 @@ export function ReviewFilters({ reviews, onFilteredReviews, viewMode, onViewMode
         </Select>
 
         <Select value={gradeFilter} onValueChange={setGradeFilter}>
-          <SelectTrigger>
+          <SelectTrigger className="bg-muted/50">
             <SelectValue placeholder="Grade" />
           </SelectTrigger>
           <SelectContent>
@@ -158,7 +158,7 @@ export function ReviewFilters({ reviews, onFilteredReviews, viewMode, onViewMode
         </Select>
 
         <Select value={priorityFilter} onValueChange={setPriorityFilter}>
-          <SelectTrigger>
+          <SelectTrigger className="bg-muted/50">
             <SelectValue placeholder="Priority" />
           </SelectTrigger>
           <SelectContent>
@@ -172,7 +172,7 @@ export function ReviewFilters({ reviews, onFilteredReviews, viewMode, onViewMode
         </Select>
 
         <Select value={countryFilter} onValueChange={setCountryFilter}>
-          <SelectTrigger>
+          <SelectTrigger className="bg-muted/50">
             <SelectValue placeholder="Country" />
           </SelectTrigger>
           <SelectContent>

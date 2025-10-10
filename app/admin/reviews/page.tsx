@@ -14,10 +14,9 @@ import { ReviewAssignDrawer } from "@/components/reviews/review-assign-drawer"
 import { AcceptanceDrawer } from "@/components/reviews/workflow/acceptance-drawer"
 import { ReviewerWorkDrawer } from "@/components/reviews/workflow/reviewer-work-drawer"
 import { VerificationDrawer } from "@/components/reviews/workflow/verification-drawer"
-import { ClipboardList, Search, RotateCcw, List, Grid3X3, Calendar, Award, Clock, MapPin, Shield, CheckCircle, FileText } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { ClipboardList, Calendar, Award, Clock, MapPin, Shield, CheckCircle, FileText } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { DataFilterBar } from "@/components/shared/data-filter-bar"
 
 import type { Review } from "@/types/entities"
 import workflowMockReviews from "@/lib/mock-data-workflow"
@@ -123,6 +122,50 @@ export default function AdminReviewsPage() {
     Array.from(new Set(reviews.map((review) => review.currentGrade))).sort(),
     [reviews]
   )
+
+  // Filter configuration for DataFilterBar
+  const filterConfigs = useMemo(() => [
+    {
+      key: "year",
+      placeholder: "Year",
+      icon: Calendar,
+      options: [
+        { value: "all", label: "All Years" },
+        ...uniqueYears.map(year => ({ value: year, label: year }))
+      ]
+    },
+    {
+      key: "grade",
+      placeholder: "Grade",
+      icon: Award,
+      options: [
+        { value: "all", label: "All Grades" },
+        ...uniqueGrades.map(grade => ({ value: grade, label: `Grade ${grade}` }))
+      ]
+    },
+    {
+      key: "reviewType",
+      placeholder: "Type",
+      icon: Clock,
+      options: [
+        { value: "all", label: "All Types" },
+        ...REVIEW_TYPE_OPTIONS.map(type => ({ value: type.hoursValue, label: type.hours }))
+      ]
+    },
+    {
+      key: "country",
+      placeholder: "Country",
+      icon: MapPin,
+      options: [
+        { value: "all", label: "All Countries" },
+        ...uniqueCountries.map(country => ({ value: country, label: country }))
+      ]
+    }
+  ], [uniqueYears, uniqueGrades, uniqueCountries])
+
+  const handleFilterChange = useCallback((key: string, value: string) => {
+    setFilter(key, value)
+  }, [setFilter])
 
   // Handlers
   const handleViewReview = useCallback((review: Review) => {
@@ -431,123 +474,21 @@ export default function AdminReviewsPage() {
           <div className="flex-1 flex flex-col overflow-hidden p-6">
             {/* Header with Filters */}
             <div className="flex-shrink-0 mb-6">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <p className="text-sm text-gray-600">
-                    {filteredReviews.length} of {reviews.length} reviews
-                  </p>
-                </div>
-                <div className="flex items-center gap-1 p-1 bg-muted rounded-md">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setViewMode("list")}
-                    className={`h-8 px-3 ${viewMode === "list" ? "bg-background shadow-sm" : ""}`}
-                  >
-                    <List className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setViewMode("card")}
-                    className={`h-8 px-3 ${viewMode === "card" ? "bg-background shadow-sm" : ""}`}
-                  >
-                    <Grid3X3 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-
-              {/* Filters */}
-              <div className="flex flex-wrap items-center gap-2">
-                {/* Search */}
-                <div className="flex-1 min-w-[200px]">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      placeholder="Search..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-9 h-9"
-                    />
-                  </div>
-                </div>
-
-                {/* Year Filter */}
-                <Select value={filters.year} onValueChange={(value) => setFilter('year', value)}>
-                  <SelectTrigger className="w-[130px] h-9">
-                    <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
-                    <SelectValue placeholder="Year" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Years</SelectItem>
-                    {uniqueYears.map((year) => (
-                      <SelectItem key={year} value={year}>
-                        {year}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                {/* Grade Filter */}
-                <Select value={filters.grade} onValueChange={(value) => setFilter('grade', value)}>
-                  <SelectTrigger className="w-[130px] h-9">
-                    <Award className="h-4 w-4 mr-2 text-muted-foreground" />
-                    <SelectValue placeholder="Grade" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Grades</SelectItem>
-                    {uniqueGrades.map((grade) => (
-                      <SelectItem key={grade} value={grade}>
-                        Grade {grade}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                {/* Review Type Filter */}
-                <Select value={filters.reviewType} onValueChange={(value) => setFilter('reviewType', value)}>
-                  <SelectTrigger className="w-[130px] h-9">
-                    <Clock className="h-4 w-4 mr-2 text-muted-foreground" />
-                    <SelectValue placeholder="Type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Types</SelectItem>
-                    {REVIEW_TYPE_OPTIONS.map((type) => (
-                      <SelectItem key={type.value} value={type.hoursValue}>
-                        {type.hours}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                {/* Country Filter */}
-                <Select value={filters.country} onValueChange={(value) => setFilter('country', value)}>
-                  <SelectTrigger className="w-[140px] h-9">
-                    <MapPin className="h-4 w-4 mr-2 text-muted-foreground" />
-                    <SelectValue placeholder="Country" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Countries</SelectItem>
-                    {uniqueCountries.map((country) => (
-                      <SelectItem key={country} value={country}>
-                        {country}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                {/* Clear Filters */}
-                {hasFilters && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={clearFilters}
-                    className="h-9 px-3"
-                  >
-                    <RotateCcw className="h-4 w-4" />
-                  </Button>
-                )}
-              </div>
+              <DataFilterBar
+                searchTerm={searchTerm}
+                searchPlaceholder="Search reviews..."
+                onSearchChange={setSearchTerm}
+                filters={filterConfigs}
+                filterValues={filters}
+                onFilterChange={handleFilterChange}
+                showViewToggle={true}
+                viewMode={viewMode}
+                onViewModeChange={setViewMode}
+                hasActiveFilters={hasFilters}
+                onClearFilters={clearFilters}
+                resultCount={filteredReviews.length}
+                totalCount={reviews.length}
+              />
             </div>
 
             {/* Review List */}
