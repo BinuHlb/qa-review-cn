@@ -237,7 +237,7 @@ export function ReviewAssignForm({
           {/* Force Assignment Option */}
           <FormSection title="Assignment Options">
             <div className="space-y-3">
-              <div className="flex items-start space-x-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+              <div className="flex items-start space-x-3 p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg">
                 <Checkbox
                   id="forceAssignment"
                   name="forceAssignment"
@@ -248,15 +248,15 @@ export function ReviewAssignForm({
                 <div className="flex-1">
                   <label
                     htmlFor="forceAssignment"
-                    className="text-sm font-medium text-amber-800 cursor-pointer"
+                    className="text-sm font-medium text-amber-800 dark:text-amber-400 cursor-pointer"
                   >
                     Force Assignment
                   </label>
-                  <p className="text-xs text-amber-700 mt-1">
+                  <p className="text-xs text-amber-700 dark:text-amber-400 mt-1">
                     Override reviewer availability and assign immediately, even if the reviewer is currently busy or has reached their capacity.
                   </p>
                   {formData.forceAssignment && (
-                    <div className="flex items-center gap-2 mt-2 text-xs text-amber-800">
+                    <div className="flex items-center gap-2 mt-2 text-xs text-amber-800 dark:text-amber-400">
                       <AlertTriangle className="h-3 w-3" />
                       <span className="font-medium">This will override normal assignment rules</span>
                     </div>

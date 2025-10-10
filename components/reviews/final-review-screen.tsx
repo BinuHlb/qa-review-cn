@@ -223,28 +223,7 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
           finalReviewStatus={review.status === 'Completed' ? 'approved' : 'pending'}
         />
 
-        {/* Review Documents */}
-        <AttachmentsSection
-          attachments={attachments.map(att => ({
-            id: att.id,
-            name: att.name,
-            size: typeof att.size === 'number' ? formatFileSize(att.size) : String(att.size),
-            uploadedBy: att.uploadedBy,
-            uploadedAt: new Date(att.uploadedAt).toISOString(),
-            type: att.type,
-            url: att.url
-          }))}
-          onUpload={handleFileUpload}
-          onRemove={handleRemoveAttachment}
-          onDownload={handleDownloadAttachment}
-          maxHeight="400px"
-          showUpload={true}
-          showDownload={true}
-          showRemove={true}
-          title="Review Documents"
-        />
-
-        {/* Final Review Actions - Optimized Layout */}
+        {/* Final Review Actions - Moved to Top */}
         <div className="bg-muted/50 rounded-lg p-4">
           {/* Section Header */}
           <div className="flex items-center justify-between mb-4 pb-2 border-b border-muted">
@@ -423,7 +402,28 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
               )}
             </div>
           </div>
-        </div>
+
+        {/* Review Documents - After Rating Form */}
+        <AttachmentsSection
+          attachments={attachments.map(att => ({
+            id: att.id,
+            name: att.name,
+            size: typeof att.size === 'number' ? formatFileSize(att.size) : String(att.size),
+            uploadedBy: att.uploadedBy,
+            uploadedAt: new Date(att.uploadedAt).toISOString(),
+            type: att.type,
+            url: att.url
+          }))}
+          onUpload={handleFileUpload}
+          onRemove={handleRemoveAttachment}
+          onDownload={handleDownloadAttachment}
+          maxHeight="100%"
+          showUpload={true}
+          showDownload={true}
+          showRemove={true}
+          title="Review Documents"
+        />
+      </div>
     </ScrollablePanel>
   )
 }

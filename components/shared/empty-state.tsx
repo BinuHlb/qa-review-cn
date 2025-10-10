@@ -33,13 +33,13 @@ export function EmptyState({
 }: EmptyStateProps) {
   return (
     <div className={`h-full flex items-center justify-center ${className}`}>
-      <div className="text-center space-y-4 px-6 max-w-md">
+      <div className="text-center space-y-4 max-w-md">
         <div className={`mx-auto w-20 h-20 ${iconBgColor} rounded-full flex items-center justify-center`}>
           <Icon className={`h-10 w-10 ${iconColor}`} />
         </div>
         <div className="space-y-2">
-          <h3 className="text-xl font-semibold text-gray-900">{title}</h3>
-          <p className="text-sm text-gray-600">{description}</p>
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">{title}</h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400">{description}</p>
         </div>
         
         {steps.length > 0 && (
@@ -50,8 +50,8 @@ export function EmptyState({
                   <span className="text-xs font-semibold text-green-600">{step.number}</span>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-900">{step.title}</p>
-                  <p className="text-xs text-gray-600">{step.description}</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{step.title}</p>
+                  <p className="text-xs text-gray-600 dark:text-gray-400">{step.description}</p>
                 </div>
               </div>
             ))}

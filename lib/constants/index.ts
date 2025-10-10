@@ -173,21 +173,21 @@ export const USER_ROLE_OPTIONS = [
 
 // Color Schemes
 export const STATUS_COLORS = {
-  [REVIEW_STATUS.COMPLETED]: 'bg-green-600 text-white',
-  [REVIEW_STATUS.SUBMITTED]: 'bg-blue-600 text-white',
-  [REVIEW_STATUS.IN_PROGRESS]: 'bg-yellow-600 text-white',
-  [REVIEW_STATUS.PENDING]: 'bg-gray-500 text-white',
-  [REVIEW_STATUS.OVERDUE]: 'bg-red-600 text-white',
-  [REVIEW_STATUS.CANCELLED]: 'bg-gray-400 text-white',
+  [REVIEW_STATUS.COMPLETED]: 'bg-emerald-500 text-white',
+  [REVIEW_STATUS.SUBMITTED]: 'bg-violet-500 text-white',
+  [REVIEW_STATUS.IN_PROGRESS]: 'bg-blue-500 text-white',
+  [REVIEW_STATUS.PENDING]: 'bg-slate-500 text-white',
+  [REVIEW_STATUS.OVERDUE]: 'bg-rose-500 text-white',
+  [REVIEW_STATUS.CANCELLED]: 'bg-slate-400 text-white',
   [REVIEW_STATUS.REJECTED]: 'bg-red-500 text-white'
 } as const
 
 export const GRADE_COLORS = {
-  [GRADES.ONE]: 'bg-green-600 text-white',
-  [GRADES.TWO]: 'bg-blue-600 text-white',
-  [GRADES.THREE]: 'bg-yellow-600 text-white',
-  [GRADES.FOUR]: 'bg-orange-600 text-white',
-  [GRADES.FIVE]: 'bg-red-600 text-white'
+  [GRADES.ONE]: 'bg-emerald-500 text-white',
+  [GRADES.TWO]: 'bg-blue-500 text-white',
+  [GRADES.THREE]: 'bg-amber-500 text-white',
+  [GRADES.FOUR]: 'bg-orange-500 text-white',
+  [GRADES.FIVE]: 'bg-rose-500 text-white'
 } as const
 
 export const PRIORITY_COLORS = {
@@ -237,11 +237,11 @@ export const PERCENTAGE_THRESHOLDS = {
 } as const
 
 export const PERCENTAGE_COLORS = {
-  EXCELLENT: 'text-green-600',
-  GOOD: 'text-blue-600',
-  AVERAGE: 'text-yellow-600',
-  BELOW_AVERAGE: 'text-orange-600',
-  POOR: 'text-red-600'
+  EXCELLENT: 'text-emerald-600 dark:text-emerald-400',
+  GOOD: 'text-blue-600 dark:text-blue-400',
+  AVERAGE: 'text-amber-600 dark:text-amber-400',
+  BELOW_AVERAGE: 'text-orange-600 dark:text-orange-400',
+  POOR: 'text-rose-600 dark:text-rose-400'
 } as const
 
 // File size limits (in bytes)

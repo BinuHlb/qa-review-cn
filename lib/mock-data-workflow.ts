@@ -1062,7 +1062,7 @@ export const workflowMockReviews: Review[] = [
 
   {
     id: 'REV-COMPLETE-003',
-    memberFirm: 'HLB International',
+    memberFirm: 'HLB International Group',
     memberFirmId: 'FIRM-011',
     type: 'Current Member',
     reviewer: 'Anna Kowalski',

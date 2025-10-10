@@ -17,8 +17,8 @@ export function PercentageBadge({ value, className = "", showIcon = true }: Perc
   }
 
   return (
-    <div className={`flex items-center gap-2 bg-white px-2 py-1 rounded-md ${className}`}>
-      {showIcon && <TrendingUp className="h-3 w-3 text-neutral-500" />}
+    <div className={`flex items-center gap-2 bg-white dark:bg-neutral-900/50 px-2 py-1 rounded-md ${className}`}>
+      {showIcon && <TrendingUp className="h-3 w-3 text-neutral-500 dark:text-neutral-400" />}
       <span className={`text-xs font-medium whitespace-nowrap ${getPercentageColor(value)}`}>
         {value}%
       </span>

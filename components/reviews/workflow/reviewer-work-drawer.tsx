@@ -158,7 +158,7 @@ export function ReviewerWorkDrawer({
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="w-full sm:max-w-2xl p-0 flex flex-col">
-        <SheetHeader className="px-6 pt-6 pb-4 border-b">
+        <SheetHeader className="px-6 pt-6 pb-4 border-b dark:border-neutral-700">
           <SheetTitle className="flex items-center gap-2">
             <FileText className="h-5 w-5 text-blue-600" />
             Review Work: {review.memberFirm}
@@ -172,20 +172,17 @@ export function ReviewerWorkDrawer({
           </div>
         </SheetHeader>
 
-        <div className="flex-1 overflow-y-auto">
-          <div className="p-6 space-y-6">
+        <div className="flex-1 overflow-y-auto min-h-0">
+          <div className="p-6 space-y-4">
           {/* Progress Indicator */}
-          <Card>
-            <CardContent className="pt-6">
+          <Card className="bg-muted/30">
+            <CardContent className="p-4">
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label className="text-sm font-medium">Form Completeness</Label>
-                  <span className="text-sm font-bold text-primary">{formCompleteness}%</span>
+                  <Label className="text-xs font-medium">Form Completeness</Label>
+                  <span className="text-xs font-bold text-primary">{formCompleteness}%</span>
                 </div>
-                <Progress value={formCompleteness} className="h-2" />
-                <p className="text-xs text-muted-foreground">
-                  Complete all required fields before submitting
-                </p>
+                <Progress value={formCompleteness} className="h-1.5" />
               </div>
             </CardContent>
           </Card>
@@ -199,34 +196,37 @@ export function ReviewerWorkDrawer({
                   Original Documents ({review.documents?.length || 0})
                 </Label>
               </div>
-              <Badge variant="outline" className="bg-blue-50 text-blue-700">
+              <Badge variant="outline" className="bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-800">
                 Download & Review
               </Badge>
             </div>
             
             {review.documents && review.documents.length > 0 ? (
-              <Card>
-                <CardContent className="p-3">
-                  <div className="space-y-2">
+              <Card className="border-blue-200 dark:border-blue-800 bg-blue-50/30 dark:bg-blue-950/20">
+                <CardContent className="p-4">
+                  <div className="space-y-2 max-h-64 overflow-y-auto">
                     {review.documents.map((doc) => (
                       <div
                         key={doc.id}
-                        className="flex items-center justify-between p-2 rounded-md hover:bg-secondary/50 transition-colors"
+                        className="flex items-center justify-between p-3 rounded-md bg-background hover:bg-secondary/80 transition-colors border border-border"
                       >
-                        <div className="flex items-center gap-2 flex-1 min-w-0">
-                          <FileText className="h-4 w-4 text-blue-600 flex-shrink-0" />
-                          <div className="min-w-0">
-                            <p className="text-sm font-medium truncate">{doc.name}</p>
+                        <div className="flex items-center gap-3 flex-1 min-w-0">
+                          <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded">
+                            <FileText className="h-4 w-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-sm font-medium text-foreground truncate">{doc.name}</p>
                             <p className="text-xs text-muted-foreground">{doc.size}</p>
                           </div>
                         </div>
                         <Button
-                          variant="ghost"
+                          variant="outline"
                           size="sm"
-                          className="flex-shrink-0"
+                          className="flex-shrink-0 ml-2"
                           onClick={() => console.log('Download:', doc.name)}
                         >
-                          <Download className="h-4 w-4" />
+                          <Download className="h-3.5 w-3.5 mr-1" />
+                          Download
                         </Button>
                       </div>
                     ))}
@@ -234,7 +234,7 @@ export function ReviewerWorkDrawer({
                 </CardContent>
               </Card>
             ) : (
-              <p className="text-sm text-muted-foreground">No original documents available</p>
+              <p className="text-sm text-muted-foreground italic">No original documents available</p>
             )}
           </div>
 
@@ -249,7 +249,7 @@ export function ReviewerWorkDrawer({
                   Upload Reviewed Files <span className="text-destructive">*</span>
                 </Label>
               </div>
-              <Badge variant="outline" className="bg-green-50 text-green-700">
+              <Badge variant="outline" className="bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800">
                 {reviewedFiles.length} file(s) ready
               </Badge>
             </div>
@@ -280,16 +280,18 @@ export function ReviewerWorkDrawer({
             </Card>
 
             {reviewedFiles.length > 0 && (
-              <div className="space-y-2">
+              <div className="space-y-2 max-h-48 overflow-y-auto">
                 {reviewedFiles.map((file, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between p-3 rounded-lg bg-green-50 border border-green-200"
+                    className="flex items-center justify-between p-3 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800"
                   >
-                    <div className="flex items-center gap-2">
-                      <FileText className="h-4 w-4 text-green-600" />
-                      <div>
-                        <p className="text-sm font-medium">{file.name}</p>
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <div className="p-2 bg-emerald-100 dark:bg-emerald-900/30 rounded">
+                        <FileText className="h-4 w-4 text-emerald-600 dark:text-emerald-500" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-medium text-foreground truncate">{file.name}</p>
                         <p className="text-xs text-muted-foreground">
                           {(file.size / 1024 / 1024).toFixed(2)} MB
                         </p>
@@ -299,7 +301,7 @@ export function ReviewerWorkDrawer({
                       variant="ghost"
                       size="sm"
                       onClick={() => handleRemoveFile(index)}
-                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                      className="text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-950/30 flex-shrink-0"
                     >
                       Remove
                     </Button>
@@ -338,28 +340,30 @@ export function ReviewerWorkDrawer({
           <Separator />
 
           {/* Comments */}
-          <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <MessageSquare className="h-4 w-4 text-muted-foreground" />
-              <Label htmlFor="comments" className="text-sm font-medium">
-                Detailed Comments <span className="text-destructive">*</span>
-              </Label>
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <MessageSquare className="h-4 w-4 text-muted-foreground" />
+                <Label htmlFor="comments" className="text-sm font-medium">
+                  Detailed Comments <span className="text-destructive">*</span>
+                </Label>
+              </div>
+              <span className="text-xs text-muted-foreground">
+                {comments.length}/50 chars
+              </span>
             </div>
             <Textarea
               id="comments"
               placeholder="Provide detailed findings from your review. Include specific observations about quality standards, documentation, processes, and any concerns identified..."
               value={comments}
               onChange={(e) => setComments(e.target.value)}
-              rows={5}
+              rows={4}
               className="resize-none"
             />
-            <p className="text-xs text-muted-foreground">
-              Minimum 50 characters required ({comments.length}/50)
-            </p>
           </div>
 
           {/* Strengths (Optional) */}
-          <div className="space-y-3">
+          <div className="space-y-2">
             <Label htmlFor="strengths" className="text-sm font-medium flex items-center gap-2">
               <Award className="h-4 w-4 text-muted-foreground" />
               Key Strengths (Optional)
@@ -369,13 +373,13 @@ export function ReviewerWorkDrawer({
               placeholder="List the firm's key strengths and positive findings..."
               value={strengths}
               onChange={(e) => setStrengths(e.target.value)}
-              rows={3}
+              rows={2}
               className="resize-none"
             />
           </div>
 
           {/* Areas for Improvement (Optional) */}
-          <div className="space-y-3">
+          <div className="space-y-2">
             <Label htmlFor="improvements" className="text-sm font-medium flex items-center gap-2">
               <AlertCircle className="h-4 w-4 text-muted-foreground" />
               Areas for Improvement (Optional)
@@ -385,13 +389,13 @@ export function ReviewerWorkDrawer({
               placeholder="Identify areas that need attention or improvement..."
               value={areasForImprovement}
               onChange={(e) => setAreasForImprovement(e.target.value)}
-              rows={3}
+              rows={2}
               className="resize-none"
             />
           </div>
 
           {/* Recommendations (Optional) */}
-          <div className="space-y-3">
+          <div className="space-y-2">
             <Label htmlFor="recommendations" className="text-sm font-medium flex items-center gap-2">
               <Lightbulb className="h-4 w-4 text-muted-foreground" />
               Recommendations (Optional)
@@ -401,78 +405,71 @@ export function ReviewerWorkDrawer({
               placeholder="Provide actionable recommendations for the firm..."
               value={recommendations}
               onChange={(e) => setRecommendations(e.target.value)}
-              rows={3}
+              rows={2}
               className="resize-none"
             />
           </div>
 
-          {/* Validation Checklist */}
-          <Card className="border-primary/20 bg-primary/5">
-            <CardContent className="pt-4">
-              <p className="text-sm font-medium mb-3">Before Submitting:</p>
-              <div className="space-y-2 text-xs">
-                <div className="flex items-center gap-2">
-                  {selectedGrade ? (
-                    <div className="h-4 w-4 rounded-full bg-green-600 flex items-center justify-center">
-                      <span className="text-white text-xs">✓</span>
-                    </div>
-                  ) : (
-                    <div className="h-4 w-4 rounded-full border-2 border-gray-300" />
-                  )}
-                  <span className={selectedGrade ? 'text-foreground' : 'text-muted-foreground'}>
-                    Grade rating selected
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  {comments.length >= 50 ? (
-                    <div className="h-4 w-4 rounded-full bg-green-600 flex items-center justify-center">
-                      <span className="text-white text-xs">✓</span>
-                    </div>
-                  ) : (
-                    <div className="h-4 w-4 rounded-full border-2 border-gray-300" />
-                  )}
-                  <span className={comments.length >= 50 ? 'text-foreground' : 'text-muted-foreground'}>
-                    Detailed comments provided (min 50 chars)
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  {reviewedFiles.length > 0 ? (
-                    <div className="h-4 w-4 rounded-full bg-green-600 flex items-center justify-center">
-                      <span className="text-white text-xs">✓</span>
-                    </div>
-                  ) : (
-                    <div className="h-4 w-4 rounded-full border-2 border-gray-300" />
-                  )}
-                  <span className={reviewedFiles.length > 0 ? 'text-foreground' : 'text-muted-foreground'}>
-                    Reviewed files uploaded
-                  </span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
           </div>
         </div>
 
-        <div className="px-6 py-4 border-t bg-muted/30">
-          <div className="flex gap-3">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleSaveDraft}
-              className="flex-1"
-              disabled={isSubmitting}
-            >
-              Save Draft
-            </Button>
-            <Button
-              type="button"
-              onClick={handleSubmitReview}
-              className="flex-1"
-              disabled={isSubmitting || !selectedGrade || comments.length < 50 || reviewedFiles.length === 0}
-            >
-              <Send className="h-4 w-4 mr-2" />
-              {isSubmitting ? 'Submitting...' : 'Submit for Verification'}
-            </Button>
+        {/* Fixed Footer with Validation & Actions */}
+        <div className="border-t dark:border-neutral-700 bg-muted/30">
+          {/* Compact Validation Status */}
+          <div className="px-6 py-3 border-b dark:border-neutral-700/50">
+            <div className="flex items-center justify-between text-xs">
+              <span className="font-medium text-foreground">Ready to submit:</span>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-1.5">
+                  {selectedGrade ? (
+                    <div className="h-3 w-3 rounded-full bg-emerald-600 dark:bg-emerald-500" />
+                  ) : (
+                    <div className="h-3 w-3 rounded-full border-2 border-muted-foreground/30" />
+                  )}
+                  <span className="text-muted-foreground">Grade</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  {comments.length >= 50 ? (
+                    <div className="h-3 w-3 rounded-full bg-emerald-600 dark:bg-emerald-500" />
+                  ) : (
+                    <div className="h-3 w-3 rounded-full border-2 border-muted-foreground/30" />
+                  )}
+                  <span className="text-muted-foreground">Comments</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  {reviewedFiles.length > 0 ? (
+                    <div className="h-3 w-3 rounded-full bg-emerald-600 dark:bg-emerald-500" />
+                  ) : (
+                    <div className="h-3 w-3 rounded-full border-2 border-muted-foreground/30" />
+                  )}
+                  <span className="text-muted-foreground">Files</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="px-6 py-4">
+            <div className="flex gap-3">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleSaveDraft}
+                className="flex-1"
+                disabled={isSubmitting}
+              >
+                Save Draft
+              </Button>
+              <Button
+                type="button"
+                onClick={handleSubmitReview}
+                className="flex-1"
+                disabled={isSubmitting || !selectedGrade || comments.length < 50 || reviewedFiles.length === 0}
+              >
+                <Send className="h-4 w-4 mr-2" />
+                {isSubmitting ? 'Submitting...' : 'Submit for Verification'}
+              </Button>
+            </div>
           </div>
         </div>
       </SheetContent>

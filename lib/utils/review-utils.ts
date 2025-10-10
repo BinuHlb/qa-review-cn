@@ -8,12 +8,12 @@
  */
 export function getGradeColor(grade: string): string {
   switch (grade) {
-    case '1': return "bg-green-600 text-white border-green-600" // Best - 1 is best
-    case '2': return "bg-blue-600 text-white border-blue-600"   // Good
-    case '3': return "bg-yellow-600 text-white border-yellow-600" // Ok
-    case '4': return "bg-orange-600 text-white border-orange-600" // Bad
-    case '5': return "bg-red-600 text-white border-red-600"       // Poor - 5 is poor
-    default: return "bg-gray-600 text-white border-gray-600"
+    case '1': return "bg-emerald-500 text-white border-emerald-500" // Best - 1 is best
+    case '2': return "bg-blue-500 text-white border-blue-500"   // Good
+    case '3': return "bg-amber-500 text-white border-amber-500" // Ok
+    case '4': return "bg-orange-500 text-white border-orange-500" // Bad
+    case '5': return "bg-rose-500 text-white border-rose-500"       // Poor - 5 is poor
+    default: return "bg-slate-500 text-white border-slate-500"
   }
 }
 
@@ -23,23 +23,23 @@ export function getGradeColor(grade: string): string {
 export function getStatusColor(status: string): string {
   switch (status.toLowerCase()) {
     case 'completed': 
-      return "bg-green-100 text-green-800 border-green-200"
+      return "bg-emerald-100 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800"
     case 'submitted':
-      return "bg-purple-100 text-purple-800 border-purple-200" // Ready for final review
+      return "bg-violet-100 dark:bg-violet-950/50 text-violet-700 dark:text-violet-400 border-violet-200 dark:border-violet-800" // Ready for final review
     case 'in progress': 
-      return "bg-blue-100 text-blue-800 border-blue-200"
+      return "bg-blue-100 dark:bg-blue-950/50 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-800"
     case 'pending': 
-      return "bg-yellow-100 text-yellow-800 border-yellow-200"
+      return "bg-amber-100 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-800"
     case 'overdue': 
-      return "bg-red-100 text-red-800 border-red-200"
+      return "bg-rose-100 dark:bg-rose-950/50 text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-800"
     case 'cancelled':
-      return "bg-gray-100 text-gray-800 border-gray-200"
+      return "bg-slate-100 dark:bg-slate-800/50 text-slate-700 dark:text-slate-400 border-slate-200 dark:border-slate-700"
     case 'rejected':
-      return "bg-red-100 text-red-800 border-red-200"
+      return "bg-red-100 dark:bg-red-950/50 text-red-700 dark:text-red-400 border-red-200 dark:border-red-800"
     case 'approved':
-      return "bg-green-100 text-green-800 border-green-200"
+      return "bg-emerald-100 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800"
     default: 
-      return "bg-gray-100 text-gray-800 border-gray-200"
+      return "bg-slate-100 dark:bg-slate-800/50 text-slate-700 dark:text-slate-400 border-slate-200 dark:border-slate-700"
   }
 }
 
@@ -49,13 +49,13 @@ export function getStatusColor(status: string): string {
 export function getPriorityColor(priority: string): string {
   switch (priority.toLowerCase()) {
     case 'high': 
-      return "bg-red-100 text-red-800 border-red-200"
+      return "bg-rose-100 dark:bg-rose-950/50 text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-800"
     case 'medium': 
-      return "bg-yellow-100 text-yellow-800 border-yellow-200"
+      return "bg-amber-100 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-800"
     case 'low': 
-      return "bg-green-100 text-green-800 border-green-200"
+      return "bg-emerald-100 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800"
     default: 
-      return "bg-gray-100 text-gray-800 border-gray-200"
+      return "bg-slate-100 dark:bg-slate-800/50 text-slate-700 dark:text-slate-400 border-slate-200 dark:border-slate-700"
   }
 }
 
@@ -65,17 +65,17 @@ export function getPriorityColor(priority: string): string {
 export function getReviewerStatusColor(status: string): string {
   switch (status.toLowerCase()) {
     case 'assigned': 
-      return "bg-blue-100 text-blue-800 border-blue-200"
+      return "bg-blue-100 dark:bg-blue-950/50 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-800"
     case 'in progress': 
-      return "bg-yellow-100 text-yellow-800 border-yellow-200"
+      return "bg-amber-100 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-800"
     case 'completed': 
-      return "bg-green-100 text-green-800 border-green-200"
+      return "bg-emerald-100 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800"
     case 'overdue': 
-      return "bg-red-100 text-red-800 border-red-200"
+      return "bg-rose-100 dark:bg-rose-950/50 text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-800"
     case 'pending':
-      return "bg-gray-100 text-gray-800 border-gray-200"
+      return "bg-slate-100 dark:bg-slate-800/50 text-slate-700 dark:text-slate-400 border-slate-200 dark:border-slate-700"
     default: 
-      return "bg-gray-100 text-gray-800 border-gray-200"
+      return "bg-slate-100 dark:bg-slate-800/50 text-slate-700 dark:text-slate-400 border-slate-200 dark:border-slate-700"
   }
 }
 

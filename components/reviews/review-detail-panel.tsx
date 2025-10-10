@@ -150,7 +150,7 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
                   <h3 className="font-bold text-lg text-neutral-900 dark:text-neutral-100 truncate" title={review.memberFirm}>
                     {review.memberFirm}
                   </h3>
-                  <p className="text-sm text-neutral-500 truncate" title={review.type}>
+                  <p className="text-sm text-neutral-500 dark:text-neutral-400 truncate" title={review.type}>
                     {review.type}
                   </p>
                 </div>
@@ -190,7 +190,7 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
               <Building2 className="h-3.5 w-3.5 text-muted-foreground" />
               <p className="text-xs text-muted-foreground font-medium">Member Firm</p>
             </div>
-            <p className="font-semibold text-sm truncate" title={review.memberFirm}>
+            <p className="font-semibold text-sm text-foreground truncate" title={review.memberFirm}>
               {review.memberFirm}
             </p>
           </div>
@@ -200,7 +200,7 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
               <User className="h-3.5 w-3.5 text-muted-foreground" />
               <p className="text-xs text-muted-foreground font-medium">Reviewer</p>
             </div>
-            <p className="font-semibold text-sm truncate" title={review.reviewer}>
+            <p className="font-semibold text-sm text-foreground truncate" title={review.reviewer}>
               {review.reviewer}
             </p>
           </div>
@@ -210,9 +210,9 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
         <div className="space-y-3">
           <div className="flex items-center gap-2">
             <FileText className="h-4 w-4 text-muted-foreground" />
-            <h4 className="text-sm font-semibold">Review Details</h4>
+            <h4 className="text-sm font-semibold text-foreground">Review Details</h4>
           </div>
-          <div className="grid grid-cols-2 gap-3 text-sm">
+          <div className="grid grid-cols-2 gap-3 text-sm text-foreground">
             <div className="flex items-center gap-2">
               <MapPin className="h-3.5 w-3.5 text-muted-foreground" />
               <span className="text-xs text-muted-foreground">Country:</span>
@@ -263,7 +263,7 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
           {review.description && (
             <div className="pt-3 border-t dark:border-neutral-700">
               <p className="text-xs text-muted-foreground font-medium mb-1.5">Description</p>
-              <p className="text-sm">{review.description}</p>
+              <p className="text-sm text-foreground">{review.description}</p>
             </div>
           )}
         </div>
@@ -274,7 +274,7 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
           onUpload={handleFileUpload}
           onRemove={handleRemoveAttachment}
           onDownload={handleDownloadAttachment}
-          maxHeight="400px"
+          maxHeight="100%"
           showUpload={true}
           showDownload={true}
           showRemove={true}
@@ -285,7 +285,7 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
         <div className="space-y-3">
           <div className="flex items-center gap-2">
             <Send className="h-4 w-4 text-muted-foreground" />
-            <h4 className="text-sm font-semibold">Comments ({comments.length})</h4>
+            <h4 className="text-sm font-semibold text-foreground">Comments ({comments.length})</h4>
           </div>
           <div className="space-y-3">
             {/* Comments List */}
@@ -299,10 +299,10 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
                   </Avatar>
                   <div className="flex-1 space-y-1">
                     <div className="flex items-baseline gap-2">
-                      <p className="text-xs font-semibold">{comment.author}</p>
+                      <p className="text-xs font-semibold text-foreground">{comment.author}</p>
                       <p className="text-xs text-muted-foreground">{comment.timestamp}</p>
                     </div>
-                    <p className="text-xs">{comment.content}</p>
+                    <p className="text-xs text-foreground">{comment.content}</p>
                   </div>
                 </div>
               ))}

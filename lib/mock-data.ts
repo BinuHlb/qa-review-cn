@@ -285,42 +285,42 @@ export const mockReviews: Review[] = [
 
 export const getGradeColor = (grade: Review['currentGrade']): string => {
   const gradeColors = {
-    '1': 'bg-green-600 text-white', // Best - 1 is best
-    '2': 'bg-blue-600 text-white',   // Good
-    '3': 'bg-yellow-600 text-white', // Ok
-    '4': 'bg-orange-600 text-white', // Bad
-    '5': 'bg-red-600 text-white'       // Poor - 5 is poor
+    '1': 'bg-emerald-500 text-white border-emerald-500', // Best - 1 is best
+    '2': 'bg-blue-500 text-white border-blue-500',   // Good
+    '3': 'bg-amber-500 text-white border-amber-500', // Ok
+    '4': 'bg-orange-500 text-white border-orange-500', // Bad
+    '5': 'bg-rose-500 text-white border-rose-500'       // Poor - 5 is poor
   }
-  return gradeColors[grade] || 'bg-gray-600 text-white'
+  return gradeColors[grade] || 'bg-slate-500 text-white border-slate-500'
 }
 
 export const getStatusColor = (status: Review['status']): string => {
   const statusColors = {
-    'Completed': 'text-green-600 bg-green-50',
-    'Submitted': 'text-purple-600 bg-purple-50', // Ready for final review
-    'In Progress': 'text-blue-600 bg-blue-50',
-    'Pending': 'text-yellow-600 bg-yellow-50',
-    'Overdue': 'text-red-600 bg-red-50',
-    'Cancelled': 'text-gray-600 bg-gray-50',
-    'Rejected': 'text-red-600 bg-red-50'
+    'Completed': 'text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-800',
+    'Submitted': 'text-violet-700 dark:text-violet-400 bg-violet-100 dark:bg-violet-950/50 border-violet-200 dark:border-violet-800', // Ready for final review
+    'In Progress': 'text-blue-700 dark:text-blue-400 bg-blue-100 dark:bg-blue-950/50 border-blue-200 dark:border-blue-800',
+    'Pending': 'text-amber-700 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/50 border-amber-200 dark:border-amber-800',
+    'Overdue': 'text-rose-700 dark:text-rose-400 bg-rose-100 dark:bg-rose-950/50 border-rose-200 dark:border-rose-800',
+    'Cancelled': 'text-slate-700 dark:text-slate-400 bg-slate-100 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700',
+    'Rejected': 'text-red-700 dark:text-red-400 bg-red-100 dark:bg-red-950/50 border-red-200 dark:border-red-800'
   }
-  return statusColors[status] || 'text-gray-600 bg-gray-50'
+  return statusColors[status] || 'text-slate-700 dark:text-slate-400 bg-slate-100 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700'
 }
 
 export const getPriorityColor = (priority: Review['priority']): string => {
   const priorityColors = {
-    'High': 'text-red-600 bg-red-50',
-    'Medium': 'text-yellow-600 bg-yellow-50',
-    'Low': 'text-green-600 bg-green-50'
+    'High': 'text-rose-700 dark:text-rose-400 bg-rose-100 dark:bg-rose-950/50 border-rose-200 dark:border-rose-800',
+    'Medium': 'text-amber-700 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/50 border-amber-200 dark:border-amber-800',
+    'Low': 'text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-800'
   }
-  return priorityColors[priority] || 'text-gray-600 bg-gray-50'
+  return priorityColors[priority] || 'text-slate-700 dark:text-slate-400 bg-slate-100 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700'
 }
 
 export const getReviewerStatusColor = (status: Review['reviewerStatus'] | Review['partnerStatus']): string => {
   const statusColors = {
-    'Active': 'text-green-600 bg-green-50',
-    'Inactive': 'text-gray-600 bg-gray-50',
-    'Pending': 'text-yellow-600 bg-yellow-50'
+    'Active': 'text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-800',
+    'Inactive': 'text-slate-700 dark:text-slate-400 bg-slate-100 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700',
+    'Pending': 'text-amber-700 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/50 border-amber-200 dark:border-amber-800'
   }
-  return statusColors[status] || 'text-gray-600 bg-gray-50'
+  return statusColors[status] || 'text-slate-700 dark:text-slate-400 bg-slate-100 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700'
 }

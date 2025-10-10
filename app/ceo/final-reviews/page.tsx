@@ -205,8 +205,8 @@ export default function CEOFinalReviewsPage() {
                     <Target className="text-purple-600" size={32} />
                   </div>
                   <div className="space-y-2">
-                    <h3 className="text-lg font-semibold text-gray-900">CEO Final Review</h3>
-                    <p className="text-sm text-gray-600">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">CEO Final Review</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
                       Select a completed review to perform executive review and approval
                     </p>
                   </div>
@@ -216,8 +216,8 @@ export default function CEOFinalReviewsPage() {
                         <span className="text-xs font-semibold text-purple-600">1</span>
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-gray-900">Executive Review</p>
-                        <p className="text-xs text-gray-600">Review admin recommendations and final grade</p>
+                        <p className="text-sm font-medium text-gray-900 dark:text-gray-100">Executive Review</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-400">Review admin recommendations and final grade</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
@@ -225,8 +225,8 @@ export default function CEOFinalReviewsPage() {
                         <span className="text-xs font-semibold text-purple-600">2</span>
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-gray-900">Final Decision</p>
-                        <p className="text-xs text-gray-600">Approve or modify the final grade</p>
+                        <p className="text-sm font-medium text-gray-900 dark:text-gray-100">Final Decision</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-400">Approve or modify the final grade</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
@@ -234,8 +234,8 @@ export default function CEOFinalReviewsPage() {
                         <span className="text-xs font-semibold text-purple-600">3</span>
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-gray-900">Official Approval</p>
-                        <p className="text-xs text-gray-600">Finalize the review with executive authority</p>
+                        <p className="text-sm font-medium text-gray-900 dark:text-gray-100">Official Approval</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-400">Finalize the review with executive authority</p>
                       </div>
                     </div>
                   </div>
@@ -352,8 +352,8 @@ export default function CEOFinalReviewsPage() {
             <div className="flex-shrink-0 mb-6">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h1 className="text-2xl font-bold text-gray-900">CEO Final Reviews</h1>
-                  <p className="text-sm text-gray-600">
+                  <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">CEO Final Reviews</h1>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
                     {filteredReviews.length} of {reviews.length} reviews ready for CEO approval
                   </p>
                 </div>

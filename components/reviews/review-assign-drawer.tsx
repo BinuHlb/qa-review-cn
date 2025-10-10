@@ -350,7 +350,7 @@ export function ReviewAssignDrawer({
             </div>
 
             {/* Force Assignment */}
-            <Card className="border-amber-200 bg-amber-50/50">
+            <Card className="border-amber-200 dark:border-amber-800 bg-amber-50/50 dark:bg-amber-950/30">
               <CardContent className="p-4">
                 <label htmlFor="forceAssignment" className="flex items-start gap-3 cursor-pointer">
                   <Checkbox
@@ -361,10 +361,10 @@ export function ReviewAssignDrawer({
                   />
                   <div className="flex-1 space-y-1">
                     <div className="flex items-center gap-2">
-                      <AlertTriangle className="h-4 w-4 text-amber-600" />
-                      <span className="text-sm font-medium text-amber-900">Force Assignment</span>
+                      <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-500" />
+                      <span className="text-sm font-medium text-amber-900 dark:text-amber-400">Force Assignment</span>
                     </div>
-                    <p className="text-xs text-amber-700">
+                    <p className="text-xs text-amber-700 dark:text-amber-400">
                       Override reviewer availability and capacity limits to assign immediately
                     </p>
                   </div>

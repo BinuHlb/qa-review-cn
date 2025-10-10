@@ -41,8 +41,8 @@ export function GradeSelect({
               "relative flex items-center justify-center p-3 rounded-lg border-2 transition-all duration-200",
               "hover:scale-105 hover:shadow-md active:scale-95",
               value === grade
-                ? "border-primary bg-primary/5 shadow-sm"
-                : "border-muted hover:border-primary/50 bg-white"
+                ? "border-primary bg-primary/10 dark:bg-primary/20 shadow-sm"
+                : "border-muted hover:border-primary/50 bg-background"
             )}
           >
             {/* Badge */}

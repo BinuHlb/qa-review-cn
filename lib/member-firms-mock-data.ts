@@ -285,26 +285,26 @@ export const mockMemberFirms: MemberFirm[] = [
 export const getStatusColor = (status: MemberFirm["status"]) => {
   switch (status) {
     case "active":
-      return "bg-green-100 text-green-800 border-green-200"
+      return "bg-emerald-100 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800"
     case "inactive":
-      return "bg-gray-100 text-gray-800 border-gray-200"
+      return "bg-slate-100 dark:bg-slate-800/50 text-slate-700 dark:text-slate-400 border-slate-200 dark:border-slate-700"
     case "pending":
-      return "bg-yellow-100 text-yellow-800 border-yellow-200"
+      return "bg-amber-100 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-800"
     case "suspended":
-      return "bg-red-100 text-red-800 border-red-200"
+      return "bg-rose-100 dark:bg-rose-950/50 text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-800"
     default:
-      return "bg-gray-100 text-gray-800 border-gray-200"
+      return "bg-slate-100 dark:bg-slate-800/50 text-slate-700 dark:text-slate-400 border-slate-200 dark:border-slate-700"
   }
 }
 
 export const getTypeColor = (type: MemberFirm["type"]) => {
   switch (type) {
     case "current_member":
-      return "bg-blue-100 text-blue-800 border-blue-200"
+      return "bg-blue-100 dark:bg-blue-950/50 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-800"
     case "prospect":
-      return "bg-purple-100 text-purple-800 border-purple-200"
+      return "bg-violet-100 dark:bg-violet-950/50 text-violet-700 dark:text-violet-400 border-violet-200 dark:border-violet-800"
     default:
-      return "bg-gray-100 text-gray-800 border-gray-200"
+      return "bg-slate-100 dark:bg-slate-800/50 text-slate-700 dark:text-slate-400 border-slate-200 dark:border-slate-700"
   }
 }
 
@@ -322,20 +322,20 @@ export const getTypeLabel = (type: MemberFirm["type"]) => {
 export const getRiskLevelColor = (riskLevel: MemberFirm["riskLevel"]) => {
   switch (riskLevel) {
     case "low":
-      return "bg-green-100 text-green-800 border-green-200"
+      return "bg-emerald-100 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800"
     case "medium":
-      return "bg-yellow-100 text-yellow-800 border-yellow-200"
+      return "bg-amber-100 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-800"
     case "high":
-      return "bg-red-100 text-red-800 border-red-200"
+      return "bg-rose-100 dark:bg-rose-950/50 text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-800"
     default:
-      return "bg-gray-100 text-gray-800 border-gray-200"
+      return "bg-slate-100 dark:bg-slate-800/50 text-slate-700 dark:text-slate-400 border-slate-200 dark:border-slate-700"
   }
 }
 
 export const getComplianceScoreColor = (score: number) => {
-  if (score >= 90) return "text-green-600"
-  if (score >= 80) return "text-yellow-600"
-  return "text-red-600"
+  if (score >= 90) return "text-emerald-600 dark:text-emerald-400"
+  if (score >= 80) return "text-amber-600 dark:text-amber-400"
+  return "text-rose-600 dark:text-rose-400"
 }
 
 export const generateFirmInitials = (firmName: string) => {

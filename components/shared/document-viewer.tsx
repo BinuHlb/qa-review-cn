@@ -276,7 +276,7 @@ export function DocumentViewer({
                   }`}>
                     <div className="space-y-4">
                       <div className="space-y-2">
-                        <h2 className="text-lg font-bold text-gray-900">{doc.name.replace('.pdf', '')}</h2>
+                        <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">{doc.name.replace('.pdf', '')}</h2>
                         <div className="h-0.5 bg-blue-600 w-12" />
                       </div>
                       
