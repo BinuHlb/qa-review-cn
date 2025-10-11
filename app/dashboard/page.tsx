@@ -105,14 +105,19 @@ export default function Page() {
         <div className="relative p-3 sm:p-4 md:p-6 space-y-3 sm:space-y-4 md:space-y-6">
           {/* Welcome Section with Glassmorphism */}
           <div className="relative overflow-hidden rounded-xl sm:rounded-2xl border border-border/40 bg-background/40 backdrop-blur-sm p-4 sm:p-6 md:p-8">
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-primary/5 pointer-events-none" />
+            {/* Multi-layer gradient background for smooth aurora effect */}
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent pointer-events-none animate-gradient-aurora" />
+            <div className="absolute inset-0 bg-gradient-to-tl from-primary/8 via-transparent to-primary/6 pointer-events-none animate-gradient-wave" style={{ animationDelay: '2s' }} />
+            <div className="absolute -right-20 -top-20 h-40 w-40 sm:h-60 sm:w-60 rounded-full bg-gradient-radial from-primary/20 to-transparent blur-3xl animate-gradient-radial-pulse" />
+            <div className="absolute -left-10 -bottom-10 h-32 w-32 sm:h-48 sm:w-48 rounded-full bg-gradient-radial from-primary/15 to-transparent blur-2xl animate-float-blur" />
             <div className="relative space-y-2 sm:space-y-3">
               <div className="flex items-center gap-2 sm:gap-3">
-                <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-gradient-to-br from-primary to-primary/50 flex items-center justify-center shadow-lg flex-shrink-0">
-                  <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-primary-foreground animate-pulse" />
+                <div className="relative h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-gradient-to-br from-primary to-primary/50 flex items-center justify-center shadow-lg flex-shrink-0 animate-gradient-pulse-breathe">
+                  <div className="absolute inset-0 rounded-full bg-gradient-radial from-primary/40 to-transparent animate-gradient-radial-pulse" />
+                  <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-primary-foreground relative z-10" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text break-words">
+                  <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent break-words animate-text-shimmer">
                     Welcome back, {session?.user?.name?.split(' ')[0] || 'Admin'}! 👋
                   </h1>
                   <p className="text-muted-foreground mt-1 text-xs sm:text-sm md:text-base lg:text-lg">
@@ -167,8 +172,8 @@ export default function Page() {
           <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
             {/* Total Reviews */}
             <Card className="group relative overflow-hidden transition-all duration-300 md:hover:scale-[1.02] cursor-pointer border border-border/40 bg-background/60 backdrop-blur-md hover:shadow-xl">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="absolute -right-8 -top-8 h-16 sm:h-24 w-16 sm:w-24 rounded-full bg-blue-500/20 blur-2xl group-hover:scale-150 transition-transform duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-gradient-wave" />
+              <div className="absolute -right-8 -top-8 h-16 sm:h-24 w-16 sm:w-24 rounded-full bg-blue-500/20 blur-2xl animate-blob-float" />
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative">
                 <CardTitle className="text-xs sm:text-sm font-medium">
                   Total Reviews
@@ -188,8 +193,8 @@ export default function Page() {
 
             {/* Pending Actions */}
             <Card className="group relative overflow-hidden transition-all duration-300 md:hover:scale-[1.02] cursor-pointer border border-border/40 bg-background/60 backdrop-blur-md hover:shadow-xl">
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="absolute -right-8 -top-8 h-16 sm:h-24 w-16 sm:w-24 rounded-full bg-amber-500/20 blur-2xl group-hover:scale-150 transition-transform duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-gradient-morph" />
+              <div className="absolute -right-8 -top-8 h-16 sm:h-24 w-16 sm:w-24 rounded-full bg-amber-500/20 blur-2xl animate-gradient-spin-scale" />
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative">
                 <CardTitle className="text-xs sm:text-sm font-medium">
                   Pending Actions
@@ -208,8 +213,8 @@ export default function Page() {
 
             {/* In Progress */}
             <Card className="group relative overflow-hidden transition-all duration-300 md:hover:scale-[1.02] cursor-pointer border border-border/40 bg-background/60 backdrop-blur-md hover:shadow-xl">
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="absolute -right-8 -top-8 h-16 sm:h-24 w-16 sm:w-24 rounded-full bg-purple-500/20 blur-2xl group-hover:scale-150 transition-transform duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-gradient-flow-diagonal" />
+              <div className="absolute -right-8 -top-8 h-16 sm:h-24 w-16 sm:w-24 rounded-full bg-purple-500/20 blur-2xl animate-blob-float" style={{ animationDelay: '1s' }} />
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative">
                 <CardTitle className="text-xs sm:text-sm font-medium">
                   In Progress
@@ -228,8 +233,8 @@ export default function Page() {
 
             {/* Completion Rate */}
             <Card className="group relative overflow-hidden transition-all duration-300 md:hover:scale-[1.02] cursor-pointer border border-border/40 bg-background/60 backdrop-blur-md hover:shadow-xl">
-              <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="absolute -right-8 -top-8 h-16 sm:h-24 w-16 sm:w-24 rounded-full bg-green-500/20 blur-2xl group-hover:scale-150 transition-transform duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 via-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-gradient-pulse-breathe" />
+              <div className="absolute -right-8 -top-8 h-16 sm:h-24 w-16 sm:w-24 rounded-full bg-green-500/20 blur-2xl animate-gradient-spin-scale" style={{ animationDelay: '0.5s' }} />
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative">
                 <CardTitle className="text-xs sm:text-sm font-medium">
                   Completion Rate
@@ -254,7 +259,7 @@ export default function Page() {
           <div className="grid gap-3 sm:gap-4 grid-cols-1 md:grid-cols-2">
             {/* Quick Actions */}
             <Card className="relative overflow-hidden border border-border/40 bg-background/50 backdrop-blur-xl shadow-lg">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-primary/3 to-transparent pointer-events-none animate-gradient-wave" />
               <CardHeader className="relative pb-3">
                 <CardTitle className="flex items-center gap-2 text-sm sm:text-base">
                   <div className="p-1.5 sm:p-2 rounded-lg bg-primary/10">
@@ -329,7 +334,7 @@ export default function Page() {
 
             {/* Recent Activity */}
             <Card className="relative overflow-hidden border border-border/40 bg-background/50 backdrop-blur-xl shadow-lg">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-primary/3 to-transparent pointer-events-none animate-gradient-morph" />
               <CardHeader className="relative pb-3">
                 <CardTitle className="flex items-center gap-2 text-sm sm:text-base">
                   <div className="p-1.5 sm:p-2 rounded-lg bg-primary/10">
@@ -371,7 +376,7 @@ export default function Page() {
           {/* Secondary Stats with Glass Effect */}
           <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-3">
             <Card className="group relative overflow-hidden border border-border/40 bg-background/50 backdrop-blur-lg hover:shadow-xl transition-all duration-300 md:hover:scale-[1.01]">
-              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-cyan-500/3 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-gradient-wave" />
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative">
                 <CardTitle className="text-xs sm:text-sm font-medium">
                   Active Reviewers
@@ -389,7 +394,7 @@ export default function Page() {
             </Card>
 
             <Card className="group relative overflow-hidden border border-border/40 bg-background/50 backdrop-blur-lg hover:shadow-xl transition-all duration-300 md:hover:scale-[1.01]">
-              <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-indigo-500/3 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-gradient-flow-diagonal" />
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative">
                 <CardTitle className="text-xs sm:text-sm font-medium">
                   Member Firms
@@ -407,7 +412,7 @@ export default function Page() {
             </Card>
 
             <Card className="group relative overflow-hidden border border-destructive/20 bg-background/50 backdrop-blur-lg hover:shadow-xl hover:shadow-destructive/20 transition-all duration-300 md:hover:scale-[1.01] sm:col-span-3 md:col-span-1">
-              <div className="absolute inset-0 bg-gradient-to-br from-destructive/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-br from-destructive/10 via-destructive/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-gradient-pulse-breathe" />
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative">
                 <CardTitle className="text-xs sm:text-sm font-medium">
                   Overdue Reviews
@@ -430,7 +435,7 @@ export default function Page() {
               className="group relative overflow-hidden border border-border/40 bg-background/50 backdrop-blur-lg hover:shadow-xl transition-all duration-300 cursor-pointer md:hover:scale-[1.03] active:scale-95"
               onClick={() => router.push('/admin/reviews?status=pending_acceptance')}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-amber-500/3 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-gradient-wave" />
               <CardHeader className="pb-2 sm:pb-3 relative">
                 <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground line-clamp-2">
                   Pending Acceptance
@@ -450,7 +455,7 @@ export default function Page() {
               className="group relative overflow-hidden border border-border/40 bg-background/50 backdrop-blur-lg hover:shadow-xl transition-all duration-300 cursor-pointer md:hover:scale-[1.03] active:scale-95"
               onClick={() => router.push('/admin/reviews?status=in_progress')}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-blue-500/3 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-gradient-morph" />
               <CardHeader className="pb-2 sm:pb-3 relative">
                 <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground line-clamp-2">
                   In Progress
@@ -470,7 +475,7 @@ export default function Page() {
               className="group relative overflow-hidden border border-border/40 bg-background/50 backdrop-blur-lg hover:shadow-xl transition-all duration-300 cursor-pointer md:hover:scale-[1.03] active:scale-95"
               onClick={() => router.push('/admin/reviews?status=submitted_for_verification')}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-purple-500/3 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-gradient-flow-diagonal" />
               <CardHeader className="pb-2 sm:pb-3 relative">
                 <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground line-clamp-2">
                   For Verification
@@ -490,7 +495,7 @@ export default function Page() {
               className="group relative overflow-hidden border border-border/40 bg-background/50 backdrop-blur-lg hover:shadow-xl hover:shadow-green-500/20 transition-all duration-300 cursor-pointer md:hover:scale-[1.03] active:scale-95"
               onClick={() => router.push('/admin/reviews?status=completed')}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 via-green-500/3 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-gradient-pulse-breathe" />
               <CardHeader className="pb-2 sm:pb-3 relative">
                 <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground line-clamp-2">
                   Completed
@@ -510,7 +515,7 @@ export default function Page() {
               className="group relative overflow-hidden border border-destructive/30 bg-background/50 backdrop-blur-lg hover:shadow-xl hover:shadow-destructive/20 transition-all duration-300 cursor-pointer md:hover:scale-[1.03] active:scale-95 col-span-2 sm:col-span-3 lg:col-span-1"
               onClick={() => router.push('/admin/reviews?overdue=true')}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-destructive/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-br from-destructive/10 via-destructive/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-gradient-morph" />
               <CardHeader className="pb-2 sm:pb-3 relative">
                 <CardTitle className="text-xs sm:text-sm font-medium text-destructive flex items-center gap-2 line-clamp-2">
                   Overdue
@@ -531,8 +536,8 @@ export default function Page() {
           {/* Alerts & Notifications with Glassmorphism */}
           {stats.overdue > 0 && (
             <Card className="relative overflow-hidden border border-destructive/40 bg-destructive/5 backdrop-blur-xl shadow-lg">
-              <div className="absolute inset-0 bg-gradient-to-r from-destructive/10 via-transparent to-destructive/5 pointer-events-none" />
-              <div className="absolute -right-6 sm:-right-12 -top-6 sm:-top-12 h-20 sm:h-32 w-20 sm:w-32 rounded-full bg-destructive/10 blur-3xl" />
+              <div className="absolute inset-0 bg-gradient-to-r from-destructive/10 via-destructive/5 to-transparent pointer-events-none animate-gradient-wave" />
+              <div className="absolute -right-6 sm:-right-12 -top-6 sm:-top-12 h-20 sm:h-32 w-20 sm:w-32 rounded-full bg-destructive/10 blur-3xl animate-blob-float" style={{ animationDelay: '2s' }} />
               <CardHeader className="relative pb-2 sm:pb-3">
                 <CardTitle className="flex items-center gap-2 text-destructive text-sm sm:text-base">
                   <div className="p-1.5 sm:p-2 rounded-lg bg-destructive/20 animate-pulse">
