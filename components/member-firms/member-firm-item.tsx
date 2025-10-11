@@ -19,10 +19,10 @@ import {
   getTypeColor, 
   getTypeLabel,
   getRiskLevelColor,
-  getComplianceScoreColor,
   generateFirmInitials,
   generateFirmAvatarColor
 } from "@/lib/member-firms-mock-data"
+import { getComplianceScoreColor } from "@/lib/utils/score-utils"
 
 interface MemberFirmItemProps {
   memberFirm: MemberFirm

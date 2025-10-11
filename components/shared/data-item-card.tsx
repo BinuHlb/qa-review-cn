@@ -103,7 +103,7 @@ export function DataItemCard({
                   }
                 }}
               >
-                <div className="flex items-center gap-2 min-w-0 flex-1">
+                <div className="flex items-center gap-2 w-fit flex-1">
                   {avatar}
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">

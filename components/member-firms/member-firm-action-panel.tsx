@@ -15,6 +15,7 @@ import {
   ActionPanelFormSection
 } from "@/components/shared/action-panel-layout"
 import { StatsGrid, ContactSection, BadgeList } from "@/components/shared/detail-sections"
+import { getComplianceScoreColor } from "@/lib/utils/score-utils"
 import {
   CheckCircle,
   XCircle,
@@ -112,12 +113,6 @@ export function MemberFirmActionPanel({
 
   const handleDownloadAttachment = (attachment: Attachment) => {
     console.log('Download attachment:', attachment)
-  }
-
-  const getComplianceScoreColor = (score: number) => {
-    if (score >= 90) return "text-green-600 dark:text-green-400"
-    if (score >= 70) return "text-yellow-600 dark:text-yellow-400"
-    return "text-red-600 dark:text-red-400"
   }
 
   const getStatusColor = (status: string) => {

@@ -332,11 +332,8 @@ export const getRiskLevelColor = (riskLevel: MemberFirm["riskLevel"]) => {
   }
 }
 
-export const getComplianceScoreColor = (score: number) => {
-  if (score >= 90) return "text-emerald-600 dark:text-emerald-400"
-  if (score >= 80) return "text-amber-600 dark:text-amber-400"
-  return "text-rose-600 dark:text-rose-400"
-}
+// Re-export from centralized utility to avoid breaking existing imports
+export { getComplianceScoreColor } from "@/lib/utils/score-utils"
 
 export const generateFirmInitials = (firmName: string) => {
   return firmName
