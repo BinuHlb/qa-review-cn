@@ -1,9 +1,7 @@
 "use client"
 
-import { useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { 
   Calendar,
   Star,
@@ -11,13 +9,11 @@ import {
   Building,
   Phone,
   Mail,
-  ChevronDown,
-  ChevronUp,
   Eye
 } from "lucide-react"
 import { StatsGrid, ContactSection, BadgeList, DetailContainer } from "@/components/shared/detail-sections"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { cn, getItemCardStyles } from "@/lib/utils"
+import { DataItemCard, type DropdownAction } from "@/components/shared/data-item-card"
 import { 
   type MemberFirm, 
   getStatusColor, 
@@ -40,281 +36,192 @@ interface MemberFirmItemProps {
 }
 
 export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete, onReview, isSelected }: MemberFirmItemProps) {
-  const [isExpanded, setIsExpanded] = useState(false)
+  // Avatar component
+  const avatar = (
+    <Avatar className="h-8 w-8 flex-shrink-0">
+      <AvatarImage src={memberFirm.avatar} alt={memberFirm.name} />
+      <AvatarFallback className={`${generateFirmAvatarColor(memberFirm.name)} text-xs font-semibold`}>
+        {generateFirmInitials(memberFirm.name)}
+      </AvatarFallback>
+    </Avatar>
+  )
 
-  if (viewMode === "list") {
-    return (
-      <Card 
-        className={cn(
-          "shadow-none border-none transition-all duration-300 cursor-pointer",
-          getItemCardStyles(isSelected)
-        )}
-        onClick={() => onReview?.(memberFirm)}
-      >
-        <CardContent className="p-3">
-          <div className="space-y-3">
-            {/* Main Row - Mobile Responsive */}
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2 min-w-0">
-              {/* Main Info - Clickable to expand/collapse */}
-              <div 
-                className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer group"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setIsExpanded(!isExpanded)
-                }}
-              >
-                <div className="flex items-center gap-2 min-w-0 flex-1">
-                  <Avatar className="h-8 w-8 flex-shrink-0">
-                    <AvatarImage src={memberFirm.avatar} alt={memberFirm.name} />
-                    <AvatarFallback className={`${generateFirmAvatarColor(memberFirm.name)} text-xs font-semibold`}>
-                      {generateFirmInitials(memberFirm.name)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 truncate group-hover:text-primary transition-colors" title={memberFirm.name}>
-                        {memberFirm.name}
-                      </h3>
-                      <div className="text-neutral-500 group-hover:text-neutral-700 dark:group-hover:text-neutral-300 h-5 w-5 p-0 flex-shrink-0 flex items-center justify-center transition-colors">
-                        {isExpanded ? (
-                          <ChevronUp className="h-3 w-3" />
-                        ) : (
-                          <ChevronDown className="h-3 w-3" />
-                        )}
-                      </div>
-                    </div>
-                    <p className="text-xs text-neutral-600 dark:text-neutral-400 truncate group-hover:text-neutral-500 transition-colors" title={memberFirm.location}>
-                      {memberFirm.location}
-                    </p>
-                  </div>
-                </div>
-              </div>
+  // Badges component
+  const badges = (
+    <div className="flex flex-wrap gap-1">
+      <Badge className={`${getStatusColor(memberFirm.status)} text-xs px-2 py-0.5`}>
+        {memberFirm.status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+      </Badge>
+      <Badge className={`${getTypeColor(memberFirm.type)} text-xs px-2 py-0.5`}>
+        {getTypeLabel(memberFirm.type)}
+      </Badge>
+      <Badge className={`${getRiskLevelColor(memberFirm.riskLevel)} text-xs px-2 py-0.5`}>
+        <span className="hidden sm:inline">{memberFirm.riskLevel.toUpperCase()} RISK</span>
+        <span className="sm:hidden">{memberFirm.riskLevel.toUpperCase()}</span>
+      </Badge>
+    </div>
+  )
 
-              {/* Secondary Info - Hidden on mobile, visible on larger screens */}
-              <div className="hidden sm:flex items-center gap-3 flex-shrink-0">
-                {/* Compliance Score */}
-                <div className="flex items-center gap-2 bg-white dark:bg-neutral-900/50 px-2 py-1 rounded-md">
-                  <Star className="h-3 w-3 text-neutral-500 dark:text-neutral-400" />
-                  <div className="flex items-center gap-1 text-xs whitespace-nowrap">
-                    <span className={`font-medium ${getComplianceScoreColor(memberFirm.complianceScore)}`}>
-                      {memberFirm.complianceScore}%
-                    </span>
-                  </div>
-                </div>
-                
-                {/* Status and Type Badges */}
-                <div className="flex items-center gap-1">
-                  <Badge className={`${getStatusColor(memberFirm.status)} text-xs px-2 py-0.5`}>
-                    {memberFirm.status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                  </Badge>
-                  <Badge className={`${getTypeColor(memberFirm.type)} text-xs px-2 py-0.5`}>
-                    {getTypeLabel(memberFirm.type)}
-                  </Badge>
-                </div>
-              </div>
+  // Secondary info for list view (desktop)
+  const secondaryInfo = (
+    <>
+      {/* Compliance Score */}
+      <div className="flex items-center gap-2 bg-white dark:bg-neutral-900/50 px-2 py-1 rounded-md">
+        <Star className="h-3 w-3 text-neutral-500 dark:text-neutral-400" />
+        <div className="flex items-center gap-1 text-xs whitespace-nowrap">
+          <span className={`font-medium ${getComplianceScoreColor(memberFirm.complianceScore)}`}>
+            {memberFirm.complianceScore}%
+          </span>
+        </div>
+      </div>
+      
+      {/* Status and Type Badges */}
+      <div className="flex items-center gap-1">
+        <Badge className={`${getStatusColor(memberFirm.status)} text-xs px-2 py-0.5`}>
+          {memberFirm.status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+        </Badge>
+        <Badge className={`${getTypeColor(memberFirm.type)} text-xs px-2 py-0.5`}>
+          {getTypeLabel(memberFirm.type)}
+        </Badge>
+      </div>
+    </>
+  )
 
-              {/* Review Button */}
-              <div className="flex items-center gap-1 flex-shrink-0">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    onReview?.(memberFirm)
-                  }}
-                  className="text-xs h-7 px-2"
-                >
-                  <Eye className="h-3 w-3 mr-1" />
-                  <span className="hidden sm:inline">Review</span>
-                </Button>
-              </div>
-            </div>
+  // Mobile info for list view
+  const mobileInfo = (
+    <>
+      {/* Compliance Score */}
+      <div className="flex items-center gap-2 bg-white dark:bg-neutral-900/50 px-2 py-1 rounded-md">
+        <Star className="h-3 w-3 text-neutral-500 dark:text-neutral-400" />
+        <div className="flex items-center gap-1 text-xs whitespace-nowrap">
+          <span className={`font-medium ${getComplianceScoreColor(memberFirm.complianceScore)}`}>
+            {memberFirm.complianceScore}%
+          </span>
+        </div>
+      </div>
+      
+      {/* Status and Type Badges */}
+      <div className="flex items-center gap-1">
+        <Badge className={`${getStatusColor(memberFirm.status)} text-xs px-2 py-0.5`}>
+          {memberFirm.status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+        </Badge>
+        <Badge className={`${getTypeColor(memberFirm.type)} text-xs px-2 py-0.5`}>
+          {getTypeLabel(memberFirm.type)}
+        </Badge>
+      </div>
+    </>
+  )
 
-            {/* Mobile Compliance and Status - Visible only on mobile */}
-            <div className="flex sm:hidden items-center justify-between gap-2">
-              {/* Compliance Score */}
-              <div className="flex items-center gap-2 bg-white dark:bg-neutral-900/50 px-2 py-1 rounded-md">
-                <Star className="h-3 w-3 text-neutral-500 dark:text-neutral-400" />
-                <div className="flex items-center gap-1 text-xs whitespace-nowrap">
-                  <span className={`font-medium ${getComplianceScoreColor(memberFirm.complianceScore)}`}>
-                    {memberFirm.complianceScore}%
-                  </span>
-                </div>
-              </div>
-              
-              {/* Status and Type Badges */}
-              <div className="flex items-center gap-1">
-                <Badge className={`${getStatusColor(memberFirm.status)} text-xs px-2 py-0.5`}>
-                  {memberFirm.status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                </Badge>
-                <Badge className={`${getTypeColor(memberFirm.type)} text-xs px-2 py-0.5`}>
-                  {getTypeLabel(memberFirm.type)}
-                </Badge>
-              </div>
-            </div>
+  // Always visible content for card view
+  const alwaysVisibleContent = (
+    <>
+      {/* Status and Type */}
+      {badges}
 
-            {/* Expandable Content */}
-            <div className={`transition-all duration-500 ease-in-out overflow-hidden ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-              <div className="pt-4 mt-3 border-t border-neutral-200 dark:border-neutral-700">
-                <DetailContainer>
-                  <BadgeList 
-                    label="Specializations" 
-                    items={memberFirm.specializations}
-                  />
+      {/* Specialization - Always visible (first 2) */}
+      <div className="space-y-1">
+        <div className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">Specializations</div>
+        <div className="flex flex-wrap gap-1">
+          {memberFirm.specializations.slice(0, 2).map((spec, index) => (
+            <Badge key={index} variant="outline" className="text-xs px-2 py-0.5 truncate max-w-[120px]" title={spec}>
+              {spec}
+            </Badge>
+          ))}
+          {memberFirm.specializations.length > 2 && (
+            <Badge variant="outline" className="text-xs px-2 py-0.5">
+              +{memberFirm.specializations.length - 2}
+            </Badge>
+          )}
+        </div>
+      </div>
+    </>
+  )
 
-                  <StatsGrid 
-                    stats={[
-                      { icon: Users, label: "Employees", value: memberFirm.employeeCount },
-                      { icon: Building, label: "Partners", value: memberFirm.partnerCount },
-                      { icon: Star, label: "Compliance", value: `${memberFirm.complianceScore}%`, valueClassName: getComplianceScoreColor(memberFirm.complianceScore) },
-                      { icon: Calendar, label: "Reviews", value: memberFirm.totalReviews }
-                    ]}
-                  />
+  // Expandable content
+  const expandableContent = (
+    <DetailContainer>
+      <BadgeList 
+        label="Specializations" 
+        items={memberFirm.specializations}
+      />
 
-                  <ContactSection
-                    title="Contact"
-                    contacts={[
-                      { icon: Mail, value: memberFirm.contactEmail, href: `mailto:${memberFirm.contactEmail}` },
-                      { icon: Phone, value: memberFirm.contactPhone, href: `tel:${memberFirm.contactPhone}` }
-                    ]}
-                  />
-                </DetailContainer>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    )
+      <StatsGrid 
+        stats={[
+          { icon: Users, label: "Employees", value: memberFirm.employeeCount },
+          { icon: Building, label: "Partners", value: memberFirm.partnerCount },
+          { icon: Star, label: "Compliance", value: `${memberFirm.complianceScore}%`, valueClassName: getComplianceScoreColor(memberFirm.complianceScore) },
+          { icon: Calendar, label: "Reviews", value: memberFirm.totalReviews }
+        ]}
+      />
+
+      <ContactSection
+        title="Contact"
+        contacts={[
+          { icon: Mail, value: memberFirm.contactEmail, href: `mailto:${memberFirm.contactEmail}` },
+          { icon: Phone, value: memberFirm.contactPhone, href: `tel:${memberFirm.contactPhone}` }
+        ]}
+      />
+    </DetailContainer>
+  )
+
+  // Dropdown actions
+  const dropdownActions: DropdownAction[] = []
+  
+  if (onEdit) {
+    dropdownActions.push({
+      icon: <Eye className="mr-2 h-4 w-4" />,
+      label: "Edit",
+      onClick: () => onEdit(memberFirm)
+    })
+  }
+  
+  if (onDelete) {
+    dropdownActions.push({
+      icon: <Eye className="mr-2 h-4 w-4" />,
+      label: "Delete",
+      onClick: () => onDelete(memberFirm),
+      variant: "destructive"
+    })
   }
 
-  // Card view
-  return (
-    <Card 
-      className={cn(
-        "shadow-none border-none transition-all duration-300 h-full flex flex-col cursor-pointer",
-        getItemCardStyles(isSelected)
-      )}
-      onClick={() => onReview?.(memberFirm)}
+  // Quick actions for card view
+  const quickActions = viewMode === "card" && onReview ? (
+    <Button
+      variant="outline"
+      size="sm"
+      onClick={(e) => {
+        e.stopPropagation()
+        onReview(memberFirm)
+      }}
+      className="text-xs h-7 px-3"
     >
-      <CardHeader className="pb-3">
-        <div className="flex items-start justify-between">
-          <div 
-            className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer group"
-            onClick={(e) => {
-              e.stopPropagation()
-              setIsExpanded(!isExpanded)
-            }}
-          >
-            <Avatar className="h-10 w-10 flex-shrink-0">
-              <AvatarImage src={memberFirm.avatar} alt={memberFirm.name} />
-              <AvatarFallback className={`${generateFirmAvatarColor(memberFirm.name)} text-sm font-semibold`}>
-                {generateFirmInitials(memberFirm.name)}
-              </AvatarFallback>
-            </Avatar>
-            <div className="min-w-0 flex-1">
-              <CardTitle className="text-base truncate group-hover:text-primary transition-colors" title={memberFirm.name}>
-                {memberFirm.name}
-              </CardTitle>
-              <CardDescription className="text-xs truncate group-hover:text-neutral-500 transition-colors" title={memberFirm.location}>
-                {memberFirm.location}
-              </CardDescription>
-            </div>
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-3 flex-1 flex flex-col">
-        {/* Status and Type */}
-        <div className="flex flex-wrap gap-1">
-          <Badge className={`${getStatusColor(memberFirm.status)} text-xs px-2 py-0.5`}>
-            {memberFirm.status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-          </Badge>
-          <Badge className={`${getTypeColor(memberFirm.type)} text-xs px-2 py-0.5`}>
-            {getTypeLabel(memberFirm.type)}
-          </Badge>
-          <Badge className={`${getRiskLevelColor(memberFirm.riskLevel)} text-xs px-2 py-0.5`}>
-            <span className="hidden sm:inline">{memberFirm.riskLevel.toUpperCase()} RISK</span>
-            <span className="sm:hidden">{memberFirm.riskLevel.toUpperCase()}</span>
-          </Badge>
-        </div>
+      <Star className="h-3 w-3 mr-1" />
+      Review
+    </Button>
+  ) : undefined
 
-        {/* Specialization - Always visible (first 2) */}
-        <div className="space-y-1">
-          <div className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">Specializations</div>
-          <div className="flex flex-wrap gap-1">
-            {memberFirm.specializations.slice(0, 2).map((spec, index) => (
-              <Badge key={index} variant="outline" className="text-xs px-2 py-0.5 truncate max-w-[120px]" title={spec}>
-                {spec}
-              </Badge>
-            ))}
-            {memberFirm.specializations.length > 2 && (
-              <Badge variant="outline" className="text-xs px-2 py-0.5">
-                +{memberFirm.specializations.length - 2}
-              </Badge>
-            )}
-          </div>
-        </div>
+  // Primary action for list view
+  const primaryAction = viewMode === "list" && onReview ? {
+    icon: <Eye className="h-3 w-3" />,
+    label: "Review",
+    onClick: () => onReview(memberFirm)
+  } : undefined
 
-        {/* Expandable Content */}
-        <div className={`transition-all duration-500 ease-in-out overflow-hidden ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-          <div className="pt-4 mt-3 border-t border-neutral-200 dark:border-neutral-700">
-            <DetailContainer>
-              <StatsGrid 
-                stats={[
-                  { icon: Users, label: "Employees", value: memberFirm.employeeCount },
-                  { icon: Building, label: "Partners", value: memberFirm.partnerCount },
-                  { icon: Star, label: "Compliance", value: `${memberFirm.complianceScore}%`, valueClassName: getComplianceScoreColor(memberFirm.complianceScore) },
-                  { icon: Calendar, label: "Reviews", value: memberFirm.totalReviews }
-                ]}
-              />
-
-              <ContactSection
-                title="Contact"
-                contacts={[
-                  { icon: Mail, value: memberFirm.contactEmail, href: `mailto:${memberFirm.contactEmail}` },
-                  { icon: Phone, value: memberFirm.contactPhone, href: `tel:${memberFirm.contactPhone}` }
-                ]}
-              />
-            </DetailContainer>
-          </div>
-        </div>
-
-        {/* Show More and Review Button */}
-        <div className="flex justify-between items-center pt-1 mt-auto">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={(e) => {
-              e.stopPropagation()
-              setIsExpanded(!isExpanded)
-            }}
-            className="text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300 h-6 px-2 text-xs"
-          >
-            {isExpanded ? (
-              <>
-                <ChevronUp className="h-3 w-3 mr-1" />
-                Show Less
-              </>
-            ) : (
-              <>
-                <ChevronDown className="h-3 w-3 mr-1" />
-                Show More
-              </>
-            )}
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={(e) => {
-              e.stopPropagation()
-              onReview?.(memberFirm)
-            }}
-            className="text-xs h-7 px-3"
-          >
-            <Star className="h-3 w-3 mr-1" />
-            Review
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+  return (
+    <DataItemCard
+      viewMode={viewMode}
+      avatar={avatar}
+      title={memberFirm.name}
+      subtitle={memberFirm.location}
+      secondaryInfo={secondaryInfo}
+      mobileInfo={mobileInfo}
+      expandableContent={expandableContent}
+      alwaysVisibleContent={alwaysVisibleContent}
+      primaryAction={primaryAction}
+      quickActions={quickActions}
+      dropdownActions={dropdownActions}
+      isSelected={isSelected}
+      onClick={() => onReview?.(memberFirm)}
+    />
   )
 }
