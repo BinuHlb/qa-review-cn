@@ -20,7 +20,8 @@ import {
   FileText,
   UserPlus,
   Bell,
-  Activity
+  Activity,
+  Sparkles
 } from "lucide-react"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
@@ -99,58 +100,86 @@ export default function Page() {
 
   return (
     <DashboardLayout noPadding>
-      <div className="flex-1 overflow-auto p-6 space-y-6">
-          {/* Welcome Section */}
-          <div className="space-y-2">
-            <h1 className="text-3xl font-bold tracking-tight">
-              Welcome back, {session?.user?.name?.split(' ')[0] || 'Admin'}! 👋
-            </h1>
-            <p className="text-muted-foreground">
-              Here&apos;s what&apos;s happening with your QA reviews today.
-            </p>
+      <div className="flex-1 overflow-auto relative">
+        
+        <div className="relative p-6 space-y-6">
+          {/* Welcome Section with Glassmorphism */}
+          <div className="relative overflow-hidden rounded-2xl border border-border/40 bg-background/40  p-8">
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-primary/5 pointer-events-none" />
+            <div className="relative space-y-3">
+              <div className="flex items-center gap-3">
+                <div className="h-12 w-12 rounded-full bg-gradient-to-br from-primary to-primary/50 flex items-center justify-center shadow-lg">
+                  <Sparkles className="h-6 w-6 text-primary-foreground animate-pulse" />
+                </div>
+                <div>
+                  <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text">
+                    Welcome back, {session?.user?.name?.split(' ')[0] || 'Admin'}! 👋
+                  </h1>
+                  <p className="text-muted-foreground mt-1 text-lg">
+                    Here&apos;s what&apos;s happening with your QA reviews today.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Period Selector */}
-          <div className="flex items-center gap-2">
+          {/* Period Selector with Glass Effect */}
+          <div className="flex items-center gap-2 p-1 rounded-xl bg-background/60 backdrop-blur-md border border-border/40 w-fit ">
             <Button
-              variant={selectedPeriod === 'week' ? 'default' : 'outline'}
+              variant={selectedPeriod === 'week' ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setSelectedPeriod('week')}
-              className="transition-all duration-200"
+              className={`transition-all duration-300 ${
+                selectedPeriod === 'week' 
+                  ? ' scale-105' 
+                  : 'hover:bg-primary/10'
+              }`}
             >
               Week
             </Button>
             <Button
-              variant={selectedPeriod === 'month' ? 'default' : 'outline'}
+              variant={selectedPeriod === 'month' ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setSelectedPeriod('month')}
-              className="transition-all duration-200"
+              className={`transition-all duration-300 ${
+                selectedPeriod === 'month' 
+                  ? ' scale-105' 
+                  : 'hover:bg-primary/10'
+              }`}
             >
               Month
             </Button>
             <Button
-              variant={selectedPeriod === 'year' ? 'default' : 'outline'}
+              variant={selectedPeriod === 'year' ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setSelectedPeriod('year')}
-              className="transition-all duration-200"
+              className={`transition-all duration-300 ${
+                selectedPeriod === 'year' 
+                  ? ' scale-105' 
+                  : 'hover:bg-primary/10'
+              }`}
             >
               Year
             </Button>
           </div>
 
-          {/* Stats Grid */}
+          {/* Stats Grid with Glassmorphism */}
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {/* Total Reviews */}
-            <Card className="hover:shadow-lg transition-all duration-300 hover:scale-[1.02] cursor-pointer border-l-4 border-l-blue-500">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <Card className="group relative overflow-hidden transition-all duration-500 hover:scale-[1.03] cursor-pointer border border-border/40 bg-background/60 backdrop-blur-md  hover:shadow-2xl">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-blue-500/20 blur-2xl group-hover:scale-150 transition-transform duration-500" />
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative">
                 <CardTitle className="text-sm font-medium">
                   Total Reviews
                 </CardTitle>
-                <ClipboardList className="h-4 w-4 text-blue-500" />
+                <div className="p-2 rounded-lg bg-blue-500/10 group-hover:bg-blue-500/20 transition-colors duration-300">
+                  <ClipboardList className="h-5 w-5 text-blue-500 group-hover:scale-110 transition-transform duration-300" />
+                </div>
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stats.totalReviews}</div>
-                <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
+              <CardContent className="relative">
+                <div className="text-3xl font-bold">{stats.totalReviews}</div>
+                <p className="text-xs text-muted-foreground flex items-center gap-1 mt-2">
                   <TrendingUp className="h-3 w-3 text-green-500" />
                   <span>+12.5% from last {selectedPeriod}</span>
                 </p>
@@ -158,48 +187,60 @@ export default function Page() {
             </Card>
 
             {/* Pending Actions */}
-            <Card className="hover:shadow-lg transition-all duration-300 hover:scale-[1.02] cursor-pointer border-l-4 border-l-amber-500">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <Card className="group relative overflow-hidden transition-all duration-500 hover:scale-[1.03] cursor-pointer border border-border/40 bg-background/60 backdrop-blur-md hover:shadow-2xl">
+              <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-amber-500/20 blur-2xl group-hover:scale-150 transition-transform duration-500" />
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative">
                 <CardTitle className="text-sm font-medium">
                   Pending Actions
                 </CardTitle>
-                <Clock className="h-4 w-4 text-amber-500" />
+                <div className="p-2 rounded-lg bg-amber-500/10 group-hover:bg-amber-500/20 transition-colors duration-300">
+                  <Clock className="h-5 w-5 text-amber-500 group-hover:scale-110 transition-transform duration-300" />
+                </div>
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stats.pendingAcceptance + stats.awaitingVerification}</div>
-                <p className="text-xs text-muted-foreground mt-1">
+              <CardContent className="relative">
+                <div className="text-3xl font-bold">{stats.pendingAcceptance + stats.awaitingVerification}</div>
+                <p className="text-xs text-muted-foreground mt-2">
                   {stats.pendingAcceptance} awaiting acceptance
                 </p>
               </CardContent>
             </Card>
 
             {/* In Progress */}
-            <Card className="hover:shadow-lg transition-all duration-300 hover:scale-[1.02] cursor-pointer border-l-4 border-l-purple-500">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <Card className="group relative overflow-hidden transition-all duration-500 hover:scale-[1.03] cursor-pointer border border-border/40 bg-background/60 backdrop-blur-md  hover:shadow-2xl">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-purple-500/20 blur-2xl group-hover:scale-150 transition-transform duration-500" />
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative">
                 <CardTitle className="text-sm font-medium">
                   In Progress
                 </CardTitle>
-                <Activity className="h-4 w-4 text-purple-500" />
+                <div className="p-2 rounded-lg bg-purple-500/10 group-hover:bg-purple-500/20 transition-colors duration-300">
+                  <Activity className="h-5 w-5 text-purple-500 group-hover:scale-110 transition-transform duration-300" />
+                </div>
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stats.inProgress}</div>
-                <p className="text-xs text-muted-foreground mt-1">
+              <CardContent className="relative">
+                <div className="text-3xl font-bold">{stats.inProgress}</div>
+                <p className="text-xs text-muted-foreground mt-2">
                   Active reviews
                 </p>
               </CardContent>
             </Card>
 
             {/* Completion Rate */}
-            <Card className="hover:shadow-lg transition-all duration-300 hover:scale-[1.02] cursor-pointer border-l-4 border-l-green-500">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <Card className="group relative overflow-hidden transition-all duration-500 hover:scale-[1.03] cursor-pointer border border-border/40 bg-background/60 backdrop-blur-md  hover:shadow-2xl">
+              <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-green-500/20 blur-2xl group-hover:scale-150 transition-transform duration-500" />
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative">
                 <CardTitle className="text-sm font-medium">
                   Completion Rate
                 </CardTitle>
-                <CheckCircle className="h-4 w-4 text-green-500" />
+                <div className="p-2 rounded-lg bg-green-500/10 group-hover:bg-green-500/20 transition-colors duration-300">
+                  <CheckCircle className="h-5 w-5 text-green-500 group-hover:scale-110 transition-transform duration-300" />
+                </div>
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stats.completionRate}%</div>
-                <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
+              <CardContent className="relative">
+                <div className="text-3xl font-bold">{stats.completionRate}%</div>
+                <p className="text-xs text-muted-foreground flex items-center gap-1 mt-2">
                   <TrendingUp className="h-3 w-3 text-green-500" />
                   <span>+5.3% from last {selectedPeriod}</span>
                 </p>
@@ -207,142 +248,110 @@ export default function Page() {
             </Card>
           </div>
 
-          {/* Secondary Stats */}
-          <div className="grid gap-4 md:grid-cols-3">
-            <Card className="hover:shadow-md transition-shadow duration-200">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Active Reviewers
-                </CardTitle>
-                <Users className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stats.activeReviewers}</div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  of {stats.totalReviewers} total
-                </p>
-              </CardContent>
-            </Card>
+         
 
-            <Card className="hover:shadow-md transition-shadow duration-200">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Member Firms
-                </CardTitle>
-                <Building2 className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stats.activeFirms}</div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  of {stats.totalFirms} active
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="hover:shadow-md transition-shadow duration-200">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Overdue Reviews
-                </CardTitle>
-                <AlertCircle className="h-4 w-4 text-destructive" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-destructive">{stats.overdue}</div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Require attention
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Main Content Grid */}
+          {/* Main Content Grid with Glass Effect */}
           <div className="grid gap-4 md:grid-cols-2">
             {/* Quick Actions */}
-            <Card>
-              <CardHeader>
+            <Card className="relative overflow-hidden border border-border/40 bg-background/50 backdrop-blur-xl shadow-xl">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
+              <CardHeader className="relative">
                 <CardTitle className="flex items-center gap-2">
-                  <Star className="h-5 w-5 text-primary" />
+                  <div className="p-2 rounded-lg bg-primary/10">
+                    <Star className="h-5 w-5 text-primary" />
+                  </div>
                   Quick Actions
                 </CardTitle>
                 <CardDescription>Common administrative tasks</CardDescription>
               </CardHeader>
-              <CardContent className="grid gap-3">
+              <CardContent className="grid gap-3 relative">
                 <Button 
                   variant="outline" 
-                  className="justify-start h-auto py-3 hover:bg-primary/5 hover:border-primary transition-all duration-200"
+                  className="group justify-start h-auto py-4 border-border/40 bg-background/30 backdrop-blur-sm hover:bg-primary/10 hover:border-primary/50 hover:scale-[1.02] transition-all duration-300 shadow-sm hover:shadow-lg"
                   onClick={() => router.push('/admin/reviews')}
                 >
-                  <ClipboardList className="h-5 w-5 mr-3 text-blue-500" />
-                  <div className="flex-1 text-left">
-                    <div className="font-medium">Manage QA Reviews</div>
+                  <div className="p-2 rounded-lg bg-blue-500/10 group-hover:bg-blue-500/20 transition-colors duration-300">
+                    <ClipboardList className="h-5 w-5 text-blue-500" />
+                  </div>
+                  <div className="flex-1 text-left ml-3">
+                    <div className="font-semibold">Manage QA Reviews</div>
                     <div className="text-xs text-muted-foreground">{stats.totalReviews} total reviews</div>
                   </div>
-                  <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                  <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:translate-x-1 transition-transform duration-300" />
                 </Button>
 
                 <Button 
                   variant="outline" 
-                  className="justify-start h-auto py-3 hover:bg-primary/5 hover:border-primary transition-all duration-200"
+                  className="group justify-start h-auto py-4 border-border/40 bg-background/30 backdrop-blur-sm hover:bg-green-500/10 hover:border-green-500/50 hover:scale-[1.02] transition-all duration-300 shadow-sm hover:shadow-lg"
                   onClick={() => router.push('/admin/reviewers')}
                 >
-                  <UserPlus className="h-5 w-5 mr-3 text-green-500" />
-                  <div className="flex-1 text-left">
-                    <div className="font-medium">Manage Reviewers</div>
+                  <div className="p-2 rounded-lg bg-green-500/10 group-hover:bg-green-500/20 transition-colors duration-300">
+                    <UserPlus className="h-5 w-5 text-green-500" />
+                  </div>
+                  <div className="flex-1 text-left ml-3">
+                    <div className="font-semibold">Manage Reviewers</div>
                     <div className="text-xs text-muted-foreground">{stats.activeReviewers} active reviewers</div>
                   </div>
-                  <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                  <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:translate-x-1 transition-transform duration-300" />
                 </Button>
 
                 <Button 
                   variant="outline" 
-                  className="justify-start h-auto py-3 hover:bg-primary/5 hover:border-primary transition-all duration-200"
+                  className="group justify-start h-auto py-4 border-border/40 bg-background/30 backdrop-blur-sm hover:bg-purple-500/10 hover:border-purple-500/50 hover:scale-[1.02] transition-all duration-300 shadow-sm hover:shadow-lg"
                   onClick={() => router.push('/admin/member-firms')}
                 >
-                  <Building2 className="h-5 w-5 mr-3 text-purple-500" />
-                  <div className="flex-1 text-left">
-                    <div className="font-medium">Member Firms</div>
+                  <div className="p-2 rounded-lg bg-purple-500/10 group-hover:bg-purple-500/20 transition-colors duration-300">
+                    <Building2 className="h-5 w-5 text-purple-500" />
+                  </div>
+                  <div className="flex-1 text-left ml-3">
+                    <div className="font-semibold">Member Firms</div>
                     <div className="text-xs text-muted-foreground">{stats.activeFirms} active firms</div>
                   </div>
-                  <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                  <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:translate-x-1 transition-transform duration-300" />
                 </Button>
 
                 <Button 
                   variant="outline" 
-                  className="justify-start h-auto py-3 hover:bg-primary/5 hover:border-primary transition-all duration-200"
+                  className="group justify-start h-auto py-4 border-border/40 bg-background/30 backdrop-blur-sm hover:bg-amber-500/10 hover:border-amber-500/50 hover:scale-[1.02] transition-all duration-300 shadow-sm hover:shadow-lg"
                   onClick={() => router.push('/admin/final-reviews')}
                 >
-                  <Star className="h-5 w-5 mr-3 text-amber-500" />
-                  <div className="flex-1 text-left">
-                    <div className="font-medium">Final Reviews</div>
+                  <div className="p-2 rounded-lg bg-amber-500/10 group-hover:bg-amber-500/20 transition-colors duration-300">
+                    <Star className="h-5 w-5 text-amber-500" />
+                  </div>
+                  <div className="flex-1 text-left ml-3">
+                    <div className="font-semibold">Final Reviews</div>
                     <div className="text-xs text-muted-foreground">CEO approval pending</div>
                   </div>
-                  <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                  <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:translate-x-1 transition-transform duration-300" />
                 </Button>
               </CardContent>
             </Card>
 
             {/* Recent Activity */}
-            <Card>
-              <CardHeader>
+            <Card className="relative overflow-hidden border border-border/40 bg-background/50 backdrop-blur-xl shadow-xl">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
+              <CardHeader className="relative">
                 <CardTitle className="flex items-center gap-2">
-                  <Bell className="h-5 w-5 text-primary" />
+                  <div className="p-2 rounded-lg bg-primary/10">
+                    <Bell className="h-5 w-5 text-primary" />
+                  </div>
                   Recent Activity
                 </CardTitle>
                 <CardDescription>Latest updates across all reviews</CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
+              <CardContent className="relative">
+                <div className="space-y-2">
                   {recentActivity.map((review) => (
                     <div
                       key={review.id}
-                      className="flex items-start gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors duration-200 cursor-pointer"
+                      className="group flex items-start gap-3 p-3 rounded-xl hover:bg-background/60 backdrop-blur-sm border border-transparent hover:border-border/40 hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-[1.01]"
                       onClick={() => router.push('/admin/reviews')}
                     >
-                      <div className={`h-2 w-2 rounded-full mt-2 flex-shrink-0 ${getStatusColor(review.workflowStatus || '')}`} />
+                      <div className={`h-2.5 w-2.5 rounded-full mt-2 flex-shrink-0 shadow-lg ${getStatusColor(review.workflowStatus || '')}`} />
                       <div className="flex-1 min-w-0 space-y-1">
                         <div className="flex items-center gap-2">
-                          <p className="text-sm font-medium truncate">{review.memberFirm}</p>
-                          <Badge variant="outline" className="text-xs">
+                          <p className="text-sm font-semibold truncate">{review.memberFirm}</p>
+                          <Badge variant="outline" className="text-xs bg-primary/5 backdrop-blur-sm">
                             {review.reviewType}h
                           </Badge>
                         </div>
@@ -350,7 +359,7 @@ export default function Page() {
                           {review.workflowStatus?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
                         </p>
                       </div>
-                      <span className="text-xs text-muted-foreground flex-shrink-0">
+                      <span className="text-xs text-muted-foreground flex-shrink-0 opacity-60 group-hover:opacity-100 transition-opacity duration-300">
                         {getTimeAgo(review.lastUpdated)}
                       </span>
                     </div>
@@ -359,119 +368,196 @@ export default function Page() {
               </CardContent>
             </Card>
           </div>
+ {/* Secondary Stats with Glass Effect */}
+ <div className="grid gap-4 md:grid-cols-3">
+            <Card className="group relative overflow-hidden border border-border/40 bg-background/50 backdrop-blur-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]">
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative">
+                <CardTitle className="text-sm font-medium">
+                  Active Reviewers
+                </CardTitle>
+                <div className="p-2 rounded-lg bg-cyan-500/10 group-hover:bg-cyan-500/20 transition-colors duration-300">
+                  <Users className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
+                </div>
+              </CardHeader>
+              <CardContent className="relative">
+                <div className="text-2xl font-bold">{stats.activeReviewers}</div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  of {stats.totalReviewers} total
+                </p>
+              </CardContent>
+            </Card>
 
-          {/* Workflow Status Cards */}
+            <Card className="group relative overflow-hidden border border-border/40 bg-background/50 backdrop-blur-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]">
+              <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative">
+                <CardTitle className="text-sm font-medium">
+                  Member Firms
+                </CardTitle>
+                <div className="p-2 rounded-lg bg-indigo-500/10 group-hover:bg-indigo-500/20 transition-colors duration-300">
+                  <Building2 className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
+                </div>
+              </CardHeader>
+              <CardContent className="relative">
+                <div className="text-2xl font-bold">{stats.activeFirms}</div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  of {stats.totalFirms} active
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="group relative overflow-hidden border border-destructive/20 bg-background/50 backdrop-blur-lg hover:shadow-xl hover:shadow-destructive/20 transition-all duration-300 hover:scale-[1.02]">
+              <div className="absolute inset-0 bg-gradient-to-br from-destructive/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative">
+                <CardTitle className="text-sm font-medium">
+                  Overdue Reviews
+                </CardTitle>
+                <div className="p-2 rounded-lg bg-destructive/10 group-hover:bg-destructive/20 transition-colors duration-300">
+                  <AlertCircle className="h-4 w-4 text-destructive animate-pulse" />
+                </div>
+              </CardHeader>
+              <CardContent className="relative">
+                <div className="text-2xl font-bold text-destructive">{stats.overdue}</div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Require attention
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+          {/* Workflow Status Cards with Glassmorphism */}
           <div className="grid gap-4 md:grid-cols-5">
             <Card 
-              className="hover:shadow-md transition-all duration-200 cursor-pointer hover:scale-[1.02]"
+              className="group relative overflow-hidden border border-border/40 bg-background/50 backdrop-blur-lg hover:shadow-xl transition-all duration-300 cursor-pointer hover:scale-[1.05]"
               onClick={() => router.push('/admin/reviews?status=pending_acceptance')}
             >
-              <CardHeader className="pb-3">
+              <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <CardHeader className="pb-3 relative">
                 <CardTitle className="text-sm font-medium text-muted-foreground">
                   Pending Acceptance
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="relative">
                 <div className="flex items-center justify-between">
                   <div className="text-3xl font-bold">{stats.pendingAcceptance}</div>
-                  <Clock className="h-8 w-8 text-amber-500 opacity-50" />
+                  <div className="p-2 rounded-lg bg-amber-500/10 group-hover:bg-amber-500/20 transition-colors duration-300">
+                    <Clock className="h-6 w-6 text-amber-500 group-hover:scale-110 transition-transform duration-300" />
+                  </div>
                 </div>
               </CardContent>
             </Card>
 
             <Card 
-              className="hover:shadow-md transition-all duration-200 cursor-pointer hover:scale-[1.02]"
+              className="group relative overflow-hidden border border-border/40 bg-background/50 backdrop-blur-lg hover:shadow-xl transition-all duration-300 cursor-pointer hover:scale-[1.05]"
               onClick={() => router.push('/admin/reviews?status=in_progress')}
             >
-              <CardHeader className="pb-3">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <CardHeader className="pb-3 relative">
                 <CardTitle className="text-sm font-medium text-muted-foreground">
                   In Progress
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="relative">
                 <div className="flex items-center justify-between">
                   <div className="text-3xl font-bold">{stats.inProgress}</div>
-                  <Activity className="h-8 w-8 text-blue-500 opacity-50" />
+                  <div className="p-2 rounded-lg bg-blue-500/10 group-hover:bg-blue-500/20 transition-colors duration-300">
+                    <Activity className="h-6 w-6 text-blue-500 group-hover:scale-110 transition-transform duration-300" />
+                  </div>
                 </div>
               </CardContent>
             </Card>
 
             <Card 
-              className="hover:shadow-md transition-all duration-200 cursor-pointer hover:scale-[1.02]"
+              className="group relative overflow-hidden border border-border/40 bg-background/50 backdrop-blur-lg hover:shadow-xl transition-all duration-300 cursor-pointer hover:scale-[1.05]"
               onClick={() => router.push('/admin/reviews?status=submitted_for_verification')}
             >
-              <CardHeader className="pb-3">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <CardHeader className="pb-3 relative">
                 <CardTitle className="text-sm font-medium text-muted-foreground">
                   For Verification
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="relative">
                 <div className="flex items-center justify-between">
                   <div className="text-3xl font-bold">{stats.awaitingVerification}</div>
-                  <FileText className="h-8 w-8 text-purple-500 opacity-50" />
+                  <div className="p-2 rounded-lg bg-purple-500/10 group-hover:bg-purple-500/20 transition-colors duration-300">
+                    <FileText className="h-6 w-6 text-purple-500 group-hover:scale-110 transition-transform duration-300" />
+                  </div>
                 </div>
               </CardContent>
             </Card>
 
             <Card 
-              className="hover:shadow-md transition-all duration-200 cursor-pointer hover:scale-[1.02]"
+              className="group relative overflow-hidden border border-border/40 bg-background/50 backdrop-blur-lg hover:shadow-xl hover:shadow-green-500/20 transition-all duration-300 cursor-pointer hover:scale-[1.05]"
               onClick={() => router.push('/admin/reviews?status=completed')}
             >
-              <CardHeader className="pb-3">
+              <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <CardHeader className="pb-3 relative">
                 <CardTitle className="text-sm font-medium text-muted-foreground">
                   Completed
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="relative">
                 <div className="flex items-center justify-between">
-                  <div className="text-3xl font-bold text-green-600">{stats.completed}</div>
-                  <CheckCircle className="h-8 w-8 text-green-500 opacity-50" />
+                  <div className="text-3xl font-bold text-green-600 dark:text-green-400">{stats.completed}</div>
+                  <div className="p-2 rounded-lg bg-green-500/10 group-hover:bg-green-500/20 transition-colors duration-300">
+                    <CheckCircle className="h-6 w-6 text-green-500 group-hover:scale-110 transition-transform duration-300" />
+                  </div>
                 </div>
               </CardContent>
             </Card>
 
             <Card 
-              className="hover:shadow-md transition-all duration-200 cursor-pointer hover:scale-[1.02] border-destructive/50"
+              className="group relative overflow-hidden border border-destructive/30 bg-background/50 backdrop-blur-lg hover:shadow-xl hover:shadow-destructive/20 transition-all duration-300 cursor-pointer hover:scale-[1.05]"
               onClick={() => router.push('/admin/reviews?overdue=true')}
             >
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium text-destructive">
+              <div className="absolute inset-0 bg-gradient-to-br from-destructive/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <CardHeader className="pb-3 relative">
+                <CardTitle className="text-sm font-medium text-destructive flex items-center gap-2">
                   Overdue
+                  <div className="h-2 w-2 rounded-full bg-destructive animate-pulse" />
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="relative">
                 <div className="flex items-center justify-between">
                   <div className="text-3xl font-bold text-destructive">{stats.overdue}</div>
-                  <AlertCircle className="h-8 w-8 text-destructive opacity-50" />
+                  <div className="p-2 rounded-lg bg-destructive/10 group-hover:bg-destructive/20 transition-colors duration-300">
+                    <AlertCircle className="h-6 w-6 text-destructive group-hover:scale-110 transition-transform duration-300" />
+                  </div>
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* Alerts & Notifications */}
+          {/* Alerts & Notifications with Glassmorphism */}
           {stats.overdue > 0 && (
-            <Card className="border-destructive/50 bg-destructive/5">
-              <CardHeader>
+            <Card className="relative overflow-hidden border border-destructive/40 bg-destructive/5 backdrop-blur-xl shadow-xl">
+              <div className="absolute inset-0 bg-gradient-to-r from-destructive/10 via-transparent to-destructive/5 pointer-events-none" />
+              <div className="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-destructive/10 blur-3xl" />
+              <CardHeader className="relative">
                 <CardTitle className="flex items-center gap-2 text-destructive">
-                  <AlertCircle className="h-5 w-5" />
+                  <div className="p-2 rounded-lg bg-destructive/20 animate-pulse">
+                    <AlertCircle className="h-5 w-5" />
+                  </div>
                   Attention Required
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="relative">
                 <p className="text-sm">
-                  You have <strong>{stats.overdue} overdue review(s)</strong> that require immediate attention.
+                  You have <strong className="text-destructive">{stats.overdue} overdue review(s)</strong> that require immediate attention.
                   <Button 
                     variant="link" 
-                    className="h-auto p-0 ml-2 text-destructive"
+                    className="h-auto p-0 ml-2 text-destructive font-semibold hover:underline group inline-flex items-center gap-1"
                     onClick={() => router.push('/admin/reviews?overdue=true')}
                   >
-                    View overdue reviews →
+                    View overdue reviews
+                    <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform duration-300" />
                   </Button>
                 </p>
               </CardContent>
             </Card>
           )}
         </div>
+      </div>
     </DashboardLayout>
   )
 }
