@@ -4,6 +4,7 @@ import "./globals.css";
 import { AuthProvider } from "@/components/providers/session-provider";
 import { ReduxProvider } from "@/components/providers/redux-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { Chatbot } from "@/components/chatbot/chatbot";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,6 +40,7 @@ export default function RootLayout({
           <ReduxProvider>
             <AuthProvider>
               {children}
+              <Chatbot />
             </AuthProvider>
           </ReduxProvider>
         </ThemeProvider>
