@@ -195,16 +195,21 @@ export default function AdminMemberFirmsPage() {
   }
 
   return (
-    <DashboardLayout noPadding>
+    <DashboardLayout 
+      noPadding
+      search={{
+        searchTerm,
+        searchPlaceholder: "Search member firms...",
+        onSearchChange: setSearchTerm
+      }}
+    >
       <ListDetailLayout
         listContent={
           <>
             {/* Header with Filters */}
             <div className="flex-shrink-0 mb-6">
               <DataFilterBar
-                searchTerm={searchTerm}
-                searchPlaceholder="Search member firms..."
-                onSearchChange={setSearchTerm}
+                showSearch={false}
                 filters={filters}
                 filterValues={filterValues}
                 onFilterChange={handleFilterChange}

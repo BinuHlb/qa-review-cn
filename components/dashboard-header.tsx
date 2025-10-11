@@ -11,6 +11,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import {
   SidebarTrigger,
@@ -24,10 +25,20 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { LogOut, User } from "lucide-react"
+import { LogOut, User, Search } from "lucide-react"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
 
-export function DashboardHeader() {
+interface SearchProps {
+  searchTerm: string
+  searchPlaceholder?: string
+  onSearchChange: (value: string) => void
+}
+
+interface DashboardHeaderProps {
+  search?: SearchProps
+}
+
+export function DashboardHeader({ search }: DashboardHeaderProps = {}) {
   const { data: session } = useSession()
   const pathname = usePathname()
 
@@ -111,6 +122,21 @@ export function DashboardHeader() {
           </BreadcrumbList>
         </Breadcrumb>
       </div>
+
+      {/* Optional Search Input */}
+      {search && (
+        <div className="flex-1 max-w-xxl px-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder={search.searchPlaceholder || "Search..."}
+              value={search.searchTerm}
+              onChange={(e) => search.onSearchChange(e.target.value)}
+              className="pl-9 h-9 bg-neutral-100 dark:bg-neutral-800 border-0 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+            />
+          </div>
+        </div>
+      )}
       
       <div className="flex items-center gap-2 px-4">
         <ThemeToggle />

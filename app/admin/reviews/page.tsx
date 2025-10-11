@@ -469,16 +469,20 @@ export default function AdminReviewsPage() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <DashboardHeader />
+        <DashboardHeader 
+          search={{
+            searchTerm,
+            searchPlaceholder: "Search reviews...",
+            onSearchChange: setSearchTerm
+          }}
+        />
         <ListDetailLayout
           listContent={
             <>
               {/* Header with Filters */}
               <div className="flex-shrink-0 mb-6">
                 <DataFilterBar
-                  searchTerm={searchTerm}
-                  searchPlaceholder="Search reviews..."
-                  onSearchChange={setSearchTerm}
+                  showSearch={false}
                   filters={filterConfigs}
                   filterValues={filters}
                   onFilterChange={handleFilterChange}

@@ -15,6 +15,12 @@ interface DashboardLayoutProps {
   className?: string
   /** If true, removes default padding from content area */
   noPadding?: boolean
+  /** Optional search configuration for header */
+  search?: {
+    searchTerm: string
+    searchPlaceholder?: string
+    onSearchChange: (value: string) => void
+  }
 }
 
 /**
@@ -37,13 +43,14 @@ interface DashboardLayoutProps {
 export function DashboardLayout({ 
   children, 
   className,
-  noPadding = false 
+  noPadding = false,
+  search
 }: DashboardLayoutProps) {
   return (
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <DashboardHeader />
+        <DashboardHeader search={search} />
         <div className={cn(
           !noPadding && "p-6 space-y-6",
           className

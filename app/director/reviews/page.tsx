@@ -265,16 +265,20 @@ export default function DirectorReviewsPage() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <DashboardHeader />
+        <DashboardHeader 
+          search={{
+            searchTerm,
+            searchPlaceholder: "Search reviews...",
+            onSearchChange: setSearchTerm
+          }}
+        />
         <div className="flex h-[calc(100vh-85px)]">
           {/* Main Content - Review List with Filters */}
           <div className="flex-1 flex flex-col overflow-hidden p-6">
             {/* Header with Filters */}
             <div className="flex-shrink-0 mb-6">
               <DataFilterBar
-                searchTerm={searchTerm}
-                searchPlaceholder="Search reviews..."
-                onSearchChange={setSearchTerm}
+                showSearch={false}
                 filters={filters}
                 filterValues={filterValues}
                 onFilterChange={handleFilterChange}
