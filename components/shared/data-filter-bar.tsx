@@ -153,9 +153,14 @@ export function DataFilterBar({
 
           {/* Clear filters button */}
           {hasActiveFilters && (
-            <Button onClick={onClearFilters} variant="outline" size="sm" className="whitespace-nowrap">
-              <RotateCcw className="mr-2 h-4 w-4" />
-              Clear
+            <Button 
+              onClick={onClearFilters} 
+              variant="ghost" 
+              size="icon-sm" 
+              className="text-muted-foreground hover:text-foreground"
+              title="Clear filters"
+            >
+              <RotateCcw className="h-4 w-4" />
             </Button>
           )}
         </div>
