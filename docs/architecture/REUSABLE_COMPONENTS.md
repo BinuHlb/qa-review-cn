@@ -414,7 +414,69 @@ import { Eye, Edit, Trash2 } from "lucide-react"
 
 ---
 
-### 7. **Detail Sections** (`components/shared/detail-sections.tsx`)
+### 7. **Action Panel Layout** (`components/shared/action-panel-layout.tsx`)
+
+Reusable components for building consistent action panels and drawers.
+
+**Components Included:**
+
+1. **ActionPanelLayout** - Main container with header and scroll area
+2. **ActionPanelHeader** - Header with avatar, title, badges, actions
+3. **ActionPanelSection** - Wrapper for consistent spacing
+4. **ActionPanelFormSection** - Styled form sections with variants
+5. **ActionPanelInfoCard** - Quick info cards (icon + label + value)
+6. **ActionPanelScrollArea** - Custom scrollable area
+
+**Features:**
+- Consistent header structure across all panels
+- Color-coded form section variants (default, primary, warning)
+- Flexible info card grids (1-4 columns)
+- Auto-generated avatars
+- Badge support with custom colors
+- Action button placement
+
+**Usage Example:**
+```tsx
+<ActionPanelLayout
+  header={
+    <ActionPanelHeader
+      title="Anderson & Associates"
+      subtitle="New York, USA"
+      avatar={{ name: "Anderson & Associates" }}
+      badges={[
+        { label: "Active", className: "bg-green-100..." }
+      ]}
+      actions={<Button>Action</Button>}
+    />
+  }
+>
+  <ActionPanelSection>
+    <ActionPanelInfoCard
+      items={[
+        { icon: <Users />, label: "Employees", value: "150" }
+      ]}
+    />
+    
+    <ActionPanelFormSection
+      title="Review Decision"
+      icon={<Star />}
+      variant="primary"
+    >
+      {/* Form fields */}
+    </ActionPanelFormSection>
+  </ActionPanelSection>
+</ActionPanelLayout>
+```
+
+**Benefits:**
+- ✅ Zero duplication across panels
+- ✅ Consistent spacing and styling
+- ✅ Reusable form section variants
+- ✅ Flexible layout compositions
+
+---
+
+### 8. **Detail Sections** (`components/shared/detail-sections.tsx`)
 
 Reusable, interactive detail UI components for expandable content sections.
 
@@ -489,6 +551,8 @@ import {
 ### ✅ **Reusability**
 - Single source of truth for document viewing
 - Timeline component works across all review stages
+- DashboardLayout wraps all dashboard pages consistently
+- ActionPanelLayout eliminates action panel/drawer duplication
 - DataFilterBar eliminates filter UI duplication across pages
 - DataViewContainer eliminates list/card view layout duplication
 - DataItemCard provides universal item rendering (reviews, firms, reviewers)
@@ -523,19 +587,23 @@ import {
 ```
 components/
 ├── shared/
-│   ├── document-viewer.tsx       # Reusable document viewer
-│   ├── review-timeline.tsx       # Workflow timeline
+│   ├── dashboard-layout.tsx      # Universal dashboard wrapper
+│   ├── action-panel-layout.tsx   # Reusable action panel components
+│   ├── detail-sections.tsx       # Interactive detail UI components
 │   ├── data-filter-bar.tsx       # Reusable filter component
 │   ├── data-view-container.tsx   # Reusable list/card view container
 │   ├── data-item-card.tsx        # Universal item card component
-│   ├── detail-sections.tsx       # Interactive detail UI components
+│   ├── document-viewer.tsx       # Reusable document viewer
+│   ├── review-timeline.tsx       # Workflow timeline
 │   └── status-badge.tsx          # Interactive status badges
 ├── reviews/
-│   ├── review-action-panel.tsx   # Uses document-viewer & timeline
+│   ├── review-action-panel.tsx   # Uses action-panel-layout
+│   ├── review-detail-panel.tsx   # Uses action-panel-layout
+│   ├── final-review-screen.tsx   # Uses action-panel-layout
 │   ├── review-view.tsx            # Uses data-view-container
-│   ├── review-item.tsx            # Uses detail-sections
-│   └── final-review-screen.tsx   # Uses document-viewer & timeline
+│   └── review-item.tsx            # Uses detail-sections
 ├── member-firms/
+│   ├── member-firm-action-panel.tsx  # Uses action-panel-layout
 │   └── member-firm-item.tsx       # Uses detail-sections
 └── reviewers/
     └── reviewer-item.tsx          # Uses detail-sections

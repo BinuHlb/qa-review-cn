@@ -19,6 +19,7 @@ import { ScrollablePanel } from "@/components/shared/scrollable-panel"
 import { AttachmentsSection } from "@/components/shared/attachments-section"
 import { ReviewTimeline } from "@/components/shared/review-timeline"
 import { GradeSelect } from "@/components/shared/grade-select"
+import { ActionPanelFormSection } from "@/components/shared/action-panel-layout"
 import { 
   getGradeColor, 
   getStatusColor, 
@@ -211,6 +212,27 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
       contentClassName="p-3"
     >
       <div className="space-y-4">
+        {/* Review Documents - First Position */}
+        <AttachmentsSection
+          attachments={attachments.map(att => ({
+            id: att.id,
+            name: att.name,
+            size: typeof att.size === 'number' ? formatFileSize(att.size) : String(att.size),
+            uploadedBy: att.uploadedBy,
+            uploadedAt: new Date(att.uploadedAt).toISOString(),
+            type: att.type,
+            url: att.url
+          }))}
+          onUpload={handleFileUpload}
+          onRemove={handleRemoveAttachment}
+          onDownload={handleDownloadAttachment}
+          maxHeight="100%"
+          showUpload={true}
+          showDownload={true}
+          showRemove={true}
+          title="Review Documents"
+        />
+
         {/* Review Timeline */}
         <ReviewTimeline
           review={review}
@@ -223,24 +245,20 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
           finalReviewStatus={review.status === 'Completed' ? 'approved' : 'pending'}
         />
 
-        {/* Final Review Actions - Moved to Top */}
-        <div className="bg-muted/50 rounded-lg p-4">
-          {/* Section Header */}
-          <div className="flex items-center justify-between mb-4 pb-2 border-b border-muted">
-            <div className="flex items-center gap-2">
-              <div className="p-1.5 bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg">
-                <Star className="h-4 w-4 text-white" />
-              </div>
-              <h3 className="font-semibold text-neutral-900 dark:text-neutral-100">Final Review & Grading</h3>
+        {/* Final Review Actions */}
+        <ActionPanelFormSection
+          title="Final Review & Grading"
+          icon={
+            <div className="p-1.5 bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg">
+              <Star className="h-4 w-4 text-white" />
             </div>
-            {review.currentGrade && (
-              <Badge variant="outline" className={`${getGradeColor(review.currentGrade)} text-xs`}>
-                Previous: {review.currentGrade}/5
-              </Badge>
-            )}
-          </div>
-
-            <div className="space-y-4">
+          }
+        >
+          {review.currentGrade && (
+            <Badge variant="outline" className={`${getGradeColor(review.currentGrade)} text-xs mb-3`}>
+              Previous: {review.currentGrade}/5
+            </Badge>
+          )}
               {/* Grade Selection - Conditional based on review type */}
               {isProspect ? (
                 <div className="space-y-2">
@@ -400,29 +418,7 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
                   </div>
                 </div>
               )}
-            </div>
-          </div>
-
-        {/* Review Documents - After Rating Form */}
-        <AttachmentsSection
-          attachments={attachments.map(att => ({
-            id: att.id,
-            name: att.name,
-            size: typeof att.size === 'number' ? formatFileSize(att.size) : String(att.size),
-            uploadedBy: att.uploadedBy,
-            uploadedAt: new Date(att.uploadedAt).toISOString(),
-            type: att.type,
-            url: att.url
-          }))}
-          onUpload={handleFileUpload}
-          onRemove={handleRemoveAttachment}
-          onDownload={handleDownloadAttachment}
-          maxHeight="100%"
-          showUpload={true}
-          showDownload={true}
-          showRemove={true}
-          title="Review Documents"
-        />
+        </ActionPanelFormSection>
       </div>
     </ScrollablePanel>
   )

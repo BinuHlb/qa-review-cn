@@ -1,13 +1,8 @@
 "use client"
 
 import { useState, useMemo } from "react"
+import { DashboardLayout } from "@/components/shared/dashboard-layout"
 import { Card, CardContent } from "@/components/ui/card"
-import { AppSidebar } from "@/components/app-sidebar"
-import {
-  SidebarInset,
-  SidebarProvider,
-} from "@/components/ui/sidebar"
-import { DashboardHeader } from "@/components/dashboard-header"
 import { TaskCard, TaskItem, EmptyTaskState } from "@/components/shared/task-card"
 import { WorkflowStatusBadge } from "@/components/shared/workflow-status-badge"
 import { VerificationDrawer } from "@/components/reviews/workflow/verification-drawer"
@@ -106,11 +101,8 @@ export default function DirectorDashboardPage() {
   }
   
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <DashboardHeader />
-        <div className="space-y-6 p-6">
+    <DashboardLayout>
+      <div className="space-y-6">
           {/* Page Header */}
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Technical Director Dashboard</h1>
@@ -233,7 +225,6 @@ export default function DirectorDashboardPage() {
             </CardContent>
           </Card>
         </div>
-      </SidebarInset>
 
       {/* Verification Drawer */}
       <VerificationDrawer
@@ -242,6 +233,6 @@ export default function DirectorDashboardPage() {
         review={selectedReviewForVerification}
         onVerify={handleVerifyReview}
       />
-    </SidebarProvider>
+    </DashboardLayout>
   )
 }

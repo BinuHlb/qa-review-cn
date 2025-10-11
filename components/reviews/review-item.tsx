@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { MoreHorizontal, MapPin, User, UserPlus, Clock, ChevronDown, ChevronUp } from "lucide-react"
-import { StatsGrid, BadgeList, DetailContainer } from "@/components/shared/detail-sections"
+import { StatsGrid, DetailContainer } from "@/components/shared/detail-sections"
 import { Icon } from "@iconify/react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { PercentageBadge } from "@/components/shared/percentage-badge"
@@ -238,8 +238,8 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
             </div>
 
             {/* Expandable Content */}
-            <div className={`transition-all duration-300 overflow-hidden ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-              <div className="pt-3 border-t border-neutral-200 dark:border-neutral-700">
+            <div className={`transition-all duration-500 ease-in-out overflow-hidden ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+              <div className="pt-4 mt-3 border-t border-neutral-200 dark:border-neutral-700">
                 <DetailContainer>
                   <StatsGrid 
                     stats={[
@@ -426,8 +426,8 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
         </div>
 
         {/* Expandable Content */}
-        <div className={`transition-all duration-300 overflow-hidden ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-          <div className="pt-3 border-t border-neutral-200 dark:border-neutral-700">
+        <div className={`transition-all duration-500 ease-in-out overflow-hidden ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+          <div className="pt-4 mt-3 border-t border-neutral-200 dark:border-neutral-700">
             <DetailContainer>
               <StatsGrid 
                 stats={[

@@ -1,22 +1,18 @@
 "use client"
 
 import { useState, useMemo, useCallback } from "react"
-import { AppSidebar } from "@/components/app-sidebar"
-import { 
-  SidebarInset,
-  SidebarProvider,
-} from "@/components/ui/sidebar"
-import { DashboardHeader } from "@/components/dashboard-header"
+import { DashboardLayout } from "@/components/shared/dashboard-layout"
 import { MemberFirmItem } from "@/components/member-firms/member-firm-item"
-import { MemberFirmReviewDialog } from "@/components/member-firms/member-firm-review-dialog"
+import { MemberFirmActionPanel } from "@/components/member-firms/member-firm-action-panel"
 import { useToast } from "@/hooks/use-toast"
 import { 
   mockMemberFirms, 
   type MemberFirm
 } from "@/lib/member-firms-mock-data"
-import { Building2, MapPin, Target, AlertTriangle } from "lucide-react"
+import { Building2, MapPin, Target, AlertTriangle, FileText } from "lucide-react"
 import { DataFilterBar } from "@/components/shared/data-filter-bar"
 import { DataViewContainer } from "@/components/shared/data-view-container"
+import { EmptyState } from "@/components/shared/empty-state"
 
 export default function AdminMemberFirmsPage() {
   const [memberFirms] = useState<MemberFirm[]>(mockMemberFirms)
@@ -26,8 +22,7 @@ export default function AdminMemberFirmsPage() {
   const [regionFilter, setRegionFilter] = useState<string>("all")
   const [riskLevelFilter, setRiskLevelFilter] = useState<string>("all")
   const [viewMode, setViewMode] = useState<"list" | "card">("list")
-  const [reviewDialogOpen, setReviewDialogOpen] = useState(false)
-  const [selectedFirmForReview, setSelectedFirmForReview] = useState<MemberFirm | null>(null)
+  const [selectedFirm, setSelectedFirm] = useState<MemberFirm | null>(null)
   const { toast } = useToast()
 
   // Memoized filtered member firms
@@ -177,8 +172,7 @@ export default function AdminMemberFirmsPage() {
   }
 
   const handleReviewMemberFirm = (memberFirm: MemberFirm) => {
-    setSelectedFirmForReview(memberFirm)
-    setReviewDialogOpen(true)
+    setSelectedFirm(memberFirm)
   }
 
   const handleAcceptReview = async (firmId: string, notes: string) => {
@@ -186,7 +180,7 @@ export default function AdminMemberFirmsPage() {
     // TODO: Implement accept review API call
     toast({
       title: "Review Accepted",
-      description: `Successfully accepted the review for ${selectedFirmForReview?.name}`,
+      description: `Successfully accepted the review for ${selectedFirm?.name}`,
     })
   }
 
@@ -195,17 +189,14 @@ export default function AdminMemberFirmsPage() {
     // TODO: Implement reject review API call
     toast({
       title: "Review Rejected",
-      description: `Review rejected for ${selectedFirmForReview?.name}`,
+      description: `Review rejected for ${selectedFirm?.name}`,
       variant: "destructive"
     })
   }
 
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <DashboardHeader />
-        <div className="flex h-[calc(100vh-85px)]">
+    <DashboardLayout noPadding>
+      <div className="flex h-[calc(100vh-85px)]">
           {/* Main Content - Member Firms List with Filters */}
           <div className="flex-1 flex flex-col overflow-hidden p-6">
             {/* Header with Filters */}
@@ -247,22 +238,30 @@ export default function AdminMemberFirmsPage() {
                     onEdit={handleEditMemberFirm}
                     onDelete={handleDeleteMemberFirm}
                     onReview={handleReviewMemberFirm}
+                    isSelected={selectedFirm?.id === firm.id}
                   />
                 ))}
               </DataViewContainer>
             </div>
           </div>
-        </div>
 
-        {/* Review Dialog */}
-        <MemberFirmReviewDialog
-          open={reviewDialogOpen}
-          onOpenChange={setReviewDialogOpen}
-          memberFirm={selectedFirmForReview}
-          onAccept={handleAcceptReview}
-          onReject={handleRejectReview}
-        />
-      </SidebarInset>
-    </SidebarProvider>
+          {/* Right Action Panel */}
+          <div className="w-[480px] border-l dark:border-neutral-700 overflow-hidden flex-shrink-0">
+            {selectedFirm ? (
+              <MemberFirmActionPanel
+                memberFirm={selectedFirm}
+                onAccept={handleAcceptReview}
+                onReject={handleRejectReview}
+              />
+            ) : (
+              <EmptyState
+                icon={FileText}
+                title="No Firm Selected"
+                description="Select a member firm from the list to review details and take action"
+              />
+            )}
+          </div>
+        </div>
+    </DashboardLayout>
   )
 }

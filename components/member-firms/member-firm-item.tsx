@@ -20,6 +20,7 @@ import {
 } from "lucide-react"
 import { StatsGrid, ContactSection, BadgeList, DetailContainer } from "@/components/shared/detail-sections"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { cn } from "@/lib/utils"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -44,14 +45,23 @@ interface MemberFirmItemProps {
   onEdit?: (memberFirm: MemberFirm) => void
   onDelete?: (memberFirm: MemberFirm) => void
   onReview?: (memberFirm: MemberFirm) => void
+  isSelected?: boolean
 }
 
-export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete, onReview }: MemberFirmItemProps) {
+export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete, onReview, isSelected }: MemberFirmItemProps) {
   const [isExpanded, setIsExpanded] = useState(false)
 
   if (viewMode === "list") {
     return (
-      <Card className="shadow-none border-none bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-300">
+      <Card 
+        className={cn(
+          "shadow-none border-none transition-all duration-300 cursor-pointer",
+          isSelected 
+            ? "bg-primary/10 dark:bg-primary/20 ring-2 ring-primary/50" 
+            : "bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+        )}
+        onClick={() => onReview?.(memberFirm)}
+      >
         <CardContent className="p-3">
           <div className="space-y-3">
             {/* Main Row - Mobile Responsive */}
@@ -188,8 +198,8 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
             </div>
 
             {/* Expandable Content */}
-            <div className={`transition-all duration-300 overflow-hidden ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-              <div className="pt-3 border-t border-neutral-200 dark:border-neutral-700">
+            <div className={`transition-all duration-500 ease-in-out overflow-hidden ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+              <div className="pt-4 mt-3 border-t border-neutral-200 dark:border-neutral-700">
                 <DetailContainer>
                   <BadgeList 
                     label="Specializations" 
@@ -223,7 +233,15 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
 
   // Card view
   return (
-    <Card className="shadow-none border-none bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-300 h-full flex flex-col">
+    <Card 
+      className={cn(
+        "shadow-none border-none transition-all duration-300 h-full flex flex-col cursor-pointer",
+        isSelected 
+          ? "bg-primary/10 dark:bg-primary/20 ring-2 ring-primary/50" 
+          : "bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+      )}
+      onClick={() => onReview?.(memberFirm)}
+    >
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div 
@@ -313,8 +331,8 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
         </div>
 
         {/* Expandable Content */}
-        <div className={`transition-all duration-300 overflow-hidden ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-          <div className="pt-3 border-t border-neutral-200 dark:border-neutral-700">
+        <div className={`transition-all duration-500 ease-in-out overflow-hidden ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+          <div className="pt-4 mt-3 border-t border-neutral-200 dark:border-neutral-700">
             <DetailContainer>
               <StatsGrid 
                 stats={[

@@ -197,8 +197,8 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
             </div>
 
             {/* Expandable Content */}
-            <div className={`transition-all duration-300 overflow-hidden ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-              <div className="pt-3 border-t border-neutral-200 dark:border-neutral-700">
+            <div className={`transition-all duration-500 ease-in-out overflow-hidden ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+              <div className="pt-4 mt-3 border-t border-neutral-200 dark:border-neutral-700">
                 <DetailContainer>
                   <BadgeList 
                     label="Specialization" 
@@ -339,8 +339,8 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
         </div>
 
         {/* Expandable Content */}
-        <div className={`transition-all duration-300 overflow-hidden ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-          <div className="pt-3 border-t border-neutral-200 dark:border-neutral-700">
+        <div className={`transition-all duration-500 ease-in-out overflow-hidden ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+          <div className="pt-4 mt-3 border-t border-neutral-200 dark:border-neutral-700">
             <DetailContainer>
               <StatsGrid 
                 stats={[

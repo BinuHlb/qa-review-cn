@@ -1,21 +1,22 @@
 "use client"
 
 import { useState } from "react"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { Badge } from "@/components/ui/badge"
 import type { Review } from "@/types/entities"
 import { getGradeColor } from "@/lib/mock-data"
 import { GradeSelect } from "@/components/shared/grade-select"
 import { AttachmentsSection, type Attachment } from "@/components/shared/attachments-section"
 import { ReviewTimeline } from "@/components/shared/review-timeline"
 import { 
-  generateInitials,
-  generateAvatarColor
-} from "@/lib/utils/review-utils"
-import { Star, Send, FileText } from "lucide-react"
+  ActionPanelLayout,
+  ActionPanelHeader,
+  ActionPanelSection,
+  ActionPanelFormSection
+} from "@/components/shared/action-panel-layout"
+import { Star, Send } from "lucide-react"
 
 
 interface ReviewActionPanelProps {
@@ -157,29 +158,31 @@ export function ReviewActionPanel({
 
 
   return (
-    <div className="h-full flex flex-col bg-background overflow-hidden">
-      {/* Selected Review Header */}
-      <div className="flex-shrink-0 p-6 pb-4 border-b dark:border-neutral-700">
-        <div className="flex items-center gap-3">
-          <Avatar className="h-12 w-12 flex-shrink-0">
-            <AvatarFallback className={`${generateAvatarColor(review.memberFirm)} text-sm font-semibold`}>
-              {generateInitials(review.memberFirm)}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex-1 min-w-0">
-            <h3 className="font-bold text-lg text-neutral-900 dark:text-neutral-100 truncate" title={review.memberFirm}>
-              {review.memberFirm}
-            </h3>
-            <p className="text-sm text-neutral-500 dark:text-neutral-400 truncate" title={review.type}>
-              {review.type}
-            </p>
+    <ActionPanelLayout
+      header={
+        <ActionPanelHeader
+          title={review.memberFirm}
+          subtitle={review.type}
+          avatar={{ name: review.memberFirm }}
+        />
+      }
+    >
+      <ActionPanelSection>
+          {/* Review Documents - First Position */}
+          <div>
+            <AttachmentsSection
+              attachments={attachments}
+              onUpload={handleFileUpload}
+              onRemove={handleRemoveAttachment}
+              onDownload={handleDownloadAttachment}
+              maxHeight="100%"
+              showUpload={true}
+              showDownload={true}
+              showRemove={true}
+              title="Review Documents"
+            />
           </div>
-        </div>
-      </div>
 
-      {/* Scrollable Content Area */}
-      <div className="flex-1 overflow-y-auto min-h-0">
-        <div className="px-6 py-4 space-y-4">
           {/* Review Timeline - If enabled */}
           {showTimeline && (
             <div>
@@ -198,34 +201,20 @@ export function ReviewActionPanel({
             </div>
           )}
 
-          {/* Submit Rating Form - Moved to Top */}
+          {/* Submit Rating Form */}
           {(showSubmitRating || showTechnicalDirectorRating) && (
-            <div className="bg-muted/50 rounded-lg p-3 space-y-2.5">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Star className="h-5 w-5 text-primary" />
-                  <h3 className="font-semibold text-neutral-900 dark:text-neutral-100">
-                    {showTechnicalDirectorRating 
-                      ? "Technical Director Rating" 
-                      : "Submit Review Rating"}
-                  </h3>
-                </div>
-                {review.currentGrade && (
-                  <Badge variant="outline" className={`${getGradeColor(review.currentGrade)} text-xs`}>
-                    Previous: {review.currentGrade}/5
-                  </Badge>
-                )}
-              </div>
-
-              {showTechnicalDirectorRating && (
-                <div className="p-2.5 bg-blue-50/50 dark:bg-blue-950/30 border border-blue-200/50 dark:border-blue-800/50 rounded text-xs text-muted-foreground">
-                  <p className="text-blue-800 dark:text-blue-400">
-                    <strong>Reviewer:</strong> {review.reviewer} • <strong>Grade:</strong> {review.currentGrade}/5
-                  </p>
-                  <p className="text-blue-700 dark:text-blue-400 mt-1">
-                    Review the submitted work and provide your technical assessment
-                  </p>
-                </div>
+            <ActionPanelFormSection
+              title={showTechnicalDirectorRating ? "Technical Director Rating" : "Submit Review Rating"}
+              icon={<Star className="h-5 w-5 text-primary" />}
+              description={showTechnicalDirectorRating 
+                ? `Reviewer: ${review.reviewer} • Grade: ${review.currentGrade}/5 - Review the submitted work and provide your technical assessment`
+                : undefined}
+              variant={showTechnicalDirectorRating ? "primary" : "default"}
+            >
+              {review.currentGrade && (
+                <Badge variant="outline" className={`${getGradeColor(review.currentGrade)} text-xs mb-3`}>
+                  Previous: {review.currentGrade}/5
+                </Badge>
               )}
 
               {/* Grade Selection */}
@@ -283,27 +272,10 @@ export function ReviewActionPanel({
                     ? "Submit Technical Rating" 
                     : "Submit Rating"}
               </Button>
-            </div>
+            </ActionPanelFormSection>
           )}
-
-          {/* Review Documents */}
-          <div>
-            <AttachmentsSection
-              attachments={attachments}
-              onUpload={handleFileUpload}
-              onRemove={handleRemoveAttachment}
-              onDownload={handleDownloadAttachment}
-              maxHeight="100%"
-              showUpload={true}
-              showDownload={true}
-              showRemove={true}
-              title="Review Documents"
-            />
-          </div>
-        </div>
-      </div>
-
-    </div>
+      </ActionPanelSection>
+    </ActionPanelLayout>
   )
 }
 

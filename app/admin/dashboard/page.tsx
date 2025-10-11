@@ -1,12 +1,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import { AppSidebar } from "@/components/app-sidebar"
-import {
-  SidebarInset,
-  SidebarProvider,
-} from "@/components/ui/sidebar"
-import { DashboardHeader } from "@/components/dashboard-header"
+import { DashboardLayout } from "@/components/shared/dashboard-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -128,12 +123,8 @@ export default function AdminDashboardPage() {
   }, [stats])
 
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <DashboardHeader />
-        
-        <div className="flex-1 overflow-auto p-6 space-y-6 animate-in fade-in-50 duration-500">
+    <DashboardLayout noPadding>
+      <div className="flex-1 overflow-auto p-6 space-y-6 animate-in fade-in-50 duration-500">
           {/* Welcome Section with Animation */}
           <div className="space-y-2">
             <h1 className="text-3xl font-bold tracking-tight animate-in slide-in-from-left-5 duration-300">
@@ -556,7 +547,6 @@ export default function AdminDashboardPage() {
             </CardContent>
           </Card>
         </div>
-      </SidebarInset>
-    </SidebarProvider>
+    </DashboardLayout>
   )
 }

@@ -3,7 +3,6 @@
 import { useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Textarea } from "@/components/ui/textarea"
 import { 
   Building2, 
@@ -17,6 +16,13 @@ import {
 } from "lucide-react"
 import type { Review } from "@/types/entities"
 import { AttachmentsSection, type Attachment } from "@/components/shared/attachments-section"
+import { 
+  ActionPanelLayout,
+  ActionPanelHeader,
+  ActionPanelSection,
+  ActionPanelInfoCard
+} from "@/components/shared/action-panel-layout"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { 
   getGradeColor, 
   getStatusColor, 
@@ -134,77 +140,58 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
   const dateRange = formatDateRange(review.startDate, review.endDate)
 
   return (
-    <div className="h-full flex flex-col bg-background overflow-hidden">
-      {/* Modern Header */}
-      <div className="flex-shrink-0 p-6 pb-4 border-b dark:border-neutral-700">
-        <div className="space-y-3">
-          <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <div className="flex items-center gap-3">
-                <Avatar className="h-12 w-12 flex-shrink-0">
-                  <AvatarFallback className={`${generateAvatarColor(review.memberFirm)} text-sm font-semibold`}>
-                    {generateInitials(review.memberFirm)}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-bold text-lg text-neutral-900 dark:text-neutral-100 truncate" title={review.memberFirm}>
-                    {review.memberFirm}
-                  </h3>
-                  <p className="text-sm text-neutral-500 dark:text-neutral-400 truncate" title={review.type}>
-                    {review.type}
-                  </p>
-                </div>
-              </div>
-            </div>
+    <ActionPanelLayout
+      header={
+        <ActionPanelHeader
+          title={review.memberFirm}
+          subtitle={review.type}
+          avatar={{ name: review.memberFirm }}
+          badges={[
+            { label: review.status, className: getStatusColor(review.status) },
+            { label: `Grade ${review.currentGrade}`, className: getGradeColor(review.currentGrade) },
+            { label: `${review.priority} Priority`, className: getPriorityColor(review.priority) }
+          ]}
+          actions={
             <Button
               onClick={() => onAssign?.(review)}
               size="sm"
-              className="ml-4"
             >
               <UserPlus className="h-4 w-4 mr-2" />
               Assign Reviewer
             </Button>
-          </div>
+          }
+        />
+      }
+    >
+      <ActionPanelSection>
+        {/* File Attachments - First Position */}
+        <AttachmentsSection
+          attachments={attachments}
+          onUpload={handleFileUpload}
+          onRemove={handleRemoveAttachment}
+          onDownload={handleDownloadAttachment}
+          maxHeight="100%"
+          showUpload={true}
+          showDownload={true}
+          showRemove={true}
+          title="Review Documents"
+        />
 
-          {/* Badges */}
-          <div className="flex flex-wrap gap-2">
-            <Badge className={`${getStatusColor(review.status)} text-xs`}>
-              {review.status}
-            </Badge>
-            <Badge className={`${getGradeColor(review.currentGrade)} text-xs`}>
-              Grade {review.currentGrade}
-            </Badge>
-            <Badge className={`${getPriorityColor(review.priority)} text-xs`}>
-              {review.priority} Priority
-            </Badge>
-          </div>
-        </div>
-      </div>
-
-      {/* Scrollable Content */}
-      <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4 min-h-0">
         {/* Quick Info */}
-        <div className="grid grid-cols-2 gap-3">
-          <div className="p-3 bg-muted/50 rounded-lg">
-            <div className="flex items-center gap-2 mb-1">
-              <Building2 className="h-3.5 w-3.5 text-muted-foreground" />
-              <p className="text-xs text-muted-foreground font-medium">Member Firm</p>
-            </div>
-            <p className="font-semibold text-sm text-foreground truncate" title={review.memberFirm}>
-              {review.memberFirm}
-            </p>
-          </div>
-
-          <div className="p-3 bg-muted/50 rounded-lg">
-            <div className="flex items-center gap-2 mb-1">
-              <User className="h-3.5 w-3.5 text-muted-foreground" />
-              <p className="text-xs text-muted-foreground font-medium">Reviewer</p>
-            </div>
-            <p className="font-semibold text-sm text-foreground truncate" title={review.reviewer}>
-              {review.reviewer}
-            </p>
-          </div>
-        </div>
+        <ActionPanelInfoCard
+          items={[
+            {
+              icon: <Building2 className="h-3.5 w-3.5 text-muted-foreground" />,
+              label: "Member Firm",
+              value: <span className="truncate" title={review.memberFirm}>{review.memberFirm}</span>
+            },
+            {
+              icon: <User className="h-3.5 w-3.5 text-muted-foreground" />,
+              label: "Reviewer",
+              value: <span className="truncate" title={review.reviewer}>{review.reviewer}</span>
+            }
+          ]}
+        />
 
         {/* Review Details */}
         <div className="space-y-3">
@@ -268,19 +255,6 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
           )}
         </div>
 
-        {/* File Attachments */}
-        <AttachmentsSection
-          attachments={attachments}
-          onUpload={handleFileUpload}
-          onRemove={handleRemoveAttachment}
-          onDownload={handleDownloadAttachment}
-          maxHeight="100%"
-          showUpload={true}
-          showDownload={true}
-          showRemove={true}
-          title="Review Documents"
-        />
-
         {/* Comments Section */}
         <div className="space-y-3">
           <div className="flex items-center gap-2">
@@ -326,8 +300,8 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </ActionPanelSection>
+    </ActionPanelLayout>
   )
 }
 

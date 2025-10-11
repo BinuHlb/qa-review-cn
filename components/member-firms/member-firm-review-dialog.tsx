@@ -136,6 +136,20 @@ export function MemberFirmReviewDialog({
         </DialogHeader>
 
         <div className="flex-1 overflow-y-auto space-y-6 py-4">
+          {/* Documents Section - First Position */}
+          <AttachmentsSection
+            attachments={attachments}
+            onUpload={handleFileUpload}
+            onRemove={handleRemoveAttachment}
+            onDownload={handleDownloadAttachment}
+            maxHeight="400px"
+            showUpload={true}
+            showDownload={true}
+            showRemove={true}
+            title="Review Documents"
+            className="border-0"
+          />
+
           {/* Firm Summary */}
           <div className="relative overflow-hidden rounded-lg border bg-gradient-to-br from-background to-muted/20">
             {/* Header Section */}
@@ -257,20 +271,6 @@ export function MemberFirmReviewDialog({
               </div>
             </div>
           </div>
-
-          {/* Documents Section */}
-          <AttachmentsSection
-            attachments={attachments}
-            onUpload={handleFileUpload}
-            onRemove={handleRemoveAttachment}
-            onDownload={handleDownloadAttachment}
-            maxHeight="400px"
-            showUpload={true}
-            showDownload={true}
-            showRemove={true}
-            title="Review Documents"
-            className="border-0"
-          />
 
           {/* Review Notes */}
           <div className="space-y-2">

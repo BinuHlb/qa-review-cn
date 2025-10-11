@@ -1,20 +1,12 @@
 "use client"
 
-import { AppSidebar } from "@/components/app-sidebar"
-import {
-  SidebarInset,
-  SidebarProvider,
-} from "@/components/ui/sidebar"
-import { DashboardHeader } from "@/components/dashboard-header"
+import { DashboardLayout } from "@/components/shared/dashboard-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default function AdminSettingsPage() {
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <DashboardHeader />
-        <div className="space-y-6 p-6">
+    <DashboardLayout>
+      <div className="space-y-6">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">System Settings</h1>
             <p className="text-muted-foreground">
@@ -36,7 +28,6 @@ export default function AdminSettingsPage() {
             </CardContent>
           </Card>
         </div>
-      </SidebarInset>
-    </SidebarProvider>
+    </DashboardLayout>
   )
 }

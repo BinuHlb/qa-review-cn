@@ -1,13 +1,8 @@
 "use client"
 
 import { useMemo } from "react"
+import { DashboardLayout } from "@/components/shared/dashboard-layout"
 import { Card, CardContent } from "@/components/ui/card"
-import { AppSidebar } from "@/components/app-sidebar"
-import {
-  SidebarInset,
-  SidebarProvider,
-} from "@/components/ui/sidebar"
-import { DashboardHeader } from "@/components/dashboard-header"
 import { TaskCard, TaskItem, EmptyTaskState } from "@/components/shared/task-card"
 import { WorkflowStatusBadge } from "@/components/shared/workflow-status-badge"
 import { Button } from "@/components/ui/button"
@@ -62,11 +57,8 @@ export default function CEODashboardPage() {
   }
 
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <DashboardHeader />
-        <div className="space-y-6 p-6">
+    <DashboardLayout>
+      <div className="space-y-6">
           {/* Page Header */}
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Executive Dashboard</h1>
@@ -226,7 +218,6 @@ export default function CEODashboardPage() {
             </CardContent>
           </Card>
         </div>
-      </SidebarInset>
-    </SidebarProvider>
+    </DashboardLayout>
   )
 }
