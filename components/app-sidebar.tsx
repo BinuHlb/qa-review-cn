@@ -55,8 +55,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <a href="/dashboard">
-                <div className="bg-primary text-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg font-bold text-lg">
-                  H
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
+                  <img 
+                    src="/hlb-logo.png" 
+                    alt="HLB Logo" 
+                    className="h-8 w-8 object-contain"
+                  />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">QA Review App</span>
