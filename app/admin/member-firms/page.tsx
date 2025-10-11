@@ -2,7 +2,8 @@
 
 import { useState, useMemo, useCallback } from "react"
 import { DashboardLayout } from "@/components/shared/dashboard-layout"
-import { MemberFirmItem } from "@/components/member-firms/member-firm-item"
+import { ListDetailLayout } from "@/components/shared/list-detail-layout"
+import { MemberFirmView } from "@/components/member-firms/member-firm-view"
 import { MemberFirmActionPanel } from "@/components/member-firms/member-firm-action-panel"
 import { useToast } from "@/hooks/use-toast"
 import { 
@@ -11,7 +12,6 @@ import {
 } from "@/lib/member-firms-mock-data"
 import { Building2, MapPin, Target, AlertTriangle, FileText } from "lucide-react"
 import { DataFilterBar } from "@/components/shared/data-filter-bar"
-import { DataViewContainer } from "@/components/shared/data-view-container"
 import { EmptyState } from "@/components/shared/empty-state"
 
 export default function AdminMemberFirmsPage() {
@@ -196,9 +196,9 @@ export default function AdminMemberFirmsPage() {
 
   return (
     <DashboardLayout noPadding>
-      <div className="flex h-[calc(100vh-85px)]">
-          {/* Main Content - Member Firms List with Filters */}
-          <div className="flex-1 flex flex-col overflow-hidden p-6">
+      <ListDetailLayout
+        listContent={
+          <>
             {/* Header with Filters */}
             <div className="flex-shrink-0 mb-6">
               <DataFilterBar
@@ -220,48 +220,35 @@ export default function AdminMemberFirmsPage() {
 
             {/* Member Firms List */}
             <div className="flex-1 min-h-0 overflow-y-auto">
-              <DataViewContainer 
+              <MemberFirmView
+                memberFirms={filteredMemberFirms}
                 viewMode={viewMode}
-                cardGridCols={{
-                  sm: "grid-cols-1",
-                  md: "md:grid-cols-2",
-                  lg: "lg:grid-cols-2",
-                  xl: "xl:grid-cols-3"
-                }}
-              >
-                {filteredMemberFirms.map((firm) => (
-                  <MemberFirmItem
-                    key={firm.id}
-                    memberFirm={firm}
-                    viewMode={viewMode}
-                    onView={handleViewMemberFirm}
-                    onEdit={handleEditMemberFirm}
-                    onDelete={handleDeleteMemberFirm}
-                    onReview={handleReviewMemberFirm}
-                    isSelected={selectedFirm?.id === firm.id}
-                  />
-                ))}
-              </DataViewContainer>
+                selectedFirm={selectedFirm}
+                onView={handleViewMemberFirm}
+                onEdit={handleEditMemberFirm}
+                onDelete={handleDeleteMemberFirm}
+                onReview={handleReviewMemberFirm}
+              />
             </div>
-          </div>
-
-          {/* Right Action Panel */}
-          <div className="w-[480px] border-l dark:border-neutral-700 overflow-hidden flex-shrink-0">
-            {selectedFirm ? (
-              <MemberFirmActionPanel
-                memberFirm={selectedFirm}
-                onAccept={handleAcceptReview}
-                onReject={handleRejectReview}
-              />
-            ) : (
-              <EmptyState
-                icon={FileText}
-                title="No Firm Selected"
-                description="Select a member firm from the list to review details and take action"
-              />
-            )}
-          </div>
-        </div>
+          </>
+        }
+        detailContent={
+          selectedFirm ? (
+            <MemberFirmActionPanel
+              memberFirm={selectedFirm}
+              onAccept={handleAcceptReview}
+              onReject={handleRejectReview}
+            />
+          ) : (
+            <EmptyState
+              icon={FileText}
+              title="No Firm Selected"
+              description="Select a member firm from the list to review details and take action"
+            />
+          )
+        }
+        detailScrollable={false}
+      />
     </DashboardLayout>
   )
 }

@@ -9,6 +9,7 @@ import { StatsGrid, DetailContainer } from "@/components/shared/detail-sections"
 import { Icon } from "@iconify/react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { PercentageBadge } from "@/components/shared/percentage-badge"
+import { cn, getItemCardStyles } from "@/lib/utils"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -84,11 +85,10 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
   if (viewMode === "list") {
     return (
       <Card 
-        className={`shadow-none border-none transition-all duration-300 cursor-pointer ${
-          isSelected 
-            ? 'bg-primary/10 dark:bg-primary/20 hover:bg-primary/10 dark:hover:bg-primary/20 border-l-4 border-l-primary' 
-            : 'bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800'
-        }`}
+        className={cn(
+          "shadow-none border-none transition-all duration-300 cursor-pointer",
+          getItemCardStyles(isSelected)
+        )}
         onClick={() => onView?.(review)}
       >
         <CardContent className="p-3">
@@ -300,11 +300,10 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
   // Card view
   return (
     <Card 
-      className={`shadow-none border-none transition-all duration-300 cursor-pointer h-full flex flex-col ${
-        isSelected 
-          ? 'bg-primary/10 dark:bg-primary/20 hover:bg-primary/10 dark:hover:bg-primary/20 border-l-4 border-l-primary' 
-          : 'bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800'
-      }`}
+      className={cn(
+        "shadow-none border-none transition-all duration-300 cursor-pointer h-full flex flex-col",
+        getItemCardStyles(isSelected)
+      )}
       onClick={() => onView?.(review)}
     >
       <CardHeader className="pb-3">

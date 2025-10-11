@@ -5,28 +5,19 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { 
-  MoreHorizontal, 
   Calendar,
   Star,
   Users,
   Building,
-  Edit,
-  Eye,
-  Trash2,
   Phone,
   Mail,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Eye
 } from "lucide-react"
 import { StatsGrid, ContactSection, BadgeList, DetailContainer } from "@/components/shared/detail-sections"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { cn } from "@/lib/utils"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { cn, getItemCardStyles } from "@/lib/utils"
 import { 
   type MemberFirm, 
   getStatusColor, 
@@ -56,9 +47,7 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
       <Card 
         className={cn(
           "shadow-none border-none transition-all duration-300 cursor-pointer",
-          isSelected 
-            ? "bg-primary/10 dark:bg-primary/20 ring-2 ring-primary/50" 
-            : "bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+          getItemCardStyles(isSelected)
         )}
         onClick={() => onReview?.(memberFirm)}
       >
@@ -124,7 +113,7 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
                 </div>
               </div>
 
-              {/* Quick Actions */}
+              {/* Review Button */}
               <div className="flex items-center gap-1 flex-shrink-0">
                 <Button
                   variant="outline"
@@ -138,39 +127,6 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
                   <Eye className="h-3 w-3 mr-1" />
                   <span className="hidden sm:inline">Review</span>
                 </Button>
-
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 h-7 w-7 p-0"
-                    >
-                      <MoreHorizontal className="h-3 w-3" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-48">
-                    <DropdownMenuItem onClick={() => onView?.(memberFirm)}>
-                      <Eye className="mr-2 h-4 w-4" />
-                      View Details
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => onEdit?.(memberFirm)}>
-                      <Edit className="mr-2 h-4 w-4" />
-                      Edit Firm
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => onReview?.(memberFirm)}>
-                      <Star className="mr-2 h-4 w-4" />
-                      Schedule Review
-                    </DropdownMenuItem>
-                    <DropdownMenuItem 
-                      onClick={() => onDelete?.(memberFirm)}
-                      className="text-red-600"
-                    >
-                      <Trash2 className="mr-2 h-4 w-4" />
-                      Delete
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
               </div>
             </div>
 
@@ -236,9 +192,7 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
     <Card 
       className={cn(
         "shadow-none border-none transition-all duration-300 h-full flex flex-col cursor-pointer",
-        isSelected 
-          ? "bg-primary/10 dark:bg-primary/20 ring-2 ring-primary/50" 
-          : "bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+        getItemCardStyles(isSelected)
       )}
       onClick={() => onReview?.(memberFirm)}
     >
@@ -265,36 +219,6 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
                 {memberFirm.location}
               </CardDescription>
             </div>
-          </div>
-          <div className="flex items-center gap-1">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="h-7 w-7 p-0">
-                  <MoreHorizontal className="h-3 w-3" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem onClick={() => onView?.(memberFirm)}>
-                  <Eye className="mr-2 h-4 w-4" />
-                  View Details
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => onEdit?.(memberFirm)}>
-                  <Edit className="mr-2 h-4 w-4" />
-                  Edit Firm
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => onReview?.(memberFirm)}>
-                  <Star className="mr-2 h-4 w-4" />
-                  Schedule Review
-                </DropdownMenuItem>
-                <DropdownMenuItem 
-                  onClick={() => onDelete?.(memberFirm)}
-                  className="text-red-600"
-                >
-                  <Trash2 className="mr-2 h-4 w-4" />
-                  Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
           </div>
         </div>
       </CardHeader>
@@ -354,7 +278,7 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
           </div>
         </div>
 
-        {/* Show More and Action Buttons in Same Row */}
+        {/* Show More and Review Button */}
         <div className="flex justify-between items-center pt-1 mt-auto">
           <Button
             variant="ghost"
@@ -377,31 +301,18 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
               </>
             )}
           </Button>
-          <div className="flex gap-1">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={(e) => {
-                e.stopPropagation()
-                onReview?.(memberFirm)
-              }}
-              className="text-xs h-7 px-3"
-            >
-              <Star className="h-3 w-3 mr-1" />
-              Review
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={(e) => {
-                e.stopPropagation()
-                onEdit?.(memberFirm)
-              }}
-              className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 h-7 w-7 p-0"
-            >
-              <Edit className="h-3 w-3" />
-            </Button>
-          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={(e) => {
+              e.stopPropagation()
+              onReview?.(memberFirm)
+            }}
+            className="text-xs h-7 px-3"
+          >
+            <Star className="h-3 w-3 mr-1" />
+            Review
+          </Button>
         </div>
       </CardContent>
     </Card>

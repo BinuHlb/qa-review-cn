@@ -26,7 +26,7 @@ export function ScrollablePanel({
   footerClassName = ""
 }: ScrollablePanelProps) {
   return (
-    <div className={`h-full flex flex-col bg-white dark:bg-neutral-900 ${className}`}>
+    <div className={`h-full flex flex-col bg-background ${className}`}>
       {/* Fixed Header */}
       {header && (
         <div className={`flex-shrink-0 ${headerClassName}`}>

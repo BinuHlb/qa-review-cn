@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react"
 import { DashboardLayout } from "@/components/shared/dashboard-layout"
+import { DashboardStatCard } from "@/components/shared/dashboard-stat-card"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -202,134 +203,93 @@ export default function AdminDashboardPage() {
           {/* Main Stats Grid */}
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 animate-in slide-in-from-bottom-5 duration-500">
             {/* Total Reviews */}
-            <Card className="hover:shadow-lg transition-all duration-300 hover:scale-[1.02] cursor-pointer border-l-4 border-l-primary group">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Total Reviews
-                </CardTitle>
-                <ClipboardList className="h-4 w-4 text-primary group-hover:scale-110 transition-transform duration-200" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stats.totalReviews}</div>
-                <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
+            <DashboardStatCard
+              title="Total Reviews"
+              value={stats.totalReviews}
+              subtitle={
+                <span className="flex items-center gap-1">
                   <TrendingUp className="h-3 w-3" />
-                  <span>+12.5% from last {selectedPeriod}</span>
-                </p>
-              </CardContent>
-            </Card>
+                  +12.5% from last {selectedPeriod}
+                </span>
+              }
+              icon={ClipboardList}
+              variant="primary"
+              onClick={() => router.push('/admin/reviews')}
+            />
 
             {/* Pending Actions */}
-            <Card className="hover:shadow-lg transition-all duration-300 hover:scale-[1.02] cursor-pointer border-l-4 border-l-muted-foreground group">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Pending Actions
-                </CardTitle>
-                <Clock className="h-4 w-4 text-muted-foreground group-hover:scale-110 transition-transform duration-200" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stats.pendingAcceptance + stats.awaitingVerification + stats.awaitingFinal}</div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Require your attention
-                </p>
-              </CardContent>
-            </Card>
+            <DashboardStatCard
+              title="Pending Actions"
+              value={stats.pendingAcceptance + stats.awaitingVerification + stats.awaitingFinal}
+              subtitle="Require your attention"
+              icon={Clock}
+              onClick={() => router.push('/admin/reviews?pending=true')}
+            />
 
             {/* In Progress */}
-            <Card className="hover:shadow-lg transition-all duration-300 hover:scale-[1.02] cursor-pointer border-l-4 border-l-accent-foreground group">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  In Progress
-                </CardTitle>
-                <Activity className="h-4 w-4 text-accent-foreground group-hover:scale-110 transition-transform duration-200" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stats.inProgress}</div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Active reviews
-                </p>
-              </CardContent>
-            </Card>
+            <DashboardStatCard
+              title="In Progress"
+              value={stats.inProgress}
+              subtitle="Active reviews"
+              icon={Activity}
+              onClick={() => router.push('/admin/reviews?status=in_progress')}
+            />
 
             {/* Completion Rate */}
-            <Card className="hover:shadow-lg transition-all duration-300 hover:scale-[1.02] cursor-pointer border-l-4 border-l-primary group">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Completion Rate
-                </CardTitle>
-                <CheckCircle className="h-4 w-4 text-primary group-hover:scale-110 transition-transform duration-200" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stats.completionRate}%</div>
-                <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
+            <DashboardStatCard
+              title="Completion Rate"
+              value={`${stats.completionRate}%`}
+              subtitle={
+                <span className="flex items-center gap-1">
                   <TrendingUp className="h-3 w-3" />
-                  <span>+5.3% from last {selectedPeriod}</span>
-                </p>
-              </CardContent>
-            </Card>
+                  +5.3% from last {selectedPeriod}
+                </span>
+              }
+              icon={CheckCircle}
+              variant="primary"
+              onClick={() => router.push('/admin/reviews?status=completed')}
+            />
           </div>
 
           {/* Secondary Stats */}
           <div className="grid gap-4 md:grid-cols-4 animate-in slide-in-from-bottom-5 duration-500 delay-100">
-            <Card className="hover:shadow-md transition-all duration-200 hover:scale-[1.02]">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Active Reviewers
-                </CardTitle>
-                <Users className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stats.activeReviewers}</div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  of {stats.totalReviewers} total
-                </p>
-              </CardContent>
-            </Card>
+            <DashboardStatCard
+              title="Active Reviewers"
+              value={stats.activeReviewers}
+              subtitle={`of ${stats.totalReviewers} total`}
+              icon={Users}
+              onClick={() => router.push('/admin/reviewers')}
+            />
 
-            <Card className="hover:shadow-md transition-all duration-200 hover:scale-[1.02]">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Member Firms
-                </CardTitle>
-                <Building2 className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stats.activeFirms}</div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  of {stats.totalFirms} active
-                </p>
-              </CardContent>
-            </Card>
+            <DashboardStatCard
+              title="Member Firms"
+              value={stats.activeFirms}
+              subtitle={`of ${stats.totalFirms} active`}
+              icon={Building2}
+              onClick={() => router.push('/admin/member-firms')}
+            />
 
-            <Card className="hover:shadow-md transition-all duration-200 hover:scale-[1.02]">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Avg Review Time
-                </CardTitle>
-                <Calendar className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stats.avgReviewTime}d</div>
-                <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
+            <DashboardStatCard
+              title="Avg Review Time"
+              value={`${stats.avgReviewTime}d`}
+              subtitle={
+                <span className="flex items-center gap-1">
                   <TrendingDown className="h-3 w-3 text-green-500" />
-                  <span>-2 days</span>
-                </p>
-              </CardContent>
-            </Card>
+                  -2 days
+                </span>
+              }
+              icon={Calendar}
+              onClick={() => router.push('/admin/reviews')}
+            />
 
-            <Card className="hover:shadow-md transition-all duration-200 hover:scale-[1.02]">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Overdue Reviews
-                </CardTitle>
-                <AlertCircle className="h-4 w-4 text-destructive" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-destructive">{stats.overdue}</div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Require attention
-                </p>
-              </CardContent>
-            </Card>
+            <DashboardStatCard
+              title="Overdue Reviews"
+              value={stats.overdue}
+              subtitle="Require attention"
+              icon={AlertCircle}
+              onClick={() => router.push('/admin/reviews?overdue=true')}
+              className="text-destructive"
+            />
           </div>
 
           {/* Main Content Grid */}

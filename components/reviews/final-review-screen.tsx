@@ -2,24 +2,24 @@
 
 import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { 
   Clock, 
   Star,
   AlertCircle,
-  ThumbsUp,
-  ThumbsDown,
-  
+  ThumbsDown
 } from "lucide-react"
 import type { Review, Attachment } from "@/types/entities"
 import { useToast } from "@/hooks/use-toast"
-import { ScrollablePanel } from "@/components/shared/scrollable-panel"
 import { AttachmentsSection } from "@/components/shared/attachments-section"
 import { ReviewTimeline } from "@/components/shared/review-timeline"
-import { GradeSelect } from "@/components/shared/grade-select"
-import { ActionPanelFormSection } from "@/components/shared/action-panel-layout"
+import { RatingForm } from "@/components/shared/rating-form"
+import { 
+  ActionPanelLayout,
+  ActionPanelHeader,
+  ActionPanelSection
+} from "@/components/shared/action-panel-layout"
 import { 
   getGradeColor, 
   getStatusColor, 
@@ -35,11 +35,8 @@ interface FinalReviewScreenProps {
 
 export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: FinalReviewScreenProps) {
   const isProspect = review.type === 'Prospect'
-  const [finalGrade, setFinalGrade] = useState<string>(review.currentGrade)
   const [prospectDecision, setProspectDecision] = useState<'pass' | 'fail' | ''>('')
-  const [adminNotes, setAdminNotes] = useState("")
   const [rejectionReason, setRejectionReason] = useState("")
-  const [isConfirming, setIsConfirming] = useState(false)
   const [isRejecting, setIsRejecting] = useState(false)
   const [showRejectForm, setShowRejectForm] = useState(false)
 
@@ -114,43 +111,6 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
     console.log('Download attachment:', attachment)
   }
 
-  const handleConfirm = async () => {
-    if (isProspect && !prospectDecision) {
-      toast({
-        title: "Error",
-        description: "Please select Pass or Fail",
-        variant: "destructive"
-      })
-      return
-    }
-    
-    if (!isProspect && !finalGrade) {
-      toast({
-        title: "Error",
-        description: "Please select a final grade",
-        variant: "destructive"
-      })
-      return
-    }
-
-    setIsConfirming(true)
-    try {
-      const gradeToSubmit = isProspect ? prospectDecision : finalGrade
-      await onConfirm(review.id, gradeToSubmit, adminNotes)
-      toast({
-        title: "Success",
-        description: "Review confirmed successfully"
-      })
-    } catch {
-      toast({
-        title: "Error",
-        description: "Failed to confirm review",
-        variant: "destructive"
-      })
-    } finally {
-      setIsConfirming(false)
-    }
-  }
 
   const handleReject = async () => {
     if (!rejectionReason.trim()) {
@@ -180,38 +140,25 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
     }
   }
 
-  const header = (
-    <div className="bg-white dark:bg-neutral-900 border-b dark:border-neutral-700 px-4 py-3">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="sm" onClick={onBack} className="h-8 w-8 p-0">
-            ←
-          </Button>
-          <div>
-            <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100">Final Review</h2>
-            <p className="text-xs text-muted-foreground">ID: {review.id}</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <Badge className={getStatusColor(review.status)}>
-            {review.status}
-          </Badge>
-          <Badge className={getGradeColor(review.currentGrade)}>
-            {review.currentGrade}
-          </Badge>
-        </div>
-      </div>
-    </div>
-  )
-
-  // If assign form is shown, render the assign form
-
   return (
-    <ScrollablePanel
-      header={header}
-      contentClassName="p-3"
+    <ActionPanelLayout
+      header={
+        <ActionPanelHeader
+          title="Final Review"
+          subtitle={`ID: ${review.id}`}
+          badges={[
+            { label: review.status, className: getStatusColor(review.status) },
+            { label: review.currentGrade, className: getGradeColor(review.currentGrade) }
+          ]}
+          actions={
+            <Button variant="ghost" size="sm" onClick={onBack}>
+              ← Back
+            </Button>
+          }
+        />
+      }
     >
-      <div className="space-y-4">
+      <ActionPanelSection>
         {/* Review Documents - First Position */}
         <AttachmentsSection
           attachments={attachments.map(att => ({
@@ -246,180 +193,98 @@ export function FinalReviewScreen({ review, onConfirm, onReject, onBack }: Final
         />
 
         {/* Final Review Actions */}
-        <ActionPanelFormSection
+        <RatingForm
+          currentGrade={review.currentGrade}
+          initialGrade={review.currentGrade}
           title="Final Review & Grading"
           icon={
             <div className="p-1.5 bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg">
               <Star className="h-4 w-4 text-white" />
             </div>
           }
-        >
-          {review.currentGrade && (
-            <Badge variant="outline" className={`${getGradeColor(review.currentGrade)} text-xs mb-3`}>
-              Previous: {review.currentGrade}/5
-            </Badge>
-          )}
-              {/* Grade Selection - Conditional based on review type */}
-              {isProspect ? (
-                <div className="space-y-2">
-                  <Label className="text-xs font-medium text-muted-foreground">
-                    Final Decision *
-                  </Label>
-                  <div className="grid grid-cols-2 gap-3">
-                    <button
-                      type="button"
-                      onClick={() => setProspectDecision('pass')}
-                      className={`relative flex items-center justify-center p-4 rounded-lg border-2 transition-all duration-200 hover:scale-105 hover:shadow-md active:scale-95 ${
-                        prospectDecision === 'pass'
-                          ? 'border-green-500 bg-green-50 dark:bg-green-900/20 shadow-sm'
-                          : 'border-muted hover:border-green-300 bg-white dark:bg-neutral-800'
-                      }`}
-                    >
-                      <div className="flex flex-col items-center gap-1.5">
-                        <ThumbsUp className={`h-6 w-6 ${prospectDecision === 'pass' ? 'text-green-600 dark:text-green-500' : 'text-muted-foreground'}`} />
-                        <span className={`text-sm font-semibold ${prospectDecision === 'pass' ? 'text-green-700 dark:text-green-400' : 'text-muted-foreground'}`}>
-                          Pass
-                        </span>
-                      </div>
-                      {prospectDecision === 'pass' && (
-                        <Star className="absolute -top-1 -right-1 h-3.5 w-3.5 fill-green-600 text-green-600" />
-                      )}
-                    </button>
-                    
-                    <button
-                      type="button"
-                      onClick={() => setProspectDecision('fail')}
-                      className={`relative flex items-center justify-center p-4 rounded-lg border-2 transition-all duration-200 hover:scale-105 hover:shadow-md active:scale-95 ${
-                        prospectDecision === 'fail'
-                          ? 'border-red-500 bg-red-50 dark:bg-red-900/20 shadow-sm'
-                          : 'border-muted hover:border-red-300 bg-white dark:bg-neutral-800'
-                      }`}
-                    >
-                      <div className="flex flex-col items-center gap-1.5">
-                        <ThumbsDown className={`h-6 w-6 ${prospectDecision === 'fail' ? 'text-red-600 dark:text-red-500' : 'text-muted-foreground'}`} />
-                        <span className={`text-sm font-semibold ${prospectDecision === 'fail' ? 'text-red-700 dark:text-red-400' : 'text-muted-foreground'}`}>
-                          Fail
-                        </span>
-                      </div>
-                      {prospectDecision === 'fail' && (
-                        <Star className="absolute -top-1 -right-1 h-3.5 w-3.5 fill-red-600 text-red-600" />
-                      )}
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <GradeSelect
-                  value={finalGrade}
-                  onValueChange={setFinalGrade}
-                  label="Final Grade"
-                  placeholder="Select grade"
-                  required={true}
-                />
-              )}
+          gradeLabel="Final Grade"
+          notesLabel="Admin Notes (Optional)"
+          notesPlaceholder="Add notes or comments..."
+          submitButtonText="Confirm Review"
+          isProspect={isProspect}
+          prospectDecision={prospectDecision}
+          onProspectDecisionChange={setProspectDecision}
+          onSubmit={async (grade, notes) => {
+            await onConfirm(review.id, grade, notes)
+            toast({
+              title: "Success",
+              description: "Review confirmed successfully"
+            })
+          }}
+        />
 
-              {/* Compact Admin Notes */}
+        {/* Rejection Section */}
+        <div className="space-y-3">
+          <Button
+            variant="outline"
+            onClick={() => setShowRejectForm(!showRejectForm)}
+            className="w-full"
+          >
+            <ThumbsDown className="h-3.5 w-3.5 mr-1.5" />
+            Reject Review
+          </Button>
+
+          {/* Compact Rejection Form */}
+          {showRejectForm && (
+            <div ref={rejectFormRef} className="space-y-3 p-3 bg-red-50/50 dark:bg-red-900/10 border border-red-200/50 dark:border-red-800/50 rounded-lg">
+              <div className="flex items-center gap-2 text-destructive">
+                <AlertCircle className="h-4 w-4" />
+                <span className="font-medium text-sm">Reject Review</span>
+              </div>
+              
               <div className="space-y-2">
-                <Label htmlFor="adminNotes" className="text-xs font-medium text-muted-foreground">
-                  Admin Notes (Optional)
+                <Label htmlFor="rejectionReason" className="text-xs font-medium text-red-800 dark:text-red-400">
+                  Reason for Rejection *
                 </Label>
                 <Textarea
-                  id="adminNotes"
-                  placeholder="Add notes or comments..."
-                  value={adminNotes}
-                  onChange={(e) => setAdminNotes(e.target.value)}
+                  id="rejectionReason"
+                  placeholder="Provide reason for rejection..."
+                  value={rejectionReason}
+                  onChange={(e) => setRejectionReason(e.target.value)}
                   rows={2}
-                  className="text-sm resize-none bg-white dark:bg-neutral-800 border-input"
+                  className="border-red-300 focus:border-red-500 text-sm resize-none"
                 />
               </div>
 
-              <div className="border-t border-muted dark:border-neutral-700 pt-3 mt-3" />
-
-              {/* Compact Action Buttons */}
               <div className="flex gap-2">
                 <Button
-                  onClick={handleConfirm}
-                  disabled={isConfirming || (isProspect ? !prospectDecision : !finalGrade)}
-                  className="flex-1 h-9 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-sm font-medium shadow-sm"
+                  onClick={handleReject}
+                  disabled={isRejecting || !rejectionReason.trim()}
+                  variant="destructive"
+                  size="sm"
                 >
-                  {isConfirming ? (
+                  {isRejecting ? (
                     <>
                       <Clock className="h-3.5 w-3.5 mr-1.5 animate-spin" />
-                      Confirming...
+                      Rejecting...
                     </>
                   ) : (
                     <>
-                      <ThumbsUp className="h-3.5 w-3.5 mr-1.5" />
-                      Confirm Review
+                      <ThumbsDown className="h-3.5 w-3.5 mr-1.5" />
+                      Confirm Rejection
                     </>
                   )}
                 </Button>
-
                 <Button
                   variant="outline"
-                  onClick={() => setShowRejectForm(!showRejectForm)}
-                  className="flex-1"
+                  size="sm"
+                  onClick={() => {
+                    setShowRejectForm(false)
+                    setRejectionReason("")
+                  }}
                 >
-                  <ThumbsDown className="h-3.5 w-3.5 mr-1.5" />
-                  Reject
+                  Cancel
                 </Button>
               </div>
-
-              {/* Compact Rejection Form */}
-              {showRejectForm && (
-                <div ref={rejectFormRef} className="space-y-3 p-3 bg-red-50/50 dark:bg-red-900/10 border border-red-200/50 dark:border-red-800/50 rounded-lg">
-                  <div className="flex items-center gap-2 text-destructive">
-                    <AlertCircle className="h-4 w-4" />
-                    <span className="font-medium text-sm">Reject Review</span>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="rejectionReason" className="text-xs font-medium text-red-800">
-                      Reason for Rejection *
-                    </Label>
-                    <Textarea
-                      id="rejectionReason"
-                      placeholder="Provide reason for rejection..."
-                      value={rejectionReason}
-                      onChange={(e) => setRejectionReason(e.target.value)}
-                      rows={2}
-                      className="border-red-300 focus:border-red-500 text-sm resize-none bg-white dark:bg-neutral-800"
-                    />
-                  </div>
-
-                  <div className="flex gap-2">
-                    <Button
-                      onClick={handleReject}
-                      disabled={isRejecting || !rejectionReason.trim()}
-                      variant="destructive"
-                      size="sm"
-                    >
-                      {isRejecting ? (
-                        <>
-                          <Clock className="h-3.5 w-3.5 mr-1.5" />
-                          Rejecting...
-                        </>
-                      ) : (
-                        <>
-                          <ThumbsDown className="h-3.5 w-3.5 mr-1.5" />
-                          Confirm Rejection
-                        </>
-                      )}
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        setShowRejectForm(false)
-                        setRejectionReason("")
-                      }}
-                    >
-                      Cancel
-                    </Button>
-                  </div>
-                </div>
-              )}
-        </ActionPanelFormSection>
-      </div>
-    </ScrollablePanel>
+            </div>
+          )}
+        </div>
+      </ActionPanelSection>
+    </ActionPanelLayout>
   )
 }

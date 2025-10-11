@@ -7,6 +7,7 @@ import {
   SidebarProvider,
 } from "@/components/ui/sidebar"
 import { DashboardHeader } from "@/components/dashboard-header"
+import { ListDetailLayout } from "@/components/shared/list-detail-layout"
 import { EmptyState } from "@/components/shared/empty-state"
 import { ReviewView } from "@/components/reviews/review-view"
 import { ReviewActionPanel } from "@/components/reviews/review-action-panel"
@@ -469,44 +470,43 @@ export default function AdminReviewsPage() {
       <AppSidebar />
       <SidebarInset>
         <DashboardHeader />
-        <div className="flex h-[calc(100vh-85px)]">
-          {/* Main Content - Review List with Filters */}
-          <div className="flex-1 flex flex-col overflow-hidden p-6">
-            {/* Header with Filters */}
-            <div className="flex-shrink-0 mb-6">
-              <DataFilterBar
-                searchTerm={searchTerm}
-                searchPlaceholder="Search reviews..."
-                onSearchChange={setSearchTerm}
-                filters={filterConfigs}
-                filterValues={filters}
-                onFilterChange={handleFilterChange}
-                showViewToggle={true}
-                viewMode={viewMode}
-                onViewModeChange={setViewMode}
-                hasActiveFilters={hasFilters}
-                onClearFilters={clearFilters}
-                resultCount={filteredReviews.length}
-                totalCount={reviews.length}
-              />
-            </div>
+        <ListDetailLayout
+          listContent={
+            <>
+              {/* Header with Filters */}
+              <div className="flex-shrink-0 mb-6">
+                <DataFilterBar
+                  searchTerm={searchTerm}
+                  searchPlaceholder="Search reviews..."
+                  onSearchChange={setSearchTerm}
+                  filters={filterConfigs}
+                  filterValues={filters}
+                  onFilterChange={handleFilterChange}
+                  showViewToggle={true}
+                  viewMode={viewMode}
+                  onViewModeChange={setViewMode}
+                  hasActiveFilters={hasFilters}
+                  onClearFilters={clearFilters}
+                  resultCount={filteredReviews.length}
+                  totalCount={reviews.length}
+                />
+              </div>
 
-            {/* Review List */}
-            <div className="flex-1 min-h-0 overflow-y-auto">
-              <ReviewView
-                reviews={filteredReviews}
-                viewMode={viewMode}
-                selectedReview={currentReview}
-                onView={handleViewReview}
-                onEdit={handleEditReview}
-                onAssign={handleAssignReview}
-              />
-            </div>
-          </div>
-
-          {/* Right Panel - Review Details */}
-          <div className="w-96 border-l bg-background overflow-y-auto">
-            {currentReview ? (
+              {/* Review List */}
+              <div className="flex-1 min-h-0 overflow-y-auto">
+                <ReviewView
+                  reviews={filteredReviews}
+                  viewMode={viewMode}
+                  selectedReview={currentReview}
+                  onView={handleViewReview}
+                  onEdit={handleEditReview}
+                  onAssign={handleAssignReview}
+                />
+              </div>
+            </>
+          }
+          detailContent={
+            currentReview ? (
               <div className="flex flex-col h-full">
                 {/* Admin Workflow Actions - Omnipotent Controls */}
                 <div className="border-b bg-muted/30 p-4 space-y-2">
@@ -581,9 +581,10 @@ export default function AdminReviewsPage() {
               <div className="h-full flex items-center justify-center p-6">
                 <EmptyState {...emptyStateConfig} />
               </div>
-            )}
-          </div>
-        </div>
+            )
+          }
+          detailScrollable={false}
+        />
 
         {/* Assign Reviewer Drawer */}
         <ReviewAssignDrawer

@@ -196,13 +196,13 @@ export function ReviewerWorkDrawer({
                   Original Documents ({review.documents?.length || 0})
                 </Label>
               </div>
-              <Badge variant="outline" className="bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-800">
+              <Badge variant="outline" className="bg-primary/10 dark:bg-primary/20 text-primary border-primary/30 dark:border-primary/40">
                 Download & Review
               </Badge>
             </div>
             
             {review.documents && review.documents.length > 0 ? (
-              <Card className="border-blue-200 dark:border-blue-800 bg-blue-50/30 dark:bg-blue-950/20">
+              <Card className="border-primary/30 dark:border-primary/40 bg-primary/5 dark:bg-primary/10">
                 <CardContent className="p-4">
                   <div className="space-y-2 max-h-64 overflow-y-auto">
                     {review.documents.map((doc) => (
@@ -249,7 +249,7 @@ export function ReviewerWorkDrawer({
                   Upload Reviewed Files <span className="text-destructive">*</span>
                 </Label>
               </div>
-              <Badge variant="outline" className="bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800">
+              <Badge variant="outline" className="bg-primary/10 dark:bg-primary/20 text-primary border-primary/30 dark:border-primary/40">
                 {reviewedFiles.length} file(s) ready
               </Badge>
             </div>
@@ -284,11 +284,11 @@ export function ReviewerWorkDrawer({
                 {reviewedFiles.map((file, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between p-3 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800"
+                    className="flex items-center justify-between p-3 rounded-lg bg-primary/5 dark:bg-primary/10 border border-primary/30 dark:border-primary/40"
                   >
                     <div className="flex items-center gap-3 flex-1 min-w-0">
-                      <div className="p-2 bg-emerald-100 dark:bg-emerald-900/30 rounded">
-                        <FileText className="h-4 w-4 text-emerald-600 dark:text-emerald-500" />
+                      <div className="p-2 bg-primary/10 dark:bg-primary/20 rounded">
+                        <FileText className="h-4 w-4 text-primary" />
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="text-sm font-medium text-foreground truncate">{file.name}</p>
@@ -323,7 +323,7 @@ export function ReviewerWorkDrawer({
                 </Label>
               </div>
               {review.reviewerRating?.grade && (
-                <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700">
+                <Badge variant="outline" className="text-xs bg-muted">
                   Previous: {review.reviewerRating.grade}/5
                 </Badge>
               )}

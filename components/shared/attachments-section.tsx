@@ -140,7 +140,7 @@ export function AttachmentsSection({
           )}
         </div>
         {showUpload && onUpload && (
-          <div className="flex items-center gap-2 p-2.5 bg-blue-50/50 dark:bg-blue-950/30 border border-blue-200/50 dark:border-blue-800/50 rounded text-xs text-muted-foreground">
+          <div className="flex items-center gap-2 p-2.5 bg-primary/5 dark:bg-primary/10 border border-primary/20 dark:border-primary/30 rounded text-xs text-muted-foreground">
             <RefreshCw className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400 flex-shrink-0" />
             <p>
               <span className="font-medium">Review Flow:</span> Download → Review → Re-upload

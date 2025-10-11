@@ -152,7 +152,7 @@ export function VerificationDrawer({
         <div className="flex-1 overflow-y-auto">
           <div className="p-6 space-y-6">
           {/* Reviewer's Assessment */}
-          <Card className="border-blue-200 bg-blue-50/30">
+          <Card className="border-primary/30 bg-primary/5">
             <CardContent className="pt-6 space-y-4">
               <div className="flex items-center gap-2 mb-3">
                 <Award className="h-5 w-5 text-blue-600" />

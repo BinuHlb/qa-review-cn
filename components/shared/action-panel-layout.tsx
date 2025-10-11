@@ -93,6 +93,7 @@ interface ActionPanelFormSectionProps {
   description?: string
   children: ReactNode
   variant?: "default" | "primary" | "warning"
+  showBorder?: boolean
   className?: string
 }
 
@@ -102,16 +103,32 @@ export function ActionPanelFormSection({
   description,
   children, 
   variant = "default",
+  showBorder = false,
   className 
 }: ActionPanelFormSectionProps) {
   const variantClasses = {
     default: "bg-muted/50",
-    primary: "bg-blue-50/50 dark:bg-blue-950/30 border border-blue-200/50 dark:border-blue-800/50",
-    warning: "bg-amber-50/50 dark:bg-amber-950/30 border border-amber-200/50 dark:border-amber-800/50"
+    primary: "bg-primary/5 dark:bg-primary/10",
+    warning: "bg-destructive/5 dark:bg-destructive/10"
+  }
+
+  const borderClasses = showBorder ? {
+    default: "border border-muted",
+    primary: "border border-primary/20 dark:border-primary/30",
+    warning: "border border-destructive/20 dark:border-destructive/30"
+  } : {
+    default: "",
+    primary: "",
+    warning: ""
   }
 
   return (
-    <div className={cn("rounded-lg p-4", variantClasses[variant], className)}>
+    <div className={cn(
+      "rounded-lg p-4", 
+      variantClasses[variant],
+      borderClasses[variant],
+      className
+    )}>
       <div className="flex items-center justify-between mb-4 pb-2 border-b border-muted">
         <div className="flex items-center gap-2">
           {icon && (
@@ -119,7 +136,7 @@ export function ActionPanelFormSection({
               {icon}
             </div>
           )}
-          <h3 className="font-semibold text-neutral-900 dark:text-neutral-100">{title}</h3>
+          <h3 className="font-semibold text-foreground">{title}</h3>
         </div>
       </div>
       {description && (
@@ -156,7 +173,7 @@ export function ActionPanelInfoCard({ items, columns = 2, className }: ActionPan
   return (
     <div className={cn(`grid ${gridClass} gap-3`, className)}>
       {items.map((item, index) => (
-        <div key={index} className="p-3 bg-muted/50 rounded-lg">
+        <div key={index} className="p-3 bg-muted/30 rounded-lg border">
           <div className="flex items-center gap-2 mb-1">
             {item.icon}
             <p className="text-xs text-muted-foreground font-medium">{item.label}</p>

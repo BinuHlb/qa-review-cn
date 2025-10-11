@@ -19,6 +19,7 @@ import {
 } from "lucide-react"
 import { StatsGrid, ProgressBar, BadgeList, DetailContainer } from "@/components/shared/detail-sections"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { cn, getItemCardStyles } from "@/lib/utils"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -37,18 +38,24 @@ import {
 interface ReviewerItemProps {
   reviewer: Reviewer
   viewMode: "list" | "card"
+  isSelected?: boolean
   onView?: (reviewer: Reviewer) => void
   onEdit?: (reviewer: Reviewer) => void
   onAssign?: (reviewer: Reviewer) => void
   onDelete?: (reviewer: Reviewer) => void
 }
 
-export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onDelete }: ReviewerItemProps) {
+export function ReviewerItem({ reviewer, viewMode, isSelected, onView, onEdit, onAssign, onDelete }: ReviewerItemProps) {
   const [isExpanded, setIsExpanded] = useState(false)
 
   if (viewMode === "list") {
     return (
-      <Card className="shadow-none border-none bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-300">
+      <Card 
+        className={cn(
+          "shadow-none border-none transition-all duration-300",
+          getItemCardStyles(isSelected)
+        )}
+      >
         <CardContent className="p-3">
           <div className="space-y-3">
             {/* Main Row - Mobile Responsive */}
@@ -231,7 +238,12 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
 
   // Card view
   return (
-    <Card className="shadow-none border-none bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-300 h-full flex flex-col">
+    <Card 
+      className={cn(
+        "shadow-none border-none transition-all duration-300 h-full flex flex-col",
+        getItemCardStyles(isSelected)
+      )}
+    >
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div 
