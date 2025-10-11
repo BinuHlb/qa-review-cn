@@ -18,6 +18,7 @@ import {
   ChevronDown,
   ChevronUp
 } from "lucide-react"
+import { StatsGrid, ContactSection, BadgeList, DetailContainer } from "@/components/shared/detail-sections"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -55,8 +56,14 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
           <div className="space-y-3">
             {/* Main Row - Mobile Responsive */}
             <div className="flex flex-col sm:flex-row sm:items-center gap-2 min-w-0">
-              {/* Main Info */}
-              <div className="flex items-center gap-3 flex-1 min-w-0">
+              {/* Main Info - Clickable to expand/collapse */}
+              <div 
+                className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer group"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setIsExpanded(!isExpanded)
+                }}
+              >
                 <div className="flex items-center gap-2 min-w-0 flex-1">
                   <Avatar className="h-8 w-8 flex-shrink-0">
                     <AvatarImage src={memberFirm.avatar} alt={memberFirm.name} />
@@ -66,26 +73,18 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
                   </Avatar>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <h3 className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 truncate" title={memberFirm.name}>
+                      <h3 className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 truncate group-hover:text-primary transition-colors" title={memberFirm.name}>
                         {memberFirm.name}
                       </h3>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          setIsExpanded(!isExpanded)
-                        }}
-                        className="text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300 h-5 w-5 p-0 flex-shrink-0"
-                      >
+                      <div className="text-neutral-500 group-hover:text-neutral-700 dark:group-hover:text-neutral-300 h-5 w-5 p-0 flex-shrink-0 flex items-center justify-center transition-colors">
                         {isExpanded ? (
                           <ChevronUp className="h-3 w-3" />
                         ) : (
                           <ChevronDown className="h-3 w-3" />
                         )}
-                      </Button>
+                      </div>
                     </div>
-                    <p className="text-xs text-neutral-600 dark:text-neutral-400 truncate" title={memberFirm.location}>
+                    <p className="text-xs text-neutral-600 dark:text-neutral-400 truncate group-hover:text-neutral-500 transition-colors" title={memberFirm.location}>
                       {memberFirm.location}
                     </p>
                   </div>
@@ -190,81 +189,30 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
 
             {/* Expandable Content */}
             <div className={`transition-all duration-300 overflow-hidden ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-              <div className="space-y-3 pt-3 border-t border-neutral-200 dark:border-neutral-700">
-                {/* Specialization */}
-                <div className="space-y-1">
-                  <div className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">Specializations</div>
-                  <div className="flex flex-wrap gap-1">
-                    {memberFirm.specializations.map((spec, index) => (
-                      <Badge key={index} variant="outline" className="text-xs px-2 py-0.5">
-                        {spec}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
+              <div className="pt-3 border-t border-neutral-200 dark:border-neutral-700">
+                <DetailContainer>
+                  <BadgeList 
+                    label="Specializations" 
+                    items={memberFirm.specializations}
+                  />
 
-                {/* Stats */}
-                <div className="grid grid-cols-2 gap-3 text-xs">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
-                      <Users className="h-3 w-3" />
-                      <span className="font-medium">Employees</span>
-                    </div>
-                    <div className="font-medium text-neutral-900 dark:text-neutral-100">
-                      {memberFirm.employeeCount}
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
-                      <Building className="h-3 w-3" />
-                      <span className="font-medium">Partners</span>
-                    </div>
-                    <div className="font-medium text-neutral-900 dark:text-neutral-100">
-                      {memberFirm.partnerCount}
-                    </div>
-                  </div>
-                </div>
+                  <StatsGrid 
+                    stats={[
+                      { icon: Users, label: "Employees", value: memberFirm.employeeCount },
+                      { icon: Building, label: "Partners", value: memberFirm.partnerCount },
+                      { icon: Star, label: "Compliance", value: `${memberFirm.complianceScore}%`, valueClassName: getComplianceScoreColor(memberFirm.complianceScore) },
+                      { icon: Calendar, label: "Reviews", value: memberFirm.totalReviews }
+                    ]}
+                  />
 
-                {/* Compliance and Reviews */}
-                <div className="grid grid-cols-2 gap-3 text-xs">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
-                      <Star className="h-3 w-3" />
-                      <span className="font-medium">Compliance</span>
-                    </div>
-                    <div className={`font-medium ${getComplianceScoreColor(memberFirm.complianceScore)}`}>
-                      {memberFirm.complianceScore}%
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
-                      <Calendar className="h-3 w-3" />
-                      <span className="font-medium">Reviews</span>
-                    </div>
-                    <div className="font-medium text-neutral-900 dark:text-neutral-100">
-                      {memberFirm.totalReviews}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Contact Info */}
-                <div className="space-y-1">
-                  <div className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">Contact</div>
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-1 text-xs min-w-0 text-neutral-700 dark:text-neutral-300">
-                      <Mail className="h-3 w-3 text-neutral-500 dark:text-neutral-400 flex-shrink-0" />
-                      <span className="truncate" title={memberFirm.contactEmail}>
-                        {memberFirm.contactEmail}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1 text-xs min-w-0 text-neutral-700 dark:text-neutral-300">
-                      <Phone className="h-3 w-3 text-neutral-500 dark:text-neutral-400 flex-shrink-0" />
-                      <span className="truncate" title={memberFirm.contactPhone}>
-                        {memberFirm.contactPhone}
-                      </span>
-                    </div>
-                  </div>
-                </div>
+                  <ContactSection
+                    title="Contact"
+                    contacts={[
+                      { icon: Mail, value: memberFirm.contactEmail, href: `mailto:${memberFirm.contactEmail}` },
+                      { icon: Phone, value: memberFirm.contactPhone, href: `tel:${memberFirm.contactPhone}` }
+                    ]}
+                  />
+                </DetailContainer>
               </div>
             </div>
           </div>
@@ -278,7 +226,13 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
     <Card className="shadow-none border-none bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-300 h-full flex flex-col">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
-          <div className="flex items-center gap-3 flex-1 min-w-0">
+          <div 
+            className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer group"
+            onClick={(e) => {
+              e.stopPropagation()
+              setIsExpanded(!isExpanded)
+            }}
+          >
             <Avatar className="h-10 w-10 flex-shrink-0">
               <AvatarImage src={memberFirm.avatar} alt={memberFirm.name} />
               <AvatarFallback className={`${generateFirmAvatarColor(memberFirm.name)} text-sm font-semibold`}>
@@ -286,10 +240,10 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
               </AvatarFallback>
             </Avatar>
             <div className="min-w-0 flex-1">
-              <CardTitle className="text-base truncate" title={memberFirm.name}>
+              <CardTitle className="text-base truncate group-hover:text-primary transition-colors" title={memberFirm.name}>
                 {memberFirm.name}
               </CardTitle>
-              <CardDescription className="text-xs truncate" title={memberFirm.location}>
+              <CardDescription className="text-xs truncate group-hover:text-neutral-500 transition-colors" title={memberFirm.location}>
                 {memberFirm.location}
               </CardDescription>
             </div>
@@ -360,69 +314,25 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
 
         {/* Expandable Content */}
         <div className={`transition-all duration-300 overflow-hidden ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-          <div className="space-y-3 pt-3 border-t border-neutral-200 dark:border-neutral-700">
-            {/* Stats */}
-            <div className="grid grid-cols-2 gap-3 text-xs">
-              <div className="space-y-1">
-                <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
-                  <Users className="h-3 w-3" />
-                  <span className="font-medium">Employees</span>
-                </div>
-                <div className="font-medium text-neutral-900 dark:text-neutral-100">
-                  {memberFirm.employeeCount}
-                </div>
-              </div>
-              <div className="space-y-1">
-                <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
-                  <Building className="h-3 w-3" />
-                  <span className="font-medium">Partners</span>
-                </div>
-                <div className="font-medium text-neutral-900 dark:text-neutral-100">
-                  {memberFirm.partnerCount}
-                </div>
-              </div>
-            </div>
+          <div className="pt-3 border-t border-neutral-200 dark:border-neutral-700">
+            <DetailContainer>
+              <StatsGrid 
+                stats={[
+                  { icon: Users, label: "Employees", value: memberFirm.employeeCount },
+                  { icon: Building, label: "Partners", value: memberFirm.partnerCount },
+                  { icon: Star, label: "Compliance", value: `${memberFirm.complianceScore}%`, valueClassName: getComplianceScoreColor(memberFirm.complianceScore) },
+                  { icon: Calendar, label: "Reviews", value: memberFirm.totalReviews }
+                ]}
+              />
 
-            {/* Compliance and Reviews */}
-            <div className="grid grid-cols-2 gap-3 text-xs">
-              <div className="space-y-1">
-                <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
-                  <Star className="h-3 w-3" />
-                  <span className="font-medium">Compliance</span>
-                </div>
-                <div className={`font-medium ${getComplianceScoreColor(memberFirm.complianceScore)}`}>
-                  {memberFirm.complianceScore}%
-                </div>
-              </div>
-              <div className="space-y-1">
-                <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
-                  <Calendar className="h-3 w-3" />
-                  <span className="font-medium">Reviews</span>
-                </div>
-                <div className="font-medium text-neutral-900 dark:text-neutral-100">
-                  {memberFirm.totalReviews}
-                </div>
-              </div>
-            </div>
-
-            {/* Contact Info */}
-            <div className="space-y-1">
-              <div className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">Contact</div>
-              <div className="space-y-1">
-                <div className="flex items-center gap-1 text-xs min-w-0 text-neutral-700 dark:text-neutral-300">
-                  <Mail className="h-3 w-3 text-neutral-500 dark:text-neutral-400 flex-shrink-0" />
-                  <span className="truncate" title={memberFirm.contactEmail}>
-                    {memberFirm.contactEmail}
-                  </span>
-                </div>
-                <div className="flex items-center gap-1 text-xs min-w-0 text-neutral-700 dark:text-neutral-300">
-                  <Phone className="h-3 w-3 text-neutral-500 dark:text-neutral-400 flex-shrink-0" />
-                  <span className="truncate" title={memberFirm.contactPhone}>
-                    {memberFirm.contactPhone}
-                  </span>
-                </div>
-              </div>
-            </div>
+              <ContactSection
+                title="Contact"
+                contacts={[
+                  { icon: Mail, value: memberFirm.contactEmail, href: `mailto:${memberFirm.contactEmail}` },
+                  { icon: Phone, value: memberFirm.contactPhone, href: `tel:${memberFirm.contactPhone}` }
+                ]}
+              />
+            </DetailContainer>
           </div>
         </div>
 

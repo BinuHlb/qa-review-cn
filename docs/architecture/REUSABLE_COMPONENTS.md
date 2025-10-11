@@ -414,6 +414,76 @@ import { Eye, Edit, Trash2 } from "lucide-react"
 
 ---
 
+### 7. **Detail Sections** (`components/shared/detail-sections.tsx`)
+
+Reusable, interactive detail UI components for expandable content sections.
+
+**Components Included:**
+
+1. **InfoRow** - Single label/value pair with icon
+2. **StatsGrid** - Configurable grid of statistics (2/3/4 columns)
+3. **BadgeList** - Display list of badges with optional max visible count
+4. **ContactSection** - Contact information with clickable links
+5. **ProgressBar** - Progress bar with color coding
+6. **DetailContainer** - Wrapper for consistent spacing
+
+**Features:**
+- Interactive hover effects
+- Clickable contact links (mailto:, tel:)
+- Color-coded progress bars
+- Truncation with tooltips
+- Consistent icons and spacing
+- Dark mode support
+- No hardcoded layouts
+
+**Usage Example:**
+```tsx
+import { 
+  StatsGrid, 
+  ContactSection, 
+  BadgeList, 
+  ProgressBar,
+  DetailContainer 
+} from "@/components/shared/detail-sections"
+
+<DetailContainer>
+  <BadgeList 
+    label="Specializations" 
+    items={firm.specializations}
+  />
+
+  <StatsGrid 
+    stats={[
+      { icon: Users, label: "Employees", value: firm.employeeCount },
+      { icon: Star, label: "Rating", value: `${firm.score}%` }
+    ]}
+  />
+
+  <ProgressBar
+    label="Workload"
+    current={reviewer.currentWorkload}
+    max={reviewer.maxWorkload}
+  />
+
+  <ContactSection
+    title="Contact"
+    contacts={[
+      { icon: Mail, value: firm.email, href: `mailto:${firm.email}` },
+      { icon: Phone, value: firm.phone, href: `tel:${firm.phone}` }
+    ]}
+  />
+</DetailContainer>
+```
+
+**Benefits:**
+- ✅ Zero duplication across expandable sections
+- ✅ Interactive contact links
+- ✅ Consistent visual design
+- ✅ Easy to compose different layouts
+- ✅ Type-safe interfaces
+
+---
+
 ## Architecture Benefits
 
 ### ✅ **Reusability**
@@ -422,6 +492,7 @@ import { Eye, Edit, Trash2 } from "lucide-react"
 - DataFilterBar eliminates filter UI duplication across pages
 - DataViewContainer eliminates list/card view layout duplication
 - DataItemCard provides universal item rendering (reviews, firms, reviewers)
+- Detail Sections eliminate expandable content duplication
 - No code duplication - DRY principle applied throughout
 
 ### ✅ **Scalability**
@@ -457,16 +528,17 @@ components/
 │   ├── data-filter-bar.tsx       # Reusable filter component
 │   ├── data-view-container.tsx   # Reusable list/card view container
 │   ├── data-item-card.tsx        # Universal item card component
+│   ├── detail-sections.tsx       # Interactive detail UI components
 │   └── status-badge.tsx          # Interactive status badges
 ├── reviews/
 │   ├── review-action-panel.tsx   # Uses document-viewer & timeline
 │   ├── review-view.tsx            # Uses data-view-container
-│   ├── review-item.tsx            # Can use data-item-card
+│   ├── review-item.tsx            # Uses detail-sections
 │   └── final-review-screen.tsx   # Uses document-viewer & timeline
 ├── member-firms/
-│   └── member-firm-item.tsx       # Can use data-item-card
+│   └── member-firm-item.tsx       # Uses detail-sections
 └── reviewers/
-    └── reviewer-item.tsx          # Can use data-item-card
+    └── reviewer-item.tsx          # Uses detail-sections
 ```
 
 ---

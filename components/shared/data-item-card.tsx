@@ -93,35 +93,35 @@ export function DataItemCard({
           <div className="space-y-3">
             {/* Main Row */}
             <div className="flex flex-col sm:flex-row sm:items-center gap-2 min-w-0">
-              {/* Main Info */}
-              <div className="flex items-center gap-3 flex-1 min-w-0">
+              {/* Main Info - Clickable to expand/collapse */}
+              <div 
+                className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer group"
+                onClick={(e) => {
+                  if (hasExpandableContent) {
+                    e.stopPropagation()
+                    setIsExpanded(!isExpanded)
+                  }
+                }}
+              >
                 <div className="flex items-center gap-2 min-w-0 flex-1">
                   {avatar}
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <h3 className={cn("font-semibold text-sm text-neutral-900 dark:text-neutral-100 truncate", titleClassName)} title={title}>
+                      <h3 className={cn("font-semibold text-sm text-neutral-900 dark:text-neutral-100 truncate group-hover:text-primary transition-colors", titleClassName)} title={title}>
                         {title}
                       </h3>
                       {hasExpandableContent && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            setIsExpanded(!isExpanded)
-                          }}
-                          className="text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300 h-5 w-5 p-0 flex-shrink-0"
-                        >
+                        <div className="text-neutral-500 group-hover:text-neutral-700 dark:group-hover:text-neutral-300 h-5 w-5 p-0 flex-shrink-0 flex items-center justify-center transition-colors">
                           {isExpanded ? (
                             <ChevronUp className="h-3 w-3" />
                           ) : (
                             <ChevronDown className="h-3 w-3" />
                           )}
-                        </Button>
+                        </div>
                       )}
                     </div>
                     {subtitle && (
-                      <p className={cn("text-xs text-neutral-600 dark:text-neutral-400 truncate", subtitleClassName)} title={subtitle}>
+                      <p className={cn("text-xs text-neutral-600 dark:text-neutral-400 truncate group-hover:text-neutral-500 transition-colors", subtitleClassName)} title={subtitle}>
                         {subtitle}
                       </p>
                     )}
@@ -214,14 +214,22 @@ export function DataItemCard({
     )}>
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
-          <div className="flex items-center gap-3 flex-1 min-w-0">
+          <div 
+            className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer group"
+            onClick={(e) => {
+              if (hasExpandableContent) {
+                e.stopPropagation()
+                setIsExpanded(!isExpanded)
+              }
+            }}
+          >
             {avatar}
             <div className="min-w-0 flex-1">
-              <h3 className={cn("text-base font-semibold truncate", titleClassName)} title={title}>
+              <h3 className={cn("text-base font-semibold truncate group-hover:text-primary transition-colors", titleClassName)} title={title}>
                 {title}
               </h3>
               {subtitle && (
-                <p className={cn("text-xs text-muted-foreground truncate", subtitleClassName)} title={subtitle}>
+                <p className={cn("text-xs text-muted-foreground truncate group-hover:text-neutral-500 transition-colors", subtitleClassName)} title={subtitle}>
                   {subtitle}
                 </p>
               )}

@@ -350,11 +350,23 @@ To complete the refactoring:
 
 ## Consistency Standards
 
+### ✅ **Expand/Collapse Click Area**
+- **MUST** include avatar, name, and subtitle
+- Wrap in `<div>` with `onClick` handler
+- Classes: `flex items-center gap-3 flex-1 min-w-0 cursor-pointer group`
+- Provides visual feedback on hover
+
 ### ✅ **Chevron Placement (List View)**
-- **MUST** be placed inline with the title (left side)
-- **NOT** in the actions area (right side)
-- Classes: `h-5 w-5 p-0 flex-shrink-0`
-- Color: `text-neutral-500 hover:text-neutral-700`
+- **MUST** be inline with the title (left side)
+- Changed from Button to simple `<div>` (no clickable button)
+- Classes: `h-5 w-5 p-0 flex-shrink-0 flex items-center justify-center`
+- Color: `text-neutral-500 group-hover:text-neutral-700`
+
+### ✅ **Hover Effects**
+- Title: `group-hover:text-primary transition-colors`
+- Subtitle: `group-hover:text-neutral-500 transition-colors`
+- Chevron: `group-hover:text-neutral-700 transition-colors`
+- Entire area responds to hover as a group
 
 ### ✅ **Chevron Placement (Card View)**
 - **NO** chevron in header

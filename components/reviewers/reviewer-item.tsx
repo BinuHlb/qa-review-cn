@@ -17,6 +17,7 @@ import {
   ChevronDown,
   ChevronUp
 } from "lucide-react"
+import { StatsGrid, ProgressBar, BadgeList, DetailContainer } from "@/components/shared/detail-sections"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -52,8 +53,14 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
           <div className="space-y-3">
             {/* Main Row - Mobile Responsive */}
             <div className="flex flex-col sm:flex-row sm:items-center gap-2 min-w-0">
-              {/* Main Info */}
-              <div className="flex items-center gap-3 flex-1 min-w-0">
+              {/* Main Info - Clickable to expand/collapse */}
+              <div 
+                className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer group"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setIsExpanded(!isExpanded)
+                }}
+              >
                 <div className="flex items-center gap-2 min-w-0 flex-1">
                   <Avatar className="h-8 w-8 flex-shrink-0">
                     <AvatarImage src={reviewer.avatar} alt={reviewer.name} />
@@ -63,26 +70,18 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
                   </Avatar>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <h3 className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 truncate" title={reviewer.name}>
+                      <h3 className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 truncate group-hover:text-primary transition-colors" title={reviewer.name}>
                         {reviewer.name}
                       </h3>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          setIsExpanded(!isExpanded)
-                        }}
-                        className="text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300 h-5 w-5 p-0 flex-shrink-0"
-                      >
+                      <div className="text-neutral-500 group-hover:text-neutral-700 dark:group-hover:text-neutral-300 h-5 w-5 p-0 flex-shrink-0 flex items-center justify-center transition-colors">
                         {isExpanded ? (
                           <ChevronUp className="h-3 w-3" />
                         ) : (
                           <ChevronDown className="h-3 w-3" />
                         )}
-                      </Button>
+                      </div>
                     </div>
-                    <p className="text-xs text-neutral-600 dark:text-neutral-400 truncate" title={reviewer.email}>
+                    <p className="text-xs text-neutral-600 dark:text-neutral-400 truncate group-hover:text-neutral-500 transition-colors" title={reviewer.email}>
                       {reviewer.email}
                     </p>
                   </div>
@@ -199,84 +198,29 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
 
             {/* Expandable Content */}
             <div className={`transition-all duration-300 overflow-hidden ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-              <div className="space-y-3 pt-3 border-t border-neutral-200 dark:border-neutral-700">
-                {/* Specialization */}
-                <div className="space-y-1">
-                  <div className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">Specialization</div>
-                  <div className="flex flex-wrap gap-1">
-                    {reviewer.specialization.map((spec, index) => (
-                      <Badge key={index} variant="outline" className="text-xs px-2 py-0.5">
-                        {spec}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
+              <div className="pt-3 border-t border-neutral-200 dark:border-neutral-700">
+                <DetailContainer>
+                  <BadgeList 
+                    label="Specialization" 
+                    items={reviewer.specialization}
+                  />
 
-                {/* Workload */}
-                <div className="space-y-1">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-neutral-500 dark:text-neutral-400 font-medium">Workload</span>
-                    <span className={`font-medium ${getWorkloadColor(reviewer.currentWorkload, reviewer.maxWorkload)}`}>
-                      {reviewer.currentWorkload}/{reviewer.maxWorkload}
-                    </span>
-                  </div>
-                  <div className="w-full bg-neutral-200 dark:bg-neutral-700 rounded-full h-2">
-                    <div 
-                      className={`h-2 rounded-full ${
-                        (reviewer.currentWorkload / reviewer.maxWorkload) >= 0.9 
-                          ? 'bg-red-500' 
-                          : (reviewer.currentWorkload / reviewer.maxWorkload) >= 0.75 
-                          ? 'bg-yellow-500' 
-                          : 'bg-green-500'
-                      }`}
-                      style={{ width: `${(reviewer.currentWorkload / reviewer.maxWorkload) * 100}%` }}
-                    />
-                  </div>
-                </div>
+                  <ProgressBar
+                    label="Workload"
+                    current={reviewer.currentWorkload}
+                    max={reviewer.maxWorkload}
+                    showNumbers={true}
+                  />
 
-                {/* Stats */}
-                <div className="grid grid-cols-2 gap-3 text-xs">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
-                      <Star className="h-3 w-3" />
-                      <span className="font-medium">Rating</span>
-                    </div>
-                    <div className="font-medium text-neutral-900 dark:text-neutral-100">
-                      {reviewer.averageRating}/5.0
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
-                      <Users className="h-3 w-3" />
-                      <span className="font-medium">Reviews</span>
-                    </div>
-                    <div className="font-medium text-neutral-900 dark:text-neutral-100">
-                      {reviewer.totalReviews}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Location and Experience */}
-                <div className="grid grid-cols-2 gap-3 text-xs">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
-                      <MapPin className="h-3 w-3" />
-                      <span className="font-medium">Location</span>
-                    </div>
-                    <div className="font-medium text-neutral-900 dark:text-neutral-100 truncate" title={reviewer.location}>
-                      {reviewer.location}
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
-                      <Calendar className="h-3 w-3" />
-                      <span className="font-medium">Experience</span>
-                    </div>
-                    <div className="font-medium text-neutral-900 dark:text-neutral-100">
-                      {reviewer.experience} years
-                    </div>
-                  </div>
-                </div>
+                  <StatsGrid 
+                    stats={[
+                      { icon: Star, label: "Rating", value: `${reviewer.averageRating}/5.0` },
+                      { icon: Users, label: "Reviews", value: reviewer.totalReviews },
+                      { icon: MapPin, label: "Location", value: reviewer.location },
+                      { icon: Calendar, label: "Experience", value: `${reviewer.experience} years` }
+                    ]}
+                  />
+                </DetailContainer>
               </div>
             </div>
           </div>
@@ -290,7 +234,13 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
     <Card className="shadow-none border-none bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-300 h-full flex flex-col">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
-          <div className="flex items-center gap-3 flex-1 min-w-0">
+          <div 
+            className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer group"
+            onClick={(e) => {
+              e.stopPropagation()
+              setIsExpanded(!isExpanded)
+            }}
+          >
             <Avatar className="h-10 w-10 flex-shrink-0">
               <AvatarImage src={reviewer.avatar} alt={reviewer.name} />
               <AvatarFallback className={`${generateReviewerAvatarColor(reviewer.name)} text-white text-sm font-semibold`}>
@@ -298,10 +248,10 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
               </AvatarFallback>
             </Avatar>
             <div className="min-w-0 flex-1">
-              <CardTitle className="text-base truncate" title={reviewer.name}>
+              <CardTitle className="text-base truncate group-hover:text-primary transition-colors" title={reviewer.name}>
                 {reviewer.name}
               </CardTitle>
-              <CardDescription className="text-xs truncate" title={reviewer.email}>
+              <CardDescription className="text-xs truncate group-hover:text-neutral-500 transition-colors" title={reviewer.email}>
                 {reviewer.email}
               </CardDescription>
             </div>
@@ -390,50 +340,17 @@ export function ReviewerItem({ reviewer, viewMode, onView, onEdit, onAssign, onD
 
         {/* Expandable Content */}
         <div className={`transition-all duration-300 overflow-hidden ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-          <div className="space-y-3 pt-3 border-t border-neutral-200 dark:border-neutral-700">
-            {/* Stats */}
-            <div className="grid grid-cols-2 gap-3 text-xs">
-              <div className="space-y-1">
-                <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
-                  <Star className="h-3 w-3" />
-                  <span className="font-medium">Rating</span>
-                </div>
-                <div className="font-medium text-neutral-900 dark:text-neutral-100">
-                  {reviewer.averageRating}/5.0
-                </div>
-              </div>
-              <div className="space-y-1">
-                <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
-                  <Users className="h-3 w-3" />
-                  <span className="font-medium">Reviews</span>
-                </div>
-                <div className="font-medium text-neutral-900 dark:text-neutral-100">
-                  {reviewer.totalReviews}
-                </div>
-              </div>
-            </div>
-
-            {/* Location and Experience */}
-            <div className="grid grid-cols-2 gap-3 text-xs">
-              <div className="space-y-1">
-                <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
-                  <MapPin className="h-3 w-3" />
-                  <span className="font-medium">Location</span>
-                </div>
-                <div className="font-medium text-neutral-900 dark:text-neutral-100 truncate" title={reviewer.location}>
-                  {reviewer.location}
-                </div>
-              </div>
-              <div className="space-y-1">
-                <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
-                  <Calendar className="h-3 w-3" />
-                  <span className="font-medium">Experience</span>
-                </div>
-                <div className="font-medium text-neutral-900 dark:text-neutral-100">
-                  {reviewer.experience} years
-                </div>
-              </div>
-            </div>
+          <div className="pt-3 border-t border-neutral-200 dark:border-neutral-700">
+            <DetailContainer>
+              <StatsGrid 
+                stats={[
+                  { icon: Star, label: "Rating", value: `${reviewer.averageRating}/5.0` },
+                  { icon: Users, label: "Reviews", value: reviewer.totalReviews },
+                  { icon: MapPin, label: "Location", value: reviewer.location },
+                  { icon: Calendar, label: "Experience", value: `${reviewer.experience} years` }
+                ]}
+              />
+            </DetailContainer>
           </div>
         </div>
 

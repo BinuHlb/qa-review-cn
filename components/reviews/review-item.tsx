@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { MoreHorizontal, MapPin, User, UserPlus, Clock, ChevronDown, ChevronUp } from "lucide-react"
+import { StatsGrid, BadgeList, DetailContainer } from "@/components/shared/detail-sections"
 import { Icon } from "@iconify/react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { PercentageBadge } from "@/components/shared/percentage-badge"
@@ -94,8 +95,14 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
           <div className="space-y-3">
             {/* Main Row - Mobile Responsive */}
             <div className="flex flex-col sm:flex-row sm:items-center gap-2 min-w-0">
-              {/* Main Info */}
-              <div className="flex items-center gap-3 flex-1 min-w-0">
+              {/* Main Info - Clickable to expand/collapse */}
+              <div 
+                className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer group"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setIsExpanded(!isExpanded)
+                }}
+              >
                 <div className="flex items-center gap-2 min-w-0 flex-1">
                   <Avatar className="h-8 w-8 flex-shrink-0">
                     <AvatarImage src="" alt={review.memberFirm} />
@@ -105,26 +112,18 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
                   </Avatar>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <h3 className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 truncate" title={review.memberFirm}>
+                      <h3 className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 truncate group-hover:text-primary transition-colors" title={review.memberFirm}>
                         {review.memberFirm}
                       </h3>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    setIsExpanded(!isExpanded)
-                  }}
-                  className="text-neutral-500 hover:text-neutral-700 h-5 w-5 p-0 flex-shrink-0"
-                >
+                      <div className="text-neutral-500 group-hover:text-neutral-700 dark:group-hover:text-neutral-300 h-5 w-5 p-0 flex-shrink-0 flex items-center justify-center transition-colors">
                         {isExpanded ? (
                           <ChevronUp className="h-3 w-3" />
                         ) : (
                           <ChevronDown className="h-3 w-3" />
                         )}
-                      </Button>
+                      </div>
                     </div>
-                    <p className="text-xs text-neutral-600 dark:text-neutral-400 truncate" title={review.type}>
+                    <p className="text-xs text-neutral-600 dark:text-neutral-400 truncate group-hover:text-neutral-500 transition-colors" title={review.type}>
                       {review.type}
                     </p>
                   </div>
@@ -240,62 +239,55 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
 
             {/* Expandable Content */}
             <div className={`transition-all duration-300 overflow-hidden ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-              <div className="space-y-3 pt-2 border-t border-neutral-200 dark:border-neutral-700">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-1 text-xs text-neutral-500 dark:text-neutral-400">
-                      <User className="h-3 w-3" />
-                      <span className="font-medium">Reviewer</span>
-                    </div>
-                    <div className="text-xs font-medium text-neutral-900 dark:text-neutral-100 truncate" title={review.reviewer}>
-                      {review.reviewer}
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-1 text-xs text-neutral-500 dark:text-neutral-400">
-                      <MapPin className="h-3 w-3" />
-                      <span className="font-medium">Country</span>
-                    </div>
-                    <div className="text-xs font-medium text-neutral-900 dark:text-neutral-100 truncate" title={review.country}>
-                      {review.country}
-                    </div>
-                  </div>
-                </div>
+              <div className="pt-3 border-t border-neutral-200 dark:border-neutral-700">
+                <DetailContainer>
+                  <StatsGrid 
+                    stats={[
+                      { icon: User, label: "Reviewer", value: review.reviewer },
+                      { icon: MapPin, label: "Country", value: review.country }
+                    ]}
+                  />
 
-                {/* Additional Status Badges */}
-                <div className="flex flex-wrap gap-1">
-                  <Badge variant="outline" className={`${getPriorityColor(review.priority)} text-xs px-2 py-0.5`}>
-                    {review.priority}
-                  </Badge>
-                  {review.previousRating && (
-                    <Badge variant="outline" className="bg-muted text-xs px-2 py-0.5">
-                      Previous: {review.previousRating}/5
-                    </Badge>
+                  <div className="space-y-2">
+                    <div className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">Additional Details</div>
+                    <div className="flex flex-wrap gap-1">
+                      <Badge variant="outline" className={`${getPriorityColor(review.priority)} text-xs px-2 py-0.5`}>
+                        {review.priority}
+                      </Badge>
+                      {review.previousRating && (
+                        <Badge variant="outline" className="bg-muted text-xs px-2 py-0.5">
+                          Previous: {review.previousRating}/5
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">Status</div>
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div className="flex items-center gap-1">
+                        <span className="text-neutral-500">Reviewer:</span>
+                        <Badge variant="outline" className={`${getReviewerStatusColor(review.reviewerStatus)} text-xs px-2 py-0.5`}>
+                          {review.reviewerStatus}
+                        </Badge>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <span className="text-neutral-500">Partner:</span>
+                        <Badge variant="outline" className={`${getReviewerStatusColor(review.partnerStatus)} text-xs px-2 py-0.5`}>
+                          {review.partnerStatus}
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+
+                  {review.description && (
+                    <div className="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-md">
+                      <div className="text-xs text-neutral-600 dark:text-neutral-400 line-clamp-2">
+                        {review.description}
+                      </div>
+                    </div>
                   )}
-                </div>
-
-                {/* Status Section */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                  <div>
-                    <span className="text-neutral-500 font-medium">Reviewer:</span>
-                    <Badge variant="outline" className={`ml-1 ${getReviewerStatusColor(review.reviewerStatus)} text-xs px-2 py-0.5`}>
-                      {review.reviewerStatus}
-                    </Badge>
-                  </div>
-                  <div>
-                    <span className="text-neutral-500 font-medium">Partner:</span>
-                    <Badge variant="outline" className={`ml-1 ${getReviewerStatusColor(review.partnerStatus)} text-xs px-2 py-0.5`}>
-                      {review.partnerStatus}
-                    </Badge>
-                  </div>
-                </div>
-
-                {review.description && (
-                  <div className="text-xs text-neutral-600 dark:text-neutral-400 line-clamp-2">
-                    {review.description}
-                  </div>
-                )}
-
+                </DetailContainer>
               </div>
             </div>
 
@@ -317,7 +309,13 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
     >
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
-          <div className="flex items-center gap-3 flex-1 min-w-0">
+          <div 
+            className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer group"
+            onClick={(e) => {
+              e.stopPropagation()
+              setIsExpanded(!isExpanded)
+            }}
+          >
             <Avatar className="h-10 w-10 flex-shrink-0">
               <AvatarImage src="" alt={review.memberFirm} />
               <AvatarFallback className={`${generateFirmAvatarColor(review.memberFirm)} text-sm font-semibold`}>
@@ -325,10 +323,10 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
               </AvatarFallback>
             </Avatar>
             <div className="min-w-0 flex-1">
-              <CardTitle className="text-base truncate" title={review.memberFirm}>
+              <CardTitle className="text-base truncate group-hover:text-primary transition-colors" title={review.memberFirm}>
                 {review.memberFirm}
               </CardTitle>
-              <CardDescription className="text-xs truncate" title={review.type}>
+              <CardDescription className="text-xs truncate group-hover:text-neutral-500 transition-colors" title={review.type}>
                 {review.type}
               </CardDescription>
             </div>
@@ -429,62 +427,55 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
 
         {/* Expandable Content */}
         <div className={`transition-all duration-300 overflow-hidden ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-          <div className="space-y-3 pt-2 border-t border-neutral-200 dark:border-neutral-700">
-              <div className="grid grid-cols-2 gap-3 text-sm">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-1 text-xs text-neutral-500 dark:text-neutral-400">
-                    <User className="h-3 w-3" />
-                    <span className="font-medium">Reviewer</span>
-                  </div>
-                  <div className="text-xs font-medium text-neutral-900 dark:text-neutral-100 truncate" title={review.reviewer}>
-                    {review.reviewer}
-                  </div>
+          <div className="pt-3 border-t border-neutral-200 dark:border-neutral-700">
+            <DetailContainer>
+              <StatsGrid 
+                stats={[
+                  { icon: User, label: "Reviewer", value: review.reviewer },
+                  { icon: MapPin, label: "Country", value: review.country }
+                ]}
+              />
+
+              <div className="space-y-2">
+                <div className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">Additional Details</div>
+                <div className="flex flex-wrap gap-1">
+                  <Badge variant="outline" className={`${getPriorityColor(review.priority)} text-xs px-2 py-0.5`}>
+                    {review.priority}
+                  </Badge>
+                  {review.previousRating && (
+                    <Badge variant="outline" className="bg-muted text-xs px-2 py-0.5">
+                      Previous: {review.previousRating}/5
+                    </Badge>
+                  )}
                 </div>
-                <div className="space-y-1">
-                  <div className="flex items-center gap-1 text-xs text-neutral-500 dark:text-neutral-400">
-                    <MapPin className="h-3 w-3" />
-                    <span className="font-medium">Country</span>
+              </div>
+
+              <div className="space-y-2">
+                <div className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">Status</div>
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div className="flex items-center gap-1">
+                    <span className="text-neutral-500">Reviewer:</span>
+                    <Badge variant="outline" className={`${getReviewerStatusColor(review.reviewerStatus)} text-xs px-2 py-0.5`}>
+                      {review.reviewerStatus}
+                    </Badge>
                   </div>
-                  <div className="text-xs font-medium text-neutral-900 dark:text-neutral-100 truncate" title={review.country}>
-                    {review.country}
+                  <div className="flex items-center gap-1">
+                    <span className="text-neutral-500">Partner:</span>
+                    <Badge variant="outline" className={`${getReviewerStatusColor(review.partnerStatus)} text-xs px-2 py-0.5`}>
+                      {review.partnerStatus}
+                    </Badge>
                   </div>
                 </div>
               </div>
 
-            {/* Additional Status Badges */}
-            <div className="flex flex-wrap gap-1">
-              <Badge variant="outline" className={`${getPriorityColor(review.priority)} text-xs px-2 py-0.5`}>
-                {review.priority}
-              </Badge>
-              {review.previousRating && (
-                <Badge variant="outline" className="bg-muted text-xs px-2 py-0.5">
-                  Previous: {review.previousRating}/5
-                </Badge>
+              {review.description && (
+                <div className="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-md">
+                  <div className="text-xs text-neutral-600 dark:text-neutral-400 line-clamp-2">
+                    {review.description}
+                  </div>
+                </div>
               )}
-            </div>
-
-            {/* Status Section */}
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <div>
-                <span className="text-neutral-500 font-medium">Reviewer:</span>
-                <Badge variant="outline" className={`ml-1 ${getReviewerStatusColor(review.reviewerStatus)} text-xs px-2 py-0.5`}>
-                  {review.reviewerStatus}
-                </Badge>
-              </div>
-              <div>
-                <span className="text-neutral-500 font-medium">Partner:</span>
-                <Badge variant="outline" className={`ml-1 ${getReviewerStatusColor(review.partnerStatus)} text-xs px-2 py-0.5`}>
-                  {review.partnerStatus}
-                </Badge>
-              </div>
-            </div>
-
-            {review.description && (
-              <div className="text-xs text-neutral-600 dark:text-neutral-400 line-clamp-2">
-                {review.description}
-              </div>
-            )}
-
+            </DetailContainer>
           </div>
         </div>
       </CardContent>

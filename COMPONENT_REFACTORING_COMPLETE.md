@@ -76,12 +76,22 @@ Eliminate ALL hardcoded, duplicated UI code and create truly reusable components
 
 ## 🎨 Consistency Standards Enforced
 
+### **Clickable Expand Area - All Views**
+- ✅ **Entire main info area is clickable** (avatar + name + subtitle)
+- ✅ Wrapped in `<div>` with `onClick` handler
+- ✅ Classes: `cursor-pointer group`
+- ✅ Hover feedback: Title turns primary color
+- ✅ NO separate button click needed - better UX!
+- ❌ **NOT** just the tiny chevron icon
+
 ### **Chevron Icon - List View**
 - ✅ Placement: **Inline with title** (left side, next to name)
-- ✅ Size: `h-5 w-5 p-0`
-- ✅ Color: `text-neutral-500 hover:text-neutral-700`
+- ✅ Changed from Button to `<div>` (visual indicator only)
+- ✅ Size: `h-5 w-5 flex items-center justify-center`
+- ✅ Color: `text-neutral-500 group-hover:text-neutral-700`
 - ✅ Position: `flex-shrink-0` to prevent squishing
 - ❌ **NOT** in actions area (right side)
+- ❌ **NOT** a clickable button (whole area is clickable)
 
 ### **Chevron Button - Card View**
 - ✅ Placement: **Bottom of card** (left side of actions row)
@@ -91,10 +101,25 @@ Eliminate ALL hardcoded, duplicated UI code and create truly reusable components
 - ❌ **NOT** in header for card view
 
 ### **Action Buttons - Card View**
-- ✅ Layout: `flex justify-between items-center pt-1`
+- ✅ Layout: `flex justify-between items-center pt-1 mt-auto`
 - ✅ Left: "Show More/Show Less" button
 - ✅ Right: Action buttons in `flex gap-1` container
+- ✅ Pushed to bottom with `mt-auto`
 - ✅ Consistent across all item types
+
+### **Card Heights - Grid Behavior**
+- ✅ Cards: `h-full flex flex-col` (fills grid cell)
+- ✅ CardContent: `flex-1 flex flex-col` (grows to fill)
+- ✅ Actions: `mt-auto` (pushed to bottom)
+- ✅ **All cards in a row match tallest card height**
+- ❌ **NOT** using `h-fit` (causes uneven heights)
+
+### **Hover Effects (Visual Feedback)**
+- ✅ Title: `group-hover:text-primary transition-colors`
+- ✅ Subtitle: `group-hover:text-neutral-500 transition-colors`
+- ✅ Chevron: `group-hover:text-neutral-700 transition-colors`
+- ✅ Smooth color transitions on all text
+- ✅ Clear indication of clickable area
 
 ### **Expand Animation**
 - ✅ Method: `transition-all duration-300 overflow-hidden`
