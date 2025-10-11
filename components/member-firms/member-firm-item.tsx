@@ -8,8 +8,7 @@ import {
   Users,
   Building,
   Phone,
-  Mail,
-  Eye
+  Mail
 } from "lucide-react"
 import { StatsGrid, ContactSection, BadgeList, DetailContainer } from "@/components/shared/detail-sections"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -164,25 +163,8 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
     </DetailContainer>
   )
 
-  // Dropdown actions
+  // No dropdown actions for member firms
   const dropdownActions: DropdownAction[] = []
-  
-  if (onEdit) {
-    dropdownActions.push({
-      icon: <Eye className="mr-2 h-4 w-4" />,
-      label: "Edit",
-      onClick: () => onEdit(memberFirm)
-    })
-  }
-  
-  if (onDelete) {
-    dropdownActions.push({
-      icon: <Eye className="mr-2 h-4 w-4" />,
-      label: "Delete",
-      onClick: () => onDelete(memberFirm),
-      variant: "destructive"
-    })
-  }
 
   // Quick actions for card view
   const quickActions = viewMode === "card" && onReview ? (
@@ -202,7 +184,7 @@ export function MemberFirmItem({ memberFirm, viewMode, onView, onEdit, onDelete,
 
   // Primary action for list view
   const primaryAction = viewMode === "list" && onReview ? {
-    icon: <Eye className="h-3 w-3" />,
+    icon: <Star className="h-3 w-3" />,
     label: "Review",
     onClick: () => onReview(memberFirm)
   } : undefined
