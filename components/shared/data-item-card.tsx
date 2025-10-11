@@ -208,10 +208,16 @@ export function DataItemCard({
 
   // Card view
   return (
-    <Card className={cn(
-      "shadow-none border-none bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-300 h-full flex flex-col",
-      className
-    )}>
+    <Card 
+      className={cn(
+        "shadow-none border-none transition-all duration-300 h-full flex flex-col cursor-pointer",
+        isSelected 
+          ? "bg-primary/10 dark:bg-primary/20 hover:bg-primary/10 dark:hover:bg-primary/20 border-l-4 border-l-primary" 
+          : "bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800",
+        className
+      )}
+      onClick={onClick}
+    >
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div 
