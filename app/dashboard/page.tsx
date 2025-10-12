@@ -110,14 +110,14 @@ export default function Page() {
             <div className="absolute inset-0 bg-gradient-to-tl from-primary/8 via-transparent to-primary/6 pointer-events-none animate-gradient-wave" style={{ animationDelay: '2s' }} />
             <div className="absolute -right-20 -top-20 h-40 w-40 sm:h-60 sm:w-60 rounded-full bg-gradient-radial from-primary/20 to-transparent blur-3xl animate-gradient-radial-pulse" />
             <div className="absolute -left-10 -bottom-10 h-32 w-32 sm:h-48 sm:w-48 rounded-full bg-gradient-radial from-primary/15 to-transparent blur-2xl animate-float-blur" />
-            <div className="relative space-y-2 sm:space-y-3">
+             <div className="relative space-y-2 sm:space-y-3">
               <div className="flex items-center gap-2 sm:gap-3">
                 <div className="relative h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-gradient-to-br from-primary to-primary/50 flex items-center justify-center shadow-lg flex-shrink-0 animate-gradient-pulse-breathe">
                   <div className="absolute inset-0 rounded-full bg-gradient-radial from-primary/40 to-transparent animate-gradient-radial-pulse" />
                   <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-primary-foreground relative z-10" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent break-words animate-text-shimmer">
+                  <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold ">
                     Welcome back, {session?.user?.name?.split(' ')[0] || 'Admin'}! 👋
                   </h1>
                   <p className="text-muted-foreground mt-1 text-xs sm:text-sm md:text-base lg:text-lg">
