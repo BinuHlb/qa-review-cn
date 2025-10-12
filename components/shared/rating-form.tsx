@@ -10,10 +10,11 @@ import { ActionPanelFormSection } from "@/components/shared/action-panel-layout"
 import { Star, Send, ThumbsUp, ThumbsDown } from "lucide-react"
 import { getGradeColor } from "@/lib/mock-data"
 import { cn } from "@/lib/utils"
+import type { GradeValue } from "@/lib/constants"
 
 interface RatingFormProps {
   /** Current/previous grade to display as reference */
-  currentGrade?: string
+  currentGrade?: GradeValue
   /** Initial grade value */
   initialGrade?: string
   /** Initial notes value */

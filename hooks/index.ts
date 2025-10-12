@@ -16,7 +16,7 @@ export type { UsePageFiltersConfig, UsePageFiltersReturn } from "./use-page-filt
 export type { UsePageStateConfig, UsePageStateReturn } from "./use-page-state"
 
 // UI-specific hooks
-export { useMobile } from "./use-mobile"
+export { useIsMobile } from "./use-mobile"
 export { useToast } from "./use-toast"
 
 // Redux hooks
