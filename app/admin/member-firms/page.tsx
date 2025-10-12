@@ -1,18 +1,18 @@
 "use client"
 
 import { useState, useMemo, useCallback } from "react"
-import { DashboardLayout } from "@/components/shared/dashboard-layout"
-import { ListDetailLayout } from "@/components/shared/list-detail-layout"
-import { MemberFirmView } from "@/components/member-firms/member-firm-view"
-import { MemberFirmActionPanel } from "@/components/member-firms/member-firm-action-panel"
+import { DashboardLayout } from "@/components/layouts/dashboard-layout"
+import { ListDetailLayout } from "@/components/layouts/list-detail-layout"
+import { MemberFirmView } from "@/components/features/member-firms/member-firm-view"
+import { MemberFirmActionPanel } from "@/components/features/member-firms/member-firm-action-panel"
 import { useToast } from "@/hooks/use-toast"
 import { 
   mockMemberFirms, 
   type MemberFirm
 } from "@/lib/member-firms-mock-data"
 import { Building2, MapPin, Target, AlertTriangle, FileText } from "lucide-react"
-import { DataFilterBar } from "@/components/shared/data-filter-bar"
-import { EmptyState } from "@/components/shared/empty-state"
+import { DataFilterBar } from "@/components/common/data-display/data-filter-bar"
+import { EmptyState } from "@/components/common/empty-state"
 
 export default function AdminMemberFirmsPage() {
   const [memberFirms] = useState<MemberFirm[]>(mockMemberFirms)

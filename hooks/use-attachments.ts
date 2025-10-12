@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useCallback } from "react"
-import { Attachment } from "@/components/shared/attachments-section"
+import { Attachment } from "@/components/common/documents/attachments-section"
 
 interface UseAttachmentsProps {
   initialAttachments?: Attachment[]

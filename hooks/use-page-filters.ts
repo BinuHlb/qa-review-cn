@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "react"
-import type { FilterConfig } from "@/components/shared/data-filter-bar"
+import type { FilterConfig } from "@/components/common/data-display/data-filter-bar"
 
 export interface UsePageFiltersConfig {
   filters: FilterConfig[]

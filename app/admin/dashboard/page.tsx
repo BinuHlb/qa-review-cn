@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import { DashboardLayout } from "@/components/shared/dashboard-layout"
-import { DashboardStatCard } from "@/components/shared/dashboard-stat-card"
+import { DashboardLayout } from "@/components/layouts/dashboard-layout"
+import { DashboardStatCard } from "@/components/common/dashboard-stat-card"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"

@@ -7,12 +7,12 @@ import {
   SidebarProvider,
 } from "@/components/ui/sidebar"
 import { DashboardHeader } from "@/components/dashboard-header"
-import { ListDetailLayout } from "@/components/shared/list-detail-layout"
-import { EmptyState } from "@/components/shared/empty-state"
-import { ReviewView } from "@/components/reviews/review-view"
-import { FinalReviewScreen } from "@/components/reviews/final-review-screen"
+import { ListDetailLayout } from "@/components/layouts/list-detail-layout"
+import { EmptyState } from "@/components/common/empty-state"
+import { ReviewView } from "@/components/features/reviews/review-view"
+import { FinalReviewScreen } from "@/components/features/reviews/final-review-screen"
 import { Star, Award, MapPin, CheckCircle2, Flag } from "lucide-react"
-import { DataFilterBar } from "@/components/shared/data-filter-bar"
+import { DataFilterBar } from "@/components/common/data-display/data-filter-bar"
 
 import { mockReviews } from "@/lib/mock-data"
 import { type Review } from "@/lib/schemas/review.schema"

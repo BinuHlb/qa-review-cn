@@ -1,6 +1,6 @@
 "use client"
 
-import { DashboardLayout } from "@/components/shared/dashboard-layout"
+import { DashboardLayout } from "@/components/layouts/dashboard-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default function FirmDashboardPage() {

@@ -1,10 +1,10 @@
 "use client"
 
 import { useMemo } from "react"
-import { DashboardLayout } from "@/components/shared/dashboard-layout"
+import { DashboardLayout } from "@/components/layouts/dashboard-layout"
 import { Card, CardContent } from "@/components/ui/card"
-import { TaskCard, TaskItem, EmptyTaskState } from "@/components/shared/task-card"
-import { WorkflowStatusBadge } from "@/components/shared/workflow-status-badge"
+import { TaskCard, TaskItem, EmptyTaskState } from "@/components/common/task-card"
+import { WorkflowStatusBadge } from "@/components/common/workflow-status-badge"
 import { Button } from "@/components/ui/button"
 import { 
   Award,

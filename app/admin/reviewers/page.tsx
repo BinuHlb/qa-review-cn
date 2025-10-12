@@ -7,16 +7,16 @@ import {
   SidebarProvider,
 } from "@/components/ui/sidebar"
 import { DashboardHeader } from "@/components/dashboard-header"
-import { ListDetailLayout } from "@/components/shared/list-detail-layout"
-import { EmptyState } from "@/components/shared/empty-state"
-import { ReviewView } from "@/components/reviews/review-view"
-import { ReviewActionPanel } from "@/components/reviews/review-action-panel"
+import { ListDetailLayout } from "@/components/layouts/list-detail-layout"
+import { EmptyState } from "@/components/common/empty-state"
+import { ReviewView } from "@/components/features/reviews/review-view"
+import { ReviewActionPanel } from "@/components/features/reviews/review-action-panel"
 import { Award, MapPin, CheckCircle2, Flag, UserCheck } from "lucide-react"
-import { DataFilterBar } from "@/components/shared/data-filter-bar"
+import { DataFilterBar } from "@/components/common/data-display/data-filter-bar"
 
 import { mockReviews } from "@/lib/mock-data"
 import type { Review } from "@/types/entities"
-import { type Attachment } from "@/components/shared/attachments-section"
+import { type Attachment } from "@/components/common/documents/attachments-section"
 
 export default function AdminReviewersPage() {
   const [reviews, setReviews] = useState<Review[]>([])

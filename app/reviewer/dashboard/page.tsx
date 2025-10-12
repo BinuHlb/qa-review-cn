@@ -1,11 +1,11 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import { DashboardLayout } from "@/components/shared/dashboard-layout"
+import { DashboardLayout } from "@/components/layouts/dashboard-layout"
 import { Card, CardContent } from "@/components/ui/card"
-import { TaskCard, TaskItem, EmptyTaskState } from "@/components/shared/task-card"
-import { WorkflowStatusBadge } from "@/components/shared/workflow-status-badge"
-import { PercentageBadge } from "@/components/shared/percentage-badge"
+import { TaskCard, TaskItem, EmptyTaskState } from "@/components/common/task-card"
+import { WorkflowStatusBadge } from "@/components/common/workflow-status-badge"
+import { PercentageBadge } from "@/components/common/percentage-badge"
 import { 
   AlertCircle, 
   FileText, 
@@ -16,8 +16,8 @@ import {
 import workflowMockReviews from "@/lib/mock-data-workflow"
 import { formatDate } from "@/lib/utils/formatters"
 import { DATE_FORMATS } from "@/lib/constants"
-import { AcceptanceDrawer } from "@/components/reviews/workflow/acceptance-drawer"
-import { ReviewerWorkDrawer } from "@/components/reviews/workflow/reviewer-work-drawer"
+import { AcceptanceDrawer } from "@/components/features/reviews/workflow/acceptance-drawer"
+import { ReviewerWorkDrawer } from "@/components/features/reviews/workflow/reviewer-work-drawer"
 import { WorkflowService } from "@/lib/services/workflow-service"
 import { NotificationService } from "@/lib/services/notification-service"
 import { useToast } from "@/hooks/use-toast"

@@ -1,8 +1,8 @@
 "use client"
 
-import { DualSidebarLayout } from "@/components/shared/dual-sidebar-layout"
-import { ReviewView } from "@/components/reviews/review-view"
-import { ReduxReviewFilters } from "@/components/reviews/redux-review-filters"
+import { DualSidebarLayout } from "@/components/layouts/dual-sidebar-layout"
+import { ReviewView } from "@/components/features/reviews/review-view"
+import { ReduxReviewFilters } from "@/components/features/reviews/redux-review-filters"
 import { useReduxReviews } from "@/hooks/use-redux-reviews"
 import { useEffect } from "react"
 

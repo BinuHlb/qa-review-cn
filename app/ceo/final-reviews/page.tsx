@@ -7,8 +7,8 @@ import {
   SidebarProvider,
 } from "@/components/ui/sidebar"
 import { DashboardHeader } from "@/components/dashboard-header"
-import { ReviewView } from "@/components/reviews/review-view"
-import { FinalReviewScreen } from "@/components/reviews/final-review-screen"
+import { ReviewView } from "@/components/features/reviews/review-view"
+import { FinalReviewScreen } from "@/components/features/reviews/final-review-screen"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"

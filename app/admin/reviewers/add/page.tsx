@@ -10,11 +10,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { FormLayout } from "@/components/shared/form-layout"
-import { FormSection } from "@/components/shared/form-section"
-import { FormField } from "@/components/shared/form-field"
-import { GridForm } from "@/components/shared/grid-form"
-import { DynamicTags } from "@/components/shared/dynamic-tags"
+import { FormLayout } from "@/components/common/forms/form-layout"
+import { FormSection } from "@/components/common/forms/form-section"
+import { FormField } from "@/components/common/forms/form-field"
+import { GridForm } from "@/components/common/forms/grid-form"
+import { DynamicTags } from "@/components/common/dynamic-tags"
 import { Save } from "lucide-react"
 
 export default function AddReviewerPage() {
