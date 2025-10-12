@@ -52,7 +52,7 @@ export interface UseListDetailPageReturn<T> {
   filteredCount: number
 }
 
-export function useListDetailPage<T extends Record<string, unknown>>({
+export function useListDetailPage<T extends Record<string, any>>({
   data,
   searchFields,
   filterConfigs,

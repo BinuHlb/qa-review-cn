@@ -1,70 +1,25 @@
 "use client"
 
 import { useState, useMemo, useCallback } from "react"
-import { DashboardLayout } from "@/components/layouts/dashboard-layout"
-import { ListDetailLayout } from "@/components/layouts/list-detail-layout"
+import { ListDetailPageLayout } from "@/components/layouts"
+import { useListDetailPage } from "@/hooks"
 import { MemberFirmView } from "@/components/features/member-firms/member-firm-view"
 import { MemberFirmActionPanel } from "@/components/features/member-firms/member-firm-action-panel"
 import { useToast } from "@/hooks/use-toast"
-import { 
-  mockMemberFirms, 
-  type MemberFirm
-} from "@/lib/member-firms-mock-data"
+import { mockMemberFirms, type MemberFirm } from "@/lib/member-firms-mock-data"
 import { Building2, MapPin, Target, AlertTriangle, FileText } from "lucide-react"
-import { DataFilterBar } from "@/components/common/data-display/data-filter-bar"
-import { EmptyState } from "@/components/common/empty-state"
 
 export default function AdminMemberFirmsPage() {
   const [memberFirms] = useState<MemberFirm[]>(mockMemberFirms)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [statusFilter, setStatusFilter] = useState<string>("all")
-  const [typeFilter, setTypeFilter] = useState<string>("all")
-  const [regionFilter, setRegionFilter] = useState<string>("all")
-  const [riskLevelFilter, setRiskLevelFilter] = useState<string>("all")
-  const [viewMode, setViewMode] = useState<"list" | "card">("list")
-  const [selectedFirm, setSelectedFirm] = useState<MemberFirm | null>(null)
   const { toast } = useToast()
 
-  // Memoized filtered member firms
-  const filteredMemberFirms = useMemo(() => {
-    let filtered = memberFirms
-
-    // Search filter
-    if (searchTerm) {
-      const searchLower = searchTerm.toLowerCase()
-      filtered = filtered.filter(
-        (firm) =>
-          firm.name.toLowerCase().includes(searchLower) ||
-          firm.location.toLowerCase().includes(searchLower) ||
-          firm.country.toLowerCase().includes(searchLower) ||
-          firm.specializations.some(spec => 
-            spec.toLowerCase().includes(searchLower)
-          )
-      )
-    }
-
-    // Status filter
-    if (statusFilter !== "all") {
-      filtered = filtered.filter((firm) => firm.status === statusFilter)
-    }
-
-    // Type filter
-    if (typeFilter !== "all") {
-      filtered = filtered.filter((firm) => firm.type === typeFilter)
-    }
-
-    // Region filter
-    if (regionFilter !== "all") {
-      filtered = filtered.filter((firm) => firm.region === regionFilter)
-    }
-
-    // Risk level filter
-    if (riskLevelFilter !== "all") {
-      filtered = filtered.filter((firm) => firm.riskLevel === riskLevelFilter)
-    }
-
-    return filtered
-  }, [memberFirms, searchTerm, statusFilter, typeFilter, regionFilter, riskLevelFilter])
+  // Use the unified hook for page state management
+  const pageState = useListDetailPage<MemberFirm>({
+    data: memberFirms,
+    searchFields: ['name', 'location', 'country'],
+    getItemId: (firm) => firm.id,
+    initialViewMode: "list"
+  })
 
   // Get unique values for filters
   const uniqueStatuses = useMemo(() => 
@@ -84,21 +39,8 @@ export default function AdminMemberFirmsPage() {
     [memberFirms]
   )
 
-  const hasActiveFilters = useMemo(() => 
-    Boolean(searchTerm || statusFilter !== "all" || typeFilter !== "all" || regionFilter !== "all" || riskLevelFilter !== "all"),
-    [searchTerm, statusFilter, typeFilter, regionFilter, riskLevelFilter]
-  )
-
-  const clearFilters = useCallback(() => {
-    setSearchTerm("")
-    setStatusFilter("all")
-    setTypeFilter("all")
-    setRegionFilter("all")
-    setRiskLevelFilter("all")
-  }, [])
-
-  // Filter configuration for DataFilterBar
-  const filters = useMemo(() => [
+  // Filter configuration
+  const filterConfigs = useMemo(() => [
     {
       key: "status",
       placeholder: "Status",
@@ -140,120 +82,93 @@ export default function AdminMemberFirmsPage() {
     }
   ], [uniqueStatuses, uniqueTypes, uniqueRegions, uniqueRiskLevels])
 
-  const filterValues = useMemo(() => ({
-    status: statusFilter,
-    type: typeFilter,
-    region: regionFilter,
-    riskLevel: riskLevelFilter
-  }), [statusFilter, typeFilter, regionFilter, riskLevelFilter])
-
   const handleFilterChange = useCallback((key: string, value: string) => {
-    switch (key) {
-      case "status": setStatusFilter(value); break
-      case "type": setTypeFilter(value); break
-      case "region": setRegionFilter(value); break
-      case "riskLevel": setRiskLevelFilter(value); break
-    }
+    pageState.setFilter(key, value)
+  }, [pageState])
+
+  const handleViewMemberFirm = useCallback((memberFirm: MemberFirm) => {
+    console.log("View member firm:", memberFirm)
   }, [])
 
-  const handleViewMemberFirm = (memberFirm: MemberFirm) => {
-    console.log("View member firm:", memberFirm)
-    // TODO: Implement view member firm functionality
-  }
-
-  const handleEditMemberFirm = (memberFirm: MemberFirm) => {
+  const handleEditMemberFirm = useCallback((memberFirm: MemberFirm) => {
     console.log("Edit member firm:", memberFirm)
-    // TODO: Implement edit member firm functionality
-  }
+  }, [])
 
-  const handleDeleteMemberFirm = (memberFirm: MemberFirm) => {
+  const handleDeleteMemberFirm = useCallback((memberFirm: MemberFirm) => {
     console.log("Delete member firm:", memberFirm)
-    // TODO: Implement delete member firm functionality
-  }
+  }, [])
 
-  const handleReviewMemberFirm = (memberFirm: MemberFirm) => {
-    setSelectedFirm(memberFirm)
-  }
+  const handleReviewMemberFirm = useCallback((memberFirm: MemberFirm) => {
+    pageState.selectItem(memberFirm)
+  }, [pageState])
 
-  const handleAcceptReview = async (firmId: string, notes: string) => {
+  const handleAcceptReview = useCallback(async (firmId: string, notes: string) => {
     console.log("Accept review for firm:", firmId, "Notes:", notes)
-    // TODO: Implement accept review API call
     toast({
       title: "Review Accepted",
-      description: `Successfully accepted the review for ${selectedFirm?.name}`,
+      description: `Successfully accepted the review for ${pageState.selectedItem?.name}`,
     })
-  }
+  }, [pageState.selectedItem, toast])
 
-  const handleRejectReview = async (firmId: string, notes: string) => {
+  const handleRejectReview = useCallback(async (firmId: string, notes: string) => {
     console.log("Reject review for firm:", firmId, "Notes:", notes)
-    // TODO: Implement reject review API call
     toast({
       title: "Review Rejected",
-      description: `Review rejected for ${selectedFirm?.name}`,
+      description: `Review rejected for ${pageState.selectedItem?.name}`,
       variant: "destructive"
     })
-  }
+  }, [pageState.selectedItem, toast])
+
+  // Empty state configuration
+  const emptyStateConfig = useMemo(() => ({
+    icon: FileText,
+    iconColor: "text-primary",
+    iconBgColor: "bg-primary/10",
+    title: "No Firm Selected",
+    description: "Select a member firm from the list to review details and take action",
+    badge: {
+      text: `${memberFirms.length} member firms`,
+      variant: "outline" as const
+    }
+  }), [memberFirms.length])
 
   return (
-    <DashboardLayout 
-      noPadding
-      search={{
-        searchTerm,
-        searchPlaceholder: "Search member firms...",
-        onSearchChange: setSearchTerm
-      }}
-    >
-      <ListDetailLayout
-        listContent={
-          <>
-            {/* Header with Filters */}
-            <div className="flex-shrink-0 mb-6">
-              <DataFilterBar
-                showSearch={false}
-                filters={filters}
-                filterValues={filterValues}
-                onFilterChange={handleFilterChange}
-                showViewToggle={true}
-                viewMode={viewMode}
-                onViewModeChange={setViewMode}
-                hasActiveFilters={hasActiveFilters}
-                onClearFilters={clearFilters}
-                resultCount={filteredMemberFirms.length}
-                totalCount={memberFirms.length}
-              />
-            </div>
-
-            {/* Member Firms List */}
-            <div className="flex-1 min-h-0 overflow-y-auto">
-              <MemberFirmView
-                memberFirms={filteredMemberFirms}
-                viewMode={viewMode}
-                selectedFirm={selectedFirm}
-                onView={handleViewMemberFirm}
-                onEdit={handleEditMemberFirm}
-                onDelete={handleDeleteMemberFirm}
-                onReview={handleReviewMemberFirm}
-              />
-            </div>
-          </>
-        }
-        detailContent={
-          selectedFirm ? (
-            <MemberFirmActionPanel
-              memberFirm={selectedFirm}
-              onAccept={handleAcceptReview}
-              onReject={handleRejectReview}
-            />
-          ) : (
-            <EmptyState
-              icon={FileText}
-              title="No Firm Selected"
-              description="Select a member firm from the list to review details and take action"
-            />
-          )
-        }
-        detailScrollable={false}
-      />
-    </DashboardLayout>
+    <ListDetailPageLayout
+      searchTerm={pageState.searchTerm}
+      searchPlaceholder="Search member firms..."
+      onSearchChange={pageState.setSearchTerm}
+      filters={filterConfigs}
+      filterValues={pageState.filters}
+      onFilterChange={handleFilterChange}
+      hasActiveFilters={pageState.hasActiveFilters}
+      onClearFilters={pageState.clearFilters}
+      showViewToggle={true}
+      viewMode={pageState.viewMode}
+      onViewModeChange={pageState.setViewMode}
+      resultCount={pageState.filteredCount}
+      totalCount={pageState.totalCount}
+      listContent={
+        <MemberFirmView
+          memberFirms={pageState.filteredData}
+          viewMode={pageState.viewMode}
+          selectedFirm={pageState.selectedItem}
+          onView={handleViewMemberFirm}
+          onEdit={handleEditMemberFirm}
+          onDelete={handleDeleteMemberFirm}
+          onReview={handleReviewMemberFirm}
+        />
+      }
+      detailContent={
+        pageState.selectedItem ? (
+          <MemberFirmActionPanel
+            memberFirm={pageState.selectedItem}
+            onAccept={handleAcceptReview}
+            onReject={handleRejectReview}
+          />
+        ) : null
+      }
+      emptyStateConfig={emptyStateConfig}
+      detailScrollable={false}
+    />
   )
 }

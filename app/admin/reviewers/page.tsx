@@ -1,90 +1,34 @@
 "use client"
 
 import { useState, useEffect, useMemo, useCallback } from "react"
-import { AppSidebar } from "@/components/app-sidebar"
-import { 
-  SidebarInset,
-  SidebarProvider,
-} from "@/components/ui/sidebar"
-import { DashboardHeader } from "@/components/dashboard-header"
-import { ListDetailLayout } from "@/components/layouts/list-detail-layout"
-import { EmptyState } from "@/components/common/empty-state"
+import { ListDetailPageLayout } from "@/components/layouts"
+import { useListDetailPage } from "@/hooks"
 import { ReviewView } from "@/components/features/reviews/review-view"
 import { ReviewActionPanel } from "@/components/features/reviews/review-action-panel"
 import { Award, MapPin, CheckCircle2, Flag, UserCheck } from "lucide-react"
-import { DataFilterBar } from "@/components/common/data-display/data-filter-bar"
-
 import { mockReviews } from "@/lib/mock-data"
 import type { Review } from "@/types/entities"
 import { type Attachment } from "@/components/common/documents/attachments-section"
 
 export default function AdminReviewersPage() {
   const [reviews, setReviews] = useState<Review[]>([])
-  const [viewMode, setViewMode] = useState<"list" | "card">("list")
-  const [searchTerm, setSearchTerm] = useState("")
-  const [statusFilter, setStatusFilter] = useState<string>("all")
-  const [gradeFilter, setGradeFilter] = useState<string>("all")
-  const [priorityFilter, setPriorityFilter] = useState<string>("all")
-  const [countryFilter, setCountryFilter] = useState<string>("all")
-  const [selectedReview, setSelectedReview] = useState<Review | null>(null)
   const [reviewAttachments, setReviewAttachments] = useState<Record<string, Attachment[]>>({})
 
   // Load assigned reviews (reviews that have been assigned to reviewers)
   useEffect(() => {
-    // Filter reviews that are assigned (have a reviewer and not pending)
     const assignedReviews = mockReviews.filter(review => 
       review.status !== 'Pending' && review.reviewer
     )
     setReviews(assignedReviews)
   }, [])
 
-  // Memoized filtered reviews based on all filter criteria
-  const filteredReviews = useMemo(() => {
-    let filtered = reviews
-
-    // Search filter
-    if (searchTerm) {
-      const searchLower = searchTerm.toLowerCase()
-      filtered = filtered.filter(
-        (review) =>
-          review.memberFirm.toLowerCase().includes(searchLower) ||
-          review.reviewer.toLowerCase().includes(searchLower) ||
-          review.type.toLowerCase().includes(searchLower) ||
-          review.country.toLowerCase().includes(searchLower)
-      )
-    }
-
-    // Status filter
-    if (statusFilter !== "all") {
-      filtered = filtered.filter((review) => review.status === statusFilter)
-    }
-
-    // Grade filter
-    if (gradeFilter !== "all") {
-      filtered = filtered.filter((review) => review.currentGrade === gradeFilter)
-    }
-
-    // Priority filter
-    if (priorityFilter !== "all") {
-      filtered = filtered.filter((review) => review.priority === priorityFilter)
-    }
-
-    // Country filter
-    if (countryFilter !== "all") {
-      filtered = filtered.filter((review) => review.country === countryFilter)
-    }
-
-    return filtered
-  }, [reviews, searchTerm, statusFilter, gradeFilter, priorityFilter, countryFilter])
-
-  // Clear selection if filtered reviews change and selected review is no longer in the list
-  useEffect(() => {
-    if (filteredReviews.length === 0) {
-      setSelectedReview(null)
-    } else if (selectedReview && !filteredReviews.find(r => r.id === selectedReview.id)) {
-      setSelectedReview(null)
-    }
-  }, [filteredReviews, selectedReview])
+  // Use the unified hook for page state management
+  const pageState = useListDetailPage({
+    data: reviews,
+    searchFields: ['memberFirm', 'reviewer', 'type', 'country'],
+    getItemId: (review) => review.id,
+    initialViewMode: "list"
+  })
 
   // Memoized unique filter values
   const uniqueCountries = useMemo(() => 
@@ -107,26 +51,8 @@ export default function AdminReviewersPage() {
     [reviews]
   )
 
-  const hasActiveFilters = useMemo(() => 
-    Boolean(searchTerm || statusFilter !== "all" || gradeFilter !== "all" || priorityFilter !== "all" || countryFilter !== "all"),
-    [searchTerm, statusFilter, gradeFilter, priorityFilter, countryFilter]
-  )
-
-  // Handlers
-  const handleViewReview = useCallback((review: Review) => {
-    setSelectedReview(prev => prev?.id === review.id ? null : review)
-  }, [])
-
-  const clearFilters = useCallback(() => {
-    setSearchTerm("")
-    setStatusFilter("all")
-    setGradeFilter("all")
-    setPriorityFilter("all")
-    setCountryFilter("all")
-  }, [])
-
-  // Filter configuration for DataFilterBar
-  const filters = useMemo(() => [
+  // Filter configuration
+  const filterConfigs = useMemo(() => [
     {
       key: "status",
       placeholder: "Status",
@@ -165,21 +91,9 @@ export default function AdminReviewersPage() {
     }
   ], [uniqueStatuses, uniqueGrades, uniquePriorities, uniqueCountries])
 
-  const filterValues = useMemo(() => ({
-    status: statusFilter,
-    grade: gradeFilter,
-    priority: priorityFilter,
-    country: countryFilter
-  }), [statusFilter, gradeFilter, priorityFilter, countryFilter])
-
   const handleFilterChange = useCallback((key: string, value: string) => {
-    switch (key) {
-      case "status": setStatusFilter(value); break
-      case "grade": setGradeFilter(value); break
-      case "priority": setPriorityFilter(value); break
-      case "country": setCountryFilter(value); break
-    }
-  }, [])
+    pageState.setFilter(key, value)
+  }, [pageState])
 
   // Attachment handlers
   const handleAttachmentUpload = useCallback(async (reviewId: string, files: File[]): Promise<Attachment[]> => {
@@ -216,24 +130,21 @@ export default function AdminReviewersPage() {
   }, [])
 
   const handleSubmitRating = useCallback(async (reviewId: string, grade: string, notes: string) => {
-    // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000))
     
     console.log('Submitting rating:', { reviewId, grade, notes })
     
-    // Update the review with new grade
     setReviews(prev => prev.map(r => 
       r.id === reviewId 
         ? { ...r, currentGrade: grade as Review['currentGrade'], status: 'Submitted' as Review['status'] }
         : r
     ))
     
-    // Close the detail panel
-    setSelectedReview(null)
-  }, [])
+    pageState.clearSelection()
+  }, [pageState])
 
   // Empty state configuration
-  const emptyStateConfig = {
+  const emptyStateConfig = useMemo(() => ({
     icon: UserCheck,
     iconColor: "text-primary",
     iconBgColor: "bg-primary/10",
@@ -260,73 +171,49 @@ export default function AdminReviewersPage() {
       text: `${reviews.length} assigned reviews`,
       variant: "outline" as const
     }
-  }
+  }), [reviews.length])
 
-  // Statistics for right sidebar
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <DashboardHeader 
-          search={{
-            searchTerm,
-            searchPlaceholder: "Search reviews...",
-            onSearchChange: setSearchTerm
-          }}
+    <ListDetailPageLayout
+      searchTerm={pageState.searchTerm}
+      searchPlaceholder="Search reviews..."
+      onSearchChange={pageState.setSearchTerm}
+      filters={filterConfigs}
+      filterValues={pageState.filters}
+      onFilterChange={handleFilterChange}
+      hasActiveFilters={pageState.hasActiveFilters}
+      onClearFilters={pageState.clearFilters}
+      showViewToggle={true}
+      viewMode={pageState.viewMode}
+      onViewModeChange={pageState.setViewMode}
+      resultCount={pageState.filteredCount}
+      totalCount={pageState.totalCount}
+      listContent={
+        <ReviewView
+          reviews={pageState.filteredData}
+          viewMode={pageState.viewMode}
+          selectedReview={pageState.selectedItem}
+          onView={pageState.toggleSelection}
+          onEdit={undefined}
+          onAssign={undefined}
         />
-        <ListDetailLayout
-          listContent={
-            <>
-              {/* Header with Filters */}
-              <div className="flex-shrink-0 mb-6">
-                <DataFilterBar
-                  showSearch={false}
-                  filters={filters}
-                  filterValues={filterValues}
-                  onFilterChange={handleFilterChange}
-                  showViewToggle={true}
-                  viewMode={viewMode}
-                  onViewModeChange={setViewMode}
-                  hasActiveFilters={hasActiveFilters}
-                  onClearFilters={clearFilters}
-                  resultCount={filteredReviews.length}
-                  totalCount={reviews.length}
-                />
-              </div>
-
-              {/* Review List */}
-              <div className="flex-1 min-h-0 overflow-y-auto">
-                <ReviewView
-                  reviews={filteredReviews}
-                  viewMode={viewMode}
-                  selectedReview={selectedReview}
-                  onView={handleViewReview}
-                  onEdit={undefined}
-                  onAssign={undefined}
-                />
-              </div>
-            </>
-          }
-          detailContent={
-            selectedReview ? (
-              <ReviewActionPanel
-                key={selectedReview.id}
-                review={selectedReview}
-                initialAttachments={reviewAttachments[selectedReview.id] || []}
-                onAttachmentUpload={(files) => handleAttachmentUpload(selectedReview.id, files)}
-                onAttachmentRemove={(attachmentId) => handleAttachmentRemove(selectedReview.id, attachmentId)}
-                onAttachmentDownload={handleAttachmentDownload}
-                showSubmitRating={true}
-                onSubmitRating={handleSubmitRating}
-              />
-            ) : (
-              <div className="h-full flex items-center justify-center p-6">
-                <EmptyState {...emptyStateConfig} />
-              </div>
-            )
-          }
-        />
-      </SidebarInset>
-    </SidebarProvider>
+      }
+      detailContent={
+        pageState.selectedItem ? (
+          <ReviewActionPanel
+            key={pageState.selectedItem.id}
+            review={pageState.selectedItem}
+            initialAttachments={reviewAttachments[pageState.selectedItem.id] || []}
+            onAttachmentUpload={(files) => handleAttachmentUpload(pageState.selectedItem!.id, files)}
+            onAttachmentRemove={(attachmentId) => handleAttachmentRemove(pageState.selectedItem!.id, attachmentId)}
+            onAttachmentDownload={handleAttachmentDownload}
+            showSubmitRating={true}
+            onSubmitRating={handleSubmitRating}
+          />
+        ) : null
+      }
+      emptyStateConfig={emptyStateConfig}
+      detailScrollable={false}
+    />
   )
 }
