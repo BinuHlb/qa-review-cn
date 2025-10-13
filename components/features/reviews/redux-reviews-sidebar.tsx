@@ -158,7 +158,6 @@ export function ReduxReviewsSidebar({
     handleSearchChange,
     handleStatusChange,
     handleGradeChange,
-    handlePriorityChange,
     handleCountryChange,
     handleClearFilters,
     handleViewModeChange,
@@ -171,14 +170,12 @@ export function ReduxReviewsSidebar({
     filters.searchTerm || 
     filters.statusFilter !== 'all' || 
     filters.gradeFilter !== 'all' || 
-    filters.priorityFilter !== 'all' || 
     filters.countryFilter !== 'all'
 
   // Get unique values for filters from filtered reviews
   const uniqueCountries = Array.from(new Set(filteredReviews.map((review) => review.country))).sort()
   const uniqueStatuses = Array.from(new Set(filteredReviews.map((review) => review.status))).sort()
   const uniqueGrades = Array.from(new Set(filteredReviews.map((review) => review.currentGrade))).sort()
-  const uniquePriorities = Array.from(new Set(filteredReviews.map((review) => review.priority))).sort()
 
   const handleQuickFilter = (filterType: string, value: string) => {
     switch (filterType) {
@@ -187,9 +184,6 @@ export function ReduxReviewsSidebar({
         break
       case 'grade':
         handleGradeChange(value)
-        break
-      case 'priority':
-        handlePriorityChange(value)
         break
       default:
         break
@@ -408,31 +402,6 @@ export function ReduxReviewsSidebar({
                       {uniqueGrades.map((grade) => (
                         <SelectItem key={grade} value={grade} className="text-xs">
                           {grade}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </SidebarMenuItem>
-
-              {/* Priority Filter */}
-              <SidebarMenuItem>
-                <div className="px-2 py-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <div className="flex items-center justify-center w-4 h-4 rounded-sm bg-orange-100 dark:bg-orange-900/30">
-                      <AlertCircle className="h-2.5 w-2.5 text-orange-600 dark:text-orange-400" />
-                    </div>
-                    <span className="text-xs font-medium text-sidebar-foreground/70">Priority</span>
-                  </div>
-                  <Select value={filters.priorityFilter} onValueChange={handlePriorityChange}>
-                    <SelectTrigger className="h-7 text-xs bg-sidebar-accent/20 border-sidebar-border">
-                      <SelectValue placeholder="All" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all" className="text-xs">All Priorities</SelectItem>
-                      {uniquePriorities.map((priority) => (
-                        <SelectItem key={priority} value={priority} className="text-xs">
-                          {priority}
                         </SelectItem>
                       ))}
                     </SelectContent>

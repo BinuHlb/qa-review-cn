@@ -45,11 +45,6 @@ export default function DirectorReviewsPage() {
     Array.from(new Set(reviews.map((review) => review.currentGrade))).sort(),
     [reviews]
   )
-  
-  const uniquePriorities = useMemo(() => 
-    Array.from(new Set(reviews.map((review) => review.priority))).sort(),
-    [reviews]
-  )
 
   // Filter configuration
   const filterConfigs = useMemo(() => [
@@ -72,15 +67,6 @@ export default function DirectorReviewsPage() {
       ]
     },
     {
-      key: "priority",
-      placeholder: "Priority",
-      icon: Flag,
-      options: [
-        { value: "all", label: "All Priority" },
-        ...uniquePriorities.map(priority => ({ value: priority, label: priority }))
-      ]
-    },
-    {
       key: "reviewer",
       placeholder: "Reviewer",
       icon: MapPin,
@@ -89,7 +75,7 @@ export default function DirectorReviewsPage() {
         ...uniqueReviewers.map(reviewer => ({ value: reviewer, label: reviewer }))
       ]
     }
-  ], [uniqueStatuses, uniqueGrades, uniquePriorities, uniqueReviewers])
+  ], [uniqueStatuses, uniqueGrades, uniqueReviewers])
 
   const handleFilterChange = useCallback((key: string, value: string) => {
     pageState.setFilter(key, value)

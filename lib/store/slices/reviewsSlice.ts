@@ -5,7 +5,6 @@ interface ReviewsFilters {
   searchTerm: string
   statusFilter: string
   gradeFilter: string
-  priorityFilter: string
   countryFilter: string
 }
 
@@ -30,7 +29,6 @@ const initialFilters: ReviewsFilters = {
   searchTerm: '',
   statusFilter: 'all',
   gradeFilter: 'all',
-  priorityFilter: 'all',
   countryFilter: 'all',
 }
 
@@ -75,11 +73,6 @@ const filterReviews = (reviews: Review[], filters: ReviewsFilters): Review[] => 
   // Grade filter
   if (filters.gradeFilter !== 'all') {
     filtered = filtered.filter((review) => review.currentGrade === filters.gradeFilter)
-  }
-
-  // Priority filter
-  if (filters.priorityFilter !== 'all') {
-    filtered = filtered.filter((review) => review.priority === filters.priorityFilter)
   }
 
   // Country filter
@@ -175,10 +168,6 @@ export const reviewsSlice = createSlice({
       state.filters.gradeFilter = action.payload
       state.filteredItems = filterReviews(state.items, state.filters)
     },
-    setPriorityFilter: (state, action: PayloadAction<string>) => {
-      state.filters.priorityFilter = action.payload
-      state.filteredItems = filterReviews(state.items, state.filters)
-    },
     setCountryFilter: (state, action: PayloadAction<string>) => {
       state.filters.countryFilter = action.payload
       state.filteredItems = filterReviews(state.items, state.filters)
@@ -208,7 +197,6 @@ export const {
   setSearchTerm,
   setStatusFilter,
   setGradeFilter,
-  setPriorityFilter,
   setCountryFilter,
   clearFilters,
   applyFilters,

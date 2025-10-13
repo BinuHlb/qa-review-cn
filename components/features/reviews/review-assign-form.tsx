@@ -161,12 +161,6 @@ export function ReviewAssignForm({
                   <p className="text-neutral-500 mb-1">Current Reviewer</p>
                   <p className="font-medium text-neutral-900 dark:text-neutral-100">{review.reviewer}</p>
                 </div>
-                <div>
-                  <p className="text-neutral-500 mb-1">Priority</p>
-                  <Badge variant="outline" className={`${getStatusColor(review.status)}`}>
-                    {review.priority}
-                  </Badge>
-                </div>
               </div>
               {review.description && (
                 <div className="pt-3 border-t">

@@ -45,11 +45,6 @@ export default function AdminReviewersPage() {
     Array.from(new Set(reviews.map((review) => review.currentGrade))).sort(),
     [reviews]
   )
-  
-  const uniquePriorities = useMemo(() => 
-    Array.from(new Set(reviews.map((review) => review.priority))).sort(),
-    [reviews]
-  )
 
   // Filter configuration
   const filterConfigs = useMemo(() => [
@@ -72,15 +67,6 @@ export default function AdminReviewersPage() {
       ]
     },
     {
-      key: "priority",
-      placeholder: "Priority",
-      icon: Flag,
-      options: [
-        { value: "all", label: "All Priority" },
-        ...uniquePriorities.map(priority => ({ value: priority, label: priority }))
-      ]
-    },
-    {
       key: "country",
       placeholder: "Country",
       icon: MapPin,
@@ -89,7 +75,7 @@ export default function AdminReviewersPage() {
         ...uniqueCountries.map(country => ({ value: country, label: country }))
       ]
     }
-  ], [uniqueStatuses, uniqueGrades, uniquePriorities, uniqueCountries])
+  ], [uniqueStatuses, uniqueGrades, uniqueCountries])
 
   const handleFilterChange = useCallback((key: string, value: string) => {
     pageState.setFilter(key, value)

@@ -21,7 +21,6 @@ export function ReduxReviewFilters() {
     handleSearchChange,
     handleStatusChange,
     handleGradeChange,
-    handlePriorityChange,
     handleCountryChange,
     handleClearFilters,
     handleViewModeChange,
@@ -31,14 +30,12 @@ export function ReduxReviewFilters() {
     filters.searchTerm || 
     filters.statusFilter !== 'all' || 
     filters.gradeFilter !== 'all' || 
-    filters.priorityFilter !== 'all' || 
     filters.countryFilter !== 'all'
 
   // Get unique values for filters from filtered reviews
   const uniqueCountries = Array.from(new Set(filteredReviews.map((review) => review.country))).sort()
   const uniqueStatuses = Array.from(new Set(filteredReviews.map((review) => review.status))).sort()
   const uniqueGrades = Array.from(new Set(filteredReviews.map((review) => review.currentGrade))).sort()
-  const uniquePriorities = Array.from(new Set(filteredReviews.map((review) => review.priority))).sort()
 
   return (
     <div className="space-y-4 sticky top-0 z-10 bg-background py-4">
@@ -82,7 +79,7 @@ export function ReduxReviewFilters() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         <Select value={filters.statusFilter} onValueChange={handleStatusChange}>
           <SelectTrigger className="bg-muted/50">
             <SelectValue placeholder="Status" />
@@ -106,20 +103,6 @@ export function ReduxReviewFilters() {
             {uniqueGrades.map((grade) => (
               <SelectItem key={grade} value={grade}>
                 {grade}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <Select value={filters.priorityFilter} onValueChange={handlePriorityChange}>
-          <SelectTrigger className="bg-muted/50">
-            <SelectValue placeholder="Priority" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Priorities</SelectItem>
-            {uniquePriorities.map((priority) => (
-              <SelectItem key={priority} value={priority}>
-                {priority}
               </SelectItem>
             ))}
           </SelectContent>

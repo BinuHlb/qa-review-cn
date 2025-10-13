@@ -21,7 +21,6 @@ export interface Review {
   currentGrade: '1' | '2' | '3' | '4' | '5'
   status: 'Completed' | 'Submitted' | 'In Progress' | 'Pending' | 'Overdue' | 'Cancelled' | 'Rejected'
   description?: string
-  priority: 'High' | 'Medium' | 'Low'
   lastUpdated: string
   documents?: Document[]
   percentage?: number
@@ -44,7 +43,6 @@ export const mockReviews: Review[] = [
     currentGrade: '1',
     status: 'In Progress',
     description: 'Current member quality assurance review',
-    priority: 'High',
     lastUpdated: '2024-01-20',
     percentage: 65,
     reviewType: '18',
@@ -98,7 +96,6 @@ export const mockReviews: Review[] = [
     currentGrade: '2',
     status: 'Submitted',
     description: 'Prospect review and assessment',
-    priority: 'High',
     lastUpdated: '2024-02-28',
     percentage: 100,
     reviewType: '8',
@@ -136,7 +133,6 @@ export const mockReviews: Review[] = [
     currentGrade: '1',
     status: 'Submitted',
     description: 'Current member quality assurance review',
-    priority: 'Medium',
     lastUpdated: '2024-01-25',
     percentage: 100,
     reviewType: '18',
@@ -156,7 +152,6 @@ export const mockReviews: Review[] = [
     currentGrade: '3',
     status: 'Overdue',
     description: 'Prospect assessment and review',
-    priority: 'High',
     lastUpdated: '2024-01-15',
     percentage: 80,
     reviewType: '5',
@@ -176,7 +171,6 @@ export const mockReviews: Review[] = [
     currentGrade: '2',
     status: 'Pending',
     description: 'Current member operational review',
-    priority: 'Medium',
     lastUpdated: '2024-02-10',
     percentage: 25,
     reviewType: '5',
@@ -196,7 +190,6 @@ export const mockReviews: Review[] = [
     currentGrade: '1',
     status: 'Submitted',
     description: 'Prospect review and compliance check',
-    priority: 'High',
     lastUpdated: '2024-02-05',
     percentage: 100,
     reviewType: '18',
@@ -216,7 +209,6 @@ export const mockReviews: Review[] = [
     currentGrade: '2',
     status: 'Submitted',
     description: 'Current member standards assessment',
-    priority: 'High',
     lastUpdated: '2024-02-28',
     percentage: 100,
     reviewType: '8',
@@ -236,7 +228,6 @@ export const mockReviews: Review[] = [
     currentGrade: '1',
     status: 'In Progress',
     description: 'Prospect compliance and quality review',
-    priority: 'Medium',
     lastUpdated: '2024-02-25',
     percentage: 55,
     reviewType: '18',
@@ -255,7 +246,6 @@ export const mockReviews: Review[] = [
     currentGrade: '3',
     status: 'Submitted',
     description: 'Current member performance evaluation',
-    priority: 'Low',
     lastUpdated: '2024-02-01',
     percentage: 100,
     reviewType: '8',
@@ -275,7 +265,6 @@ export const mockReviews: Review[] = [
     currentGrade: '4',
     status: 'Cancelled',
     description: 'Prospect governance and ethics review',
-    priority: 'Medium',
     lastUpdated: '2024-01-15',
     percentage: 90,
     reviewType: '5',
@@ -305,15 +294,6 @@ export const getStatusColor = (status: Review['status']): string => {
     'Rejected': 'text-red-700 dark:text-red-400 bg-red-100 dark:bg-red-950/50 border-red-200 dark:border-red-800'
   }
   return statusColors[status] || 'text-slate-700 dark:text-slate-400 bg-slate-100 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700'
-}
-
-export const getPriorityColor = (priority: Review['priority']): string => {
-  const priorityColors = {
-    'High': 'text-rose-700 dark:text-rose-400 bg-rose-100 dark:bg-rose-950/50 border-rose-200 dark:border-rose-800',
-    'Medium': 'text-amber-700 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/50 border-amber-200 dark:border-amber-800',
-    'Low': 'text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-800'
-  }
-  return priorityColors[priority] || 'text-slate-700 dark:text-slate-400 bg-slate-100 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700'
 }
 
 export const getReviewerStatusColor = (status: Review['reviewerStatus'] | Review['partnerStatus']): string => {

@@ -6,7 +6,6 @@
 import type { 
   ReviewStatusValue, 
   GradeValue, 
-  PriorityValue,
   ReviewTypeValue,
   ReviewModeValue
 } from '@/lib/constants'
@@ -90,7 +89,6 @@ export interface Review {
   
   // Metadata
   description?: string
-  priority: PriorityValue
   lastUpdated: string
   percentage?: number
   

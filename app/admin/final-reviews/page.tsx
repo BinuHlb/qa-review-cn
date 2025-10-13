@@ -25,7 +25,6 @@ export default function FinalReviewsPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("all")
   const [gradeFilter, setGradeFilter] = useState<string>("all")
-  const [priorityFilter, setPriorityFilter] = useState<string>("all")
   const [countryFilter, setCountryFilter] = useState<string>("all")
   const { confirmFinalReview, rejectReview } = useFinalReview()
 
@@ -64,18 +63,13 @@ export default function FinalReviewsPage() {
       filtered = filtered.filter((review) => review.currentGrade === gradeFilter)
     }
 
-    // Priority filter
-    if (priorityFilter !== "all") {
-      filtered = filtered.filter((review) => review.priority === priorityFilter)
-    }
-
     // Country filter
     if (countryFilter !== "all") {
       filtered = filtered.filter((review) => review.country === countryFilter)
     }
 
     return filtered
-  }, [reviews, searchTerm, statusFilter, gradeFilter, priorityFilter, countryFilter])
+  }, [reviews, searchTerm, statusFilter, gradeFilter, countryFilter])
 
   // Clear selection if filtered reviews change and selected review is no longer in the list
   useEffect(() => {
@@ -101,15 +95,10 @@ export default function FinalReviewsPage() {
     Array.from(new Set(reviews.map((review) => review.currentGrade))).sort(),
     [reviews]
   )
-  
-  const uniquePriorities = useMemo(() => 
-    Array.from(new Set(reviews.map((review) => review.priority))).sort(),
-    [reviews]
-  )
 
   const hasActiveFilters = useMemo(() => 
-    Boolean(searchTerm || statusFilter !== "all" || gradeFilter !== "all" || priorityFilter !== "all" || countryFilter !== "all"),
-    [searchTerm, statusFilter, gradeFilter, priorityFilter, countryFilter]
+    Boolean(searchTerm || statusFilter !== "all" || gradeFilter !== "all" || countryFilter !== "all"),
+    [searchTerm, statusFilter, gradeFilter, countryFilter]
   )
 
   // Event handlers
@@ -153,7 +142,6 @@ export default function FinalReviewsPage() {
     setSearchTerm("")
     setStatusFilter("all")
     setGradeFilter("all")
-    setPriorityFilter("all")
     setCountryFilter("all")
   }, [])
 
@@ -178,15 +166,6 @@ export default function FinalReviewsPage() {
       ]
     },
     {
-      key: "priority",
-      placeholder: "Priority",
-      icon: Flag,
-      options: [
-        { value: "all", label: "All Priority" },
-        ...uniquePriorities.map(priority => ({ value: priority, label: priority }))
-      ]
-    },
-    {
       key: "country",
       placeholder: "Country",
       icon: MapPin,
@@ -195,20 +174,18 @@ export default function FinalReviewsPage() {
         ...uniqueCountries.map(country => ({ value: country, label: country }))
       ]
     }
-  ], [uniqueStatuses, uniqueGrades, uniquePriorities, uniqueCountries])
+  ], [uniqueStatuses, uniqueGrades, uniqueCountries])
 
   const filterValues = useMemo(() => ({
     status: statusFilter,
     grade: gradeFilter,
-    priority: priorityFilter,
     country: countryFilter
-  }), [statusFilter, gradeFilter, priorityFilter, countryFilter])
+  }), [statusFilter, gradeFilter, countryFilter])
 
   const handleFilterChange = useCallback((key: string, value: string) => {
     switch (key) {
       case "status": setStatusFilter(value); break
       case "grade": setGradeFilter(value); break
-      case "priority": setPriorityFilter(value); break
       case "country": setCountryFilter(value); break
     }
   }, [])

@@ -42,7 +42,6 @@ export default function CEOFinalReviewsPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("all")
   const [gradeFilter, setGradeFilter] = useState<string>("all")
-  const [priorityFilter, setPriorityFilter] = useState<string>("all")
   const [countryFilter, setCountryFilter] = useState<string>("all")
   const { confirmFinalReview, rejectReview } = useFinalReview()
 
@@ -104,10 +103,9 @@ export default function CEOFinalReviewsPage() {
     const inProgress = reviews.filter(r => r.status === 'In Progress').length
     const pending = reviews.filter(r => r.status === 'Pending').length
     const overdue = reviews.filter(r => r.status === 'Overdue').length
-    const highPriority = reviews.filter(r => r.priority === 'High').length
     const excellentGrades = reviews.filter(r => r.currentGrade === '1').length
 
-    return { total, completed, inProgress, pending, overdue, highPriority, excellentGrades }
+    return { total, completed, inProgress, pending, overdue, excellentGrades }
   }, [reviews])
 
   // Memoized filtered reviews based on all filter criteria
@@ -136,18 +134,13 @@ export default function CEOFinalReviewsPage() {
       filtered = filtered.filter((review) => review.currentGrade === gradeFilter)
     }
 
-    // Priority filter
-    if (priorityFilter !== "all") {
-      filtered = filtered.filter((review) => review.priority === priorityFilter)
-    }
-
     // Country filter
     if (countryFilter !== "all") {
       filtered = filtered.filter((review) => review.country === countryFilter)
     }
 
     return filtered
-  }, [reviews, searchTerm, statusFilter, gradeFilter, priorityFilter, countryFilter])
+  }, [reviews, searchTerm, statusFilter, gradeFilter, countryFilter])
 
   // Memoized unique filter values
   const uniqueCountries = useMemo(() => 
@@ -164,22 +157,16 @@ export default function CEOFinalReviewsPage() {
     Array.from(new Set(reviews.map((review) => review.currentGrade))).sort(),
     [reviews]
   )
-  
-  const uniquePriorities = useMemo(() => 
-    Array.from(new Set(reviews.map((review) => review.priority))).sort(),
-    [reviews]
-  )
 
   const hasActiveFilters = useMemo(() => 
-    Boolean(searchTerm || statusFilter !== "all" || gradeFilter !== "all" || priorityFilter !== "all" || countryFilter !== "all"),
-    [searchTerm, statusFilter, gradeFilter, priorityFilter, countryFilter]
+    Boolean(searchTerm || statusFilter !== "all" || gradeFilter !== "all" || countryFilter !== "all"),
+    [searchTerm, statusFilter, gradeFilter, countryFilter]
   )
 
   const clearFilters = useCallback(() => {
     setSearchTerm("")
     setStatusFilter("all")
     setGradeFilter("all")
-    setPriorityFilter("all")
     setCountryFilter("all")
   }, [])
 
@@ -323,19 +310,6 @@ export default function CEOFinalReviewsPage() {
 
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">High Priority</CardTitle>
-                    <AlertCircle className="h-4 w-4 text-orange-600" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold text-orange-600">{stats.highPriority}</div>
-                    <p className="text-xs text-muted-foreground">
-                      Require attention
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">Grade 1 Reviews</CardTitle>
                     <Award className="h-4 w-4 text-purple-600" />
                   </CardHeader>
@@ -419,22 +393,6 @@ export default function CEOFinalReviewsPage() {
                     {uniqueGrades.map((grade) => (
                       <SelectItem key={grade} value={grade}>
                         Grade {grade}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                {/* Priority Filter */}
-                <Select value={priorityFilter} onValueChange={setPriorityFilter}>
-                  <SelectTrigger className="w-[130px] h-9">
-                    <Flag className="h-4 w-4 mr-2 text-muted-foreground" />
-                    <SelectValue placeholder="Priority" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Priority</SelectItem>
-                    {uniquePriorities.map((priority) => (
-                      <SelectItem key={priority} value={priority}>
-                        {priority}
                       </SelectItem>
                     ))}
                   </SelectContent>

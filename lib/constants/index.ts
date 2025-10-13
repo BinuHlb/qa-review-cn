@@ -117,19 +117,6 @@ export const GRADE_OPTIONS = [
   { value: GRADES.FIVE, label: 'Grade 5', description: 'Poor' }
 ] as const
 
-// Priorities
-export const PRIORITY = {
-  HIGH: 'High',
-  MEDIUM: 'Medium',
-  LOW: 'Low'
-} as const
-
-export const PRIORITY_OPTIONS = [
-  PRIORITY.HIGH,
-  PRIORITY.MEDIUM,
-  PRIORITY.LOW
-] as const
-
 // Member Firm Types
 export const MEMBER_FIRM_TYPE = {
   CURRENT_MEMBER: 'Current Member',
@@ -188,12 +175,6 @@ export const GRADE_COLORS = {
   [GRADES.THREE]: 'bg-amber-500 text-white',
   [GRADES.FOUR]: 'bg-orange-500 text-white',
   [GRADES.FIVE]: 'bg-rose-500 text-white'
-} as const
-
-export const PRIORITY_COLORS = {
-  [PRIORITY.HIGH]: 'bg-red-100 text-red-800',
-  [PRIORITY.MEDIUM]: 'bg-yellow-100 text-yellow-800',
-  [PRIORITY.LOW]: 'bg-green-100 text-green-800'
 } as const
 
 export const WORKFLOW_STATUS_COLORS = {
@@ -301,6 +282,5 @@ export type ReviewTypeValue = typeof REVIEW_TYPES[keyof typeof REVIEW_TYPES]['va
 export type ReviewModeValue = typeof REVIEW_MODES[keyof typeof REVIEW_MODES]['value']
 export type ReviewStatusValue = typeof REVIEW_STATUS[keyof typeof REVIEW_STATUS]
 export type GradeValue = typeof GRADES[keyof typeof GRADES]
-export type PriorityValue = typeof PRIORITY[keyof typeof PRIORITY]
 export type UserRoleValue = typeof USER_ROLE[keyof typeof USER_ROLE]
 

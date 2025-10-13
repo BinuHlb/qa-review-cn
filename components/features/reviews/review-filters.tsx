@@ -25,7 +25,6 @@ export function ReviewFilters({ reviews, onFilteredReviews, viewMode, onViewMode
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("all")
   const [gradeFilter, setGradeFilter] = useState<string>("all")
-  const [priorityFilter, setPriorityFilter] = useState<string>("all")
   const [countryFilter, setCountryFilter] = useState<string>("all")
 
   const handleFilter = () => {
@@ -52,11 +51,6 @@ export function ReviewFilters({ reviews, onFilteredReviews, viewMode, onViewMode
       filtered = filtered.filter((review) => review.currentGrade === gradeFilter)
     }
 
-    // Priority filter
-    if (priorityFilter !== "all") {
-      filtered = filtered.filter((review) => review.priority === priorityFilter)
-    }
-
     // Country filter
     if (countryFilter !== "all") {
       filtered = filtered.filter((review) => review.country === countryFilter)
@@ -69,18 +63,16 @@ export function ReviewFilters({ reviews, onFilteredReviews, viewMode, onViewMode
     setSearchTerm("")
     setStatusFilter("all")
     setGradeFilter("all")
-    setPriorityFilter("all")
     setCountryFilter("all")
     onFilteredReviews(reviews)
   }
 
-  const hasActiveFilters = searchTerm || statusFilter !== "all" || gradeFilter !== "all" || priorityFilter !== "all" || countryFilter !== "all"
+  const hasActiveFilters = searchTerm || statusFilter !== "all" || gradeFilter !== "all" || countryFilter !== "all"
 
   // Get unique values for filters
   const uniqueCountries = Array.from(new Set(reviews.map((review) => review.country))).sort()
   const uniqueStatuses = Array.from(new Set(reviews.map((review) => review.status))).sort()
   const uniqueGrades = Array.from(new Set(reviews.map((review) => review.currentGrade))).sort()
-  const uniquePriorities = Array.from(new Set(reviews.map((review) => review.priority))).sort()
 
   return (
     <div className="space-y-4 sticky top-0 z-10 bg-background py-4">
@@ -128,7 +120,7 @@ export function ReviewFilters({ reviews, onFilteredReviews, viewMode, onViewMode
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         <Select value={statusFilter} onValueChange={setStatusFilter}>
           <SelectTrigger className="bg-muted/50">
             <SelectValue placeholder="Status" />
@@ -152,20 +144,6 @@ export function ReviewFilters({ reviews, onFilteredReviews, viewMode, onViewMode
             {uniqueGrades.map((grade) => (
               <SelectItem key={grade} value={grade}>
                 {grade}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <Select value={priorityFilter} onValueChange={setPriorityFilter}>
-          <SelectTrigger className="bg-muted/50">
-            <SelectValue placeholder="Priority" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Priorities</SelectItem>
-            {uniquePriorities.map((priority) => (
-              <SelectItem key={priority} value={priority}>
-                {priority}
               </SelectItem>
             ))}
           </SelectContent>

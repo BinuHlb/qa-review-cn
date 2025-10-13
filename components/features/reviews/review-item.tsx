@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { PercentageBadge } from "@/components/common/percentage-badge"
 import { DataItemCard, type DropdownAction } from "@/components/common/data-item-card"
 import type { Review } from "@/types/entities"
-import { getGradeColor, getStatusColor, getPriorityColor, getReviewerStatusColor } from "@/lib/mock-data"
+import { getGradeColor, getStatusColor, getReviewerStatusColor } from "@/lib/mock-data"
 
 interface ReviewItemProps {
   review: Review
@@ -165,9 +165,6 @@ export function ReviewItem({ review, viewMode, isSelected = false, onView, onEdi
       <div className="space-y-2">
         <div className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">Additional Details</div>
         <div className="flex flex-wrap gap-1">
-          <Badge variant="outline" className={`${getPriorityColor(review.priority)} text-xs px-2 py-0.5`}>
-            {review.priority}
-          </Badge>
           {review.previousRating && (
             <Badge variant="outline" className="bg-muted text-xs px-2 py-0.5">
               Previous: {review.previousRating}/5

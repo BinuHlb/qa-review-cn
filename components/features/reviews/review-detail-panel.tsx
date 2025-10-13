@@ -26,7 +26,6 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { 
   getGradeColor, 
   getStatusColor, 
-  getPriorityColor, 
   getReviewerStatusColor,
   generateInitials,
   generateAvatarColor,
@@ -148,8 +147,7 @@ export function ReviewDetailPanel({ review, onAssign }: ReviewDetailPanelProps) 
           avatar={{ name: review.memberFirm }}
           badges={[
             { label: review.status, className: getStatusColor(review.status) },
-            { label: `Grade ${review.currentGrade}`, className: getGradeColor(review.currentGrade) },
-            { label: `${review.priority} Priority`, className: getPriorityColor(review.priority) }
+            { label: `Grade ${review.currentGrade}`, className: getGradeColor(review.currentGrade) }
           ]}
           actions={
             <Button

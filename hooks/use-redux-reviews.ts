@@ -17,7 +17,6 @@ import {
   setSearchTerm,
   setStatusFilter,
   setGradeFilter,
-  setPriorityFilter,
   setCountryFilter,
   clearFilters,
 } from "@/lib/store/slices/reviewsSlice"
@@ -182,10 +181,6 @@ export function useReduxReviews() {
     dispatch(setGradeFilter(value))
   }, [dispatch])
 
-  const handlePriorityChange = useCallback((value: string) => {
-    dispatch(setPriorityFilter(value))
-  }, [dispatch])
-
   const handleCountryChange = useCallback((value: string) => {
     dispatch(setCountryFilter(value))
   }, [dispatch])
@@ -226,7 +221,6 @@ export function useReduxReviews() {
     handleSearchChange,
     handleStatusChange,
     handleGradeChange,
-    handlePriorityChange,
     handleCountryChange,
     handleClearFilters,
     handleViewModeChange,

@@ -18,7 +18,6 @@ export const reviewSchema = z.object({
   currentGrade: z.enum(['1', '2', '3', '4', '5']),
   status: z.enum(['Completed', 'Submitted', 'In Progress', 'Pending', 'Overdue', 'Cancelled', 'Rejected']),
   description: z.string().optional(),
-  priority: z.enum(['High', 'Medium', 'Low']),
   lastUpdated: z.string(),
 })
 
@@ -29,7 +28,6 @@ export const updateReviewSchema = reviewSchema.partial().required({ id: true })
 export const assignReviewerSchema = z.object({
   reviewId: z.string().min(1, "Review ID is required"),
   reviewerId: z.string().min(1, "Reviewer is required"),
-  priority: z.enum(['High', 'Medium', 'Low']).optional(),
   notes: z.string().optional(),
 })
 

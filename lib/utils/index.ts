@@ -19,7 +19,6 @@ export {
 export {
   getGradeColor,
   getStatusColor,
-  getPriorityColor,
   getReviewerStatusColor,
   generateInitials,
   generateAvatarColor,

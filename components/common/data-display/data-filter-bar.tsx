@@ -103,8 +103,8 @@ export function DataFilterBar({
                 >
                   <SelectTrigger className={`${filter.width || "w-auto min-w-[140px] max-w-[200px]"} h-9 bg-muted/50`}>
                     <div className="flex items-center gap-2 flex-1 overflow-hidden">
-                      {filter.icon && <filter.icon className="h-4 w-4 text-muted-foreground flex-shrink-0" />}
-                      <span className="truncate text-sm whitespace-nowrap">{displayLabel}</span>
+                      {filter.icon && <filter.icon key="filter-icon" className="h-4 w-4 text-muted-foreground flex-shrink-0" />}
+                      <span key="filter-label" className="truncate text-sm whitespace-nowrap">{displayLabel}</span>
                     </div>
                   </SelectTrigger>
                   <SelectContent>
@@ -133,6 +133,7 @@ export function DataFilterBar({
           {showViewToggle && onViewModeChange && (
             <div className="flex items-center gap-1 p-1 bg-muted rounded-md">
               <Button
+                key="list-view"
                 variant="ghost"
                 size="sm"
                 onClick={() => onViewModeChange("list")}
@@ -141,6 +142,7 @@ export function DataFilterBar({
                 <List className="h-4 w-4" />
               </Button>
               <Button
+                key="card-view"
                 variant="ghost"
                 size="sm"
                 onClick={() => onViewModeChange("card")}

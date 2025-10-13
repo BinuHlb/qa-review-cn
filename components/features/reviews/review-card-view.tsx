@@ -17,7 +17,6 @@ import type { Review } from "@/types/entities"
 import { 
   getGradeColor, 
   getStatusColor, 
-  getPriorityColor, 
   getReviewerStatusColor,
   generateInitials,
   generateAvatarColor,
@@ -123,9 +122,6 @@ export function ReviewCardView({ reviews, onView, onEdit, onAssign }: ReviewCard
                 <PercentageBadge value={review.percentage || 0} />
                 <Badge className={`${getGradeColor(review.currentGrade)} text-xs px-2 py-0.5`}>
                   {review.currentGrade}
-                </Badge>
-                <Badge variant="outline" className={`${getPriorityColor(review.priority)} text-xs px-2 py-0.5`}>
-                  {review.priority}
                 </Badge>
               </div>
 
