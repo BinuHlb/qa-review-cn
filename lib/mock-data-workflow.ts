@@ -55,7 +55,7 @@ export const workflowMockReviews: Review[] = [
   // ========================================================================
   {
     id: 'REV-PENDING-001',
-    memberFirm: 'Ernst & Young Global',
+    memberFirm: 'HLB Surlatina Chile',
     memberFirmId: 'FIRM-005',
     type: 'Current Member',
     reviewer: 'Michael Chen',
@@ -156,7 +156,7 @@ export const workflowMockReviews: Review[] = [
 
   {
     id: 'REV-PENDING-002',
-    memberFirm: 'Grant Thornton LLP',
+    memberFirm: 'HLB Global Office',
     memberFirmId: 'FIRM-006',
     type: 'Prospect',
     reviewer: 'Emma Wilson',
@@ -263,7 +263,7 @@ export const workflowMockReviews: Review[] = [
   // ========================================================================
   {
     id: 'REV-PROGRESS-001',
-    memberFirm: 'Deloitte & Associates',
+    memberFirm: 'HLB Atectam & Partners (HLB Reunion)',
     memberFirmId: 'FIRM-001',
     type: 'Current Member',
     reviewer: 'John Smith',
@@ -377,7 +377,7 @@ export const workflowMockReviews: Review[] = [
 
   {
     id: 'REV-PROGRESS-002',
-    memberFirm: 'BDO International',
+    memberFirm: 'HLB Belgium',
     memberFirmId: 'FIRM-007',
     type: 'Current Member',
     reviewer: 'Sarah Martinez',
@@ -473,7 +473,7 @@ export const workflowMockReviews: Review[] = [
   // ========================================================================
   {
     id: 'REV-SUBMITTED-001',
-    memberFirm: 'KPMG Advisory',
+    memberFirm: 'Priego,Castro y Asoc, S.C. (HLB Mexico)',
     memberFirmId: 'FIRM-002',
     type: 'Current Member',
     reviewer: 'David Lee',
@@ -605,7 +605,7 @@ export const workflowMockReviews: Review[] = [
 
   {
     id: 'REV-SUBMITTED-002',
-    memberFirm: 'Crowe Global',
+    memberFirm: 'HLB Bahamas',
     memberFirmId: 'FIRM-008',
     type: 'Prospect',
     reviewer: 'Lisa Anderson',
@@ -681,7 +681,7 @@ export const workflowMockReviews: Review[] = [
   // ========================================================================
   {
     id: 'REV-VERIFIED-001',
-    memberFirm: 'PwC Global',
+    memberFirm: 'HLB Marka Audit (HLB Kyrgyz Republic)',
     memberFirmId: 'FIRM-003',
     type: 'Current Member',
     reviewer: 'Robert Taylor',
@@ -793,7 +793,7 @@ export const workflowMockReviews: Review[] = [
 
   {
     id: 'REV-VERIFIED-002',
-    memberFirm: 'Baker Tilly International',
+    memberFirm: 'Financial Management Group (HLB Georgia)',
     memberFirmId: 'FIRM-009',
     type: 'Current Member',
     reviewer: 'Maria Garcia',
@@ -870,7 +870,7 @@ export const workflowMockReviews: Review[] = [
   // ========================================================================
   {
     id: 'REV-COMPLETE-001',
-    memberFirm: 'RSM International',
+    memberFirm: 'HLB Cambodia',
     memberFirmId: 'FIRM-004',
     type: 'Current Member',
     reviewer: 'Thomas Brown',
@@ -986,7 +986,7 @@ export const workflowMockReviews: Review[] = [
 
   {
     id: 'REV-COMPLETE-002',
-    memberFirm: 'Mazars Group',
+    memberFirm: 'HLB Surlatina Chile',
     memberFirmId: 'FIRM-010',
     type: 'Current Member',
     reviewer: 'Sophie Dubois',
@@ -1062,7 +1062,7 @@ export const workflowMockReviews: Review[] = [
 
   {
     id: 'REV-COMPLETE-003',
-    memberFirm: 'HLB International Group',
+    memberFirm: 'HLB Global Office',
     memberFirmId: 'FIRM-011',
     type: 'Current Member',
     reviewer: 'Anna Kowalski',
@@ -1123,7 +1123,7 @@ export const workflowMockReviews: Review[] = [
 
   {
     id: 'REV-COMPLETE-004',
-    memberFirm: 'Nexia International',
+    memberFirm: 'HLB Belgium',
     type: 'Prospect',
     reviewer: 'James O\'Brien',
     country: 'Ireland',
@@ -1158,7 +1158,7 @@ export const workflowMockReviews: Review[] = [
 
   {
     id: 'REV-COMPLETE-005',
-    memberFirm: 'Moore Global',
+    memberFirm: 'HLB Bahamas',
     type: 'Current Member',
     reviewer: 'Patricia Wong',
     country: 'Hong Kong',

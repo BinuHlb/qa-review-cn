@@ -33,7 +33,7 @@ export interface Review {
 export const mockReviews: Review[] = [
   {
     id: 'REV-001',
-    memberFirm: 'Deloitte & Associates',
+    memberFirm: 'HLB Surlatina Chile',
     type: 'Current Member',
     reviewer: 'John Smith',
     country: 'United States',
@@ -87,7 +87,7 @@ export const mockReviews: Review[] = [
   },
   {
     id: 'REV-002',
-    memberFirm: 'PwC Global',
+    memberFirm: 'HLB Global Office',
     type: 'Prospect',
     reviewer: 'Sarah Johnson',
     country: 'United Kingdom',
@@ -125,7 +125,7 @@ export const mockReviews: Review[] = [
   },
   {
     id: 'REV-003',
-    memberFirm: 'KPMG International',
+    memberFirm: 'HLB Atectam & Partners (HLB Reunion)',
     type: 'Current Member',
     reviewer: 'Michael Chen',
     country: 'Canada',
@@ -145,7 +145,7 @@ export const mockReviews: Review[] = [
   },
   {
     id: 'REV-004',
-    memberFirm: 'EY Global',
+    memberFirm: 'HLB Belgium',
     type: 'Prospect',
     reviewer: 'Emily Davis',
     country: 'Australia',
@@ -165,7 +165,7 @@ export const mockReviews: Review[] = [
   },
   {
     id: 'REV-005',
-    memberFirm: 'Grant Thornton',
+    memberFirm: 'Priego,Castro y Asoc, S.C. (HLB Mexico)',
     type: 'Current Member',
     reviewer: 'David Wilson',
     country: 'Germany',
@@ -185,7 +185,7 @@ export const mockReviews: Review[] = [
   },
   {
     id: 'REV-006',
-    memberFirm: 'BDO International',
+    memberFirm: 'HLB Bahamas',
     type: 'Prospect',
     reviewer: 'Lisa Anderson',
     country: 'France',
@@ -205,7 +205,7 @@ export const mockReviews: Review[] = [
   },
   {
     id: 'REV-007',
-    memberFirm: 'RSM International',
+    memberFirm: 'HLB Marka Audit (HLB Kyrgyz Republic)',
     type: 'Current Member',
     reviewer: 'Robert Taylor',
     country: 'Japan',
@@ -225,7 +225,7 @@ export const mockReviews: Review[] = [
   },
   {
     id: 'REV-008',
-    memberFirm: 'Crowe Global',
+    memberFirm: 'Financial Management Group (HLB Georgia)',
     type: 'Prospect',
     reviewer: 'Jennifer Brown',
     country: 'Netherlands',
@@ -244,7 +244,7 @@ export const mockReviews: Review[] = [
   },
   {
     id: 'REV-009',
-    memberFirm: 'Mazars',
+    memberFirm: 'HLB Cambodia',
     type: 'Current Member',
     reviewer: 'Christopher Lee',
     country: 'Singapore',
@@ -264,7 +264,7 @@ export const mockReviews: Review[] = [
   },
   {
     id: 'REV-010',
-    memberFirm: 'Nexia International',
+    memberFirm: 'HLB Surlatina Chile',
     type: 'Prospect',
     reviewer: 'Amanda Garcia',
     country: 'Brazil',
