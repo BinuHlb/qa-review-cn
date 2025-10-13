@@ -108,78 +108,24 @@ export function AttachmentsSection({
   return (
     <div className={className}>
       <div className="pb-3">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <div className="p-1.5 bg-primary/10 rounded">
-              <Paperclip className="h-3.5 w-3.5 text-primary" />
-            </div>
-            <div>
-              <h3 className="text-sm font-medium">
-                {title}
-              </h3>
-              <p className="text-xs text-muted-foreground">
-                {attachments.length} {attachments.length === 1 ? 'file' : 'files'}
-              </p>
-            </div>
+        <div className="flex items-center gap-2 mb-3">
+          <div className="p-1.5 bg-primary/10 rounded">
+            <Paperclip className="h-3.5 w-3.5 text-primary" />
           </div>
-          {showUpload && onUpload && (
-            <label htmlFor="file-upload" className="flex-shrink-0">
-              <Button size="sm" variant="ghost" className="h-7 w-7 p-0" asChild>
-                <span className="cursor-pointer" title="Upload files">
-                  <Upload className="h-3.5 w-3.5" />
-                </span>
-              </Button>
-              <input
-                id="file-upload"
-                type="file"
-                multiple
-                className="hidden"
-                onChange={handleFileUpload}
-              />
-            </label>
-          )}
-        </div>
-        {showUpload && onUpload && (
-          <div className="flex items-center gap-2 p-2.5 bg-primary/5 dark:bg-primary/10 border border-primary/20 dark:border-primary/30 rounded text-xs text-muted-foreground">
-            <RefreshCw className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400 flex-shrink-0" />
-            <p>
-              <span className="font-medium">Review Flow:</span> Download → Review → Re-upload
+          <div>
+            <h3 className="text-sm font-medium">
+              {title}
+            </h3>
+            <p className="text-xs text-muted-foreground">
+              {attachments.length} {attachments.length === 1 ? 'file' : 'files'}
             </p>
           </div>
-        )}
+        </div>
       </div>
       <div className={`space-y-2 overflow-y-auto`} style={{ maxHeight }}>
-        {/* Drop Zone */}
-        {showUpload && onUpload && (
-          <div
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-            className={`border-2 border-dashed rounded-lg p-6 text-center transition-all cursor-pointer ${
-              isDragging 
-                ? 'border-primary bg-primary/10 scale-[1.02]' 
-                : 'border-muted-foreground/25 hover:border-primary/50 hover:bg-accent/50'
-            }`}
-            onClick={() => document.getElementById('file-upload')?.click()}
-          >
-            <div className={`p-3 rounded-full mx-auto mb-3 w-fit transition-colors ${
-              isDragging ? 'bg-primary text-primary-foreground' : 'bg-muted'
-            }`}>
-              <Upload className="h-5 w-5" />
-            </div>
-            <p className="text-sm font-medium mb-1">
-              {isDragging ? 'Drop files here' : 'Upload Files'}
-            </p>
-            <p className="text-xs text-muted-foreground">
-              <span className="hidden sm:inline">Drag and drop or click to browse</span>
-              <span className="sm:hidden">Tap to browse files</span>
-            </p>
-          </div>
-        )}
-
         {/* Documents/Files List */}
         {attachments.length > 0 ? (
-          <div className="space-y-2">
+          <div className="space-y-2 mb-4">
             {attachments.map((attachment) => (
               <div
                 key={attachment.id}
@@ -237,17 +183,61 @@ export function AttachmentsSection({
             ))}
           </div>
         ) : (
-          <div className="text-center py-10 px-4">
+          <div className="text-center py-6 px-4 mb-4">
             <div className="p-4 rounded-full bg-muted/50 w-fit mx-auto mb-4">
               <Paperclip className="h-8 w-8 text-muted-foreground" />
             </div>
             <p className="text-sm font-medium text-foreground mb-1">No documents yet</p>
-            {showUpload && onUpload && (
-              <p className="text-xs text-muted-foreground">
-                <span className="hidden sm:inline">Upload files using the button above or drag and drop</span>
-                <span className="sm:hidden">Tap upload button to add files</span>
+            <p className="text-xs text-muted-foreground">
+              <span className="hidden sm:inline">Upload files using the area below</span>
+              <span className="sm:hidden">Upload files below</span>
+            </p>
+          </div>
+        )}
+
+        {/* Upload Area - After files list */}
+        {showUpload && onUpload && (
+          <div className="space-y-3">
+            {/* Review Flow Instruction */}
+            <div className="flex items-center gap-2 p-2.5 bg-primary/5 dark:bg-primary/10 border border-primary/20 dark:border-primary/30 rounded text-xs text-muted-foreground">
+              <RefreshCw className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+              <p>
+                <span className="font-medium">Review Flow:</span> Download → Review → Re-upload
               </p>
-            )}
+            </div>
+
+            {/* Drop Zone */}
+            <div
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              className={`border-2 border-dashed rounded-lg p-6 text-center transition-all cursor-pointer ${
+                isDragging 
+                  ? 'border-primary bg-primary/10 scale-[1.02]' 
+                  : 'border-muted-foreground/25 hover:border-primary/50 hover:bg-accent/50'
+              }`}
+              onClick={() => document.getElementById('file-upload')?.click()}
+            >
+              <input
+                id="file-upload"
+                type="file"
+                multiple
+                className="hidden"
+                onChange={handleFileUpload}
+              />
+              <div className={`p-3 rounded-full mx-auto mb-3 w-fit transition-colors ${
+                isDragging ? 'bg-primary text-primary-foreground' : 'bg-muted'
+              }`}>
+                <Upload className="h-5 w-5" />
+              </div>
+              <p className="text-sm font-medium mb-1">
+                {isDragging ? 'Drop files here' : 'Upload Files'}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                <span className="hidden sm:inline">Drag and drop or click to browse</span>
+                <span className="sm:hidden">Tap to browse files</span>
+              </p>
+            </div>
           </div>
         )}
       </div>

@@ -205,7 +205,7 @@ export function ReviewAssignDrawer({
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4 text-muted-foreground" />
                 <Label className="text-sm font-medium">
-                  Review Type <span className="text-destructive">*</span>
+                  Review Hours <span className="text-destructive">*</span>
                 </Label>
               </div>
               <div className="grid grid-cols-3 gap-2">
@@ -214,20 +214,15 @@ export function ReviewAssignDrawer({
                     key={type.value}
                     type="button"
                     onClick={() => handleInputChange("reviewType", type.value)}
-                    className={`group relative px-4 py-3.5 rounded-lg transition-all duration-200 text-left ${
+                    className={`group relative px-4 py-3.5 rounded-lg transition-all duration-200 text-center ${
                       formData.reviewType === type.value
-                        ? "bg-primary/10"
-                        : "bg-secondary hover:bg-secondary/80"
+                        ? "bg-primary/10 border-2 border-primary"
+                        : "bg-secondary hover:bg-secondary/80 border-2 border-transparent"
                     }`}
                   >
                     <div className="flex flex-col gap-1">
-                      <span className={`text-sm font-semibold ${
+                      <span className={`text-base font-semibold ${
                         formData.reviewType === type.value ? "text-primary" : "text-foreground"
-                      }`}>
-                        {type.label}
-                      </span>
-                      <span className={`text-xs font-medium ${
-                        formData.reviewType === type.value ? "text-primary/70" : "text-muted-foreground"
                       }`}>
                         {type.hours}
                       </span>

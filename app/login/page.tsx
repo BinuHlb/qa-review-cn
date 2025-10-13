@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
-import { Github, Chrome, LogIn } from "lucide-react"
+import { LogIn, Key } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
@@ -36,11 +36,11 @@ export default function LoginPage() {
         router.push('/dashboard')
       } else {
         console.error('Sign in failed:', result?.error)
-        alert('Authentication provider not configured. Please set up OAuth credentials in your environment variables.')
+        alert('SSO provider not configured. Please set up SSO credentials in your environment variables.')
       }
     } catch (error) {
       console.error('Sign in error:', error)
-      alert('Authentication provider not configured. Please set up OAuth credentials in your environment variables.')
+      alert('SSO provider not configured. Please set up SSO credentials in your environment variables.')
     } finally {
       setIsLoading(false)
     }
@@ -129,32 +129,20 @@ export default function LoginPage() {
             </div>
             <div className="relative flex justify-center text-xs uppercase">
               <span className="bg-background px-2 text-muted-foreground">
-                OAuth Providers (Not Configured)
+                Or continue with
               </span>
             </div>
           </div>
           
-          <div className="space-y-2">
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={() => handleSignIn('google')}
-              disabled={isLoading}
-            >
-              <Chrome className="mr-2 h-4 w-4" />
-              Continue with Google
-            </Button>
-            
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={() => handleSignIn('github')}
-              disabled={isLoading}
-            >
-              <Github className="mr-2 h-4 w-4" />
-              Continue with GitHub
-            </Button>
-          </div>
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={() => handleSignIn('sso')}
+            disabled={isLoading}
+          >
+            <Key className="mr-2 h-4 w-4" />
+            Continue with SSO
+          </Button>
           
           <div className="text-center text-sm text-muted-foreground">
             <p className="mb-2">

@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { type MemberFirm } from "@/lib/member-firms-mock-data"
@@ -11,21 +10,11 @@ import {
   ActionPanelLayout,
   ActionPanelHeader,
   ActionPanelSection,
-  ActionPanelInfoCard,
   ActionPanelFormSection
 } from "@/components/common/panels/action-panel-layout"
-import { StatsGrid, ContactSection, BadgeList } from "@/components/common/panels/detail-sections"
-import { getComplianceScoreColor } from "@/lib/utils/score-utils"
 import {
   CheckCircle,
   XCircle,
-  Building,
-  Users,
-  Star,
-  Mail,
-  Phone,
-  Calendar,
-  MapPin,
   Award
 } from "lucide-react"
 
@@ -147,7 +136,7 @@ export function MemberFirmActionPanel({
       }
     >
       <ActionPanelSection>
-        {/* Review Documents - First Position */}
+        {/* Firm Documents */}
         <div>
           <AttachmentsSection
             attachments={attachments}
@@ -162,78 +151,7 @@ export function MemberFirmActionPanel({
           />
         </div>
 
-        {/* Firm Stats */}
-        <ActionPanelInfoCard
-          items={[
-            {
-              icon: <Users className="h-3.5 w-3.5 text-muted-foreground" />,
-              label: "Employees",
-              value: memberFirm.employeeCount.toString()
-            },
-            {
-              icon: <Building className="h-3.5 w-3.5 text-muted-foreground" />,
-              label: "Partners",
-              value: memberFirm.partnerCount.toString()
-            },
-            {
-              icon: <Star className="h-3.5 w-3.5 text-muted-foreground" />,
-              label: "Compliance",
-              value: `${memberFirm.complianceScore}%`,
-              valueClassName: getComplianceScoreColor(memberFirm.complianceScore)
-            },
-            {
-              icon: <Calendar className="h-3.5 w-3.5 text-muted-foreground" />,
-              label: "Total Reviews",
-              value: memberFirm.totalReviews.toString()
-            }
-          ]}
-        />
-
-        {/* Detailed Information */}
-        <div className="space-y-4">
-          <BadgeList 
-            label="Specializations" 
-            items={memberFirm.specializations}
-          />
-
-          <ContactSection
-            title="Contact Information"
-            contacts={[
-              { icon: Mail, value: memberFirm.contactEmail, href: `mailto:${memberFirm.contactEmail}` },
-              { icon: Phone, value: memberFirm.contactPhone, href: `tel:${memberFirm.contactPhone}` }
-            ]}
-          />
-
-          {memberFirm.certifications && memberFirm.certifications.length > 0 && (
-            <BadgeList 
-              label="Certifications" 
-              items={memberFirm.certifications}
-              variant="secondary"
-            />
-          )}
-
-          <ActionPanelInfoCard
-            columns={1}
-            items={[
-              {
-                icon: <MapPin className="h-3.5 w-3.5 text-muted-foreground" />,
-                label: "Full Address",
-                value: memberFirm.address
-              },
-              {
-                icon: <Calendar className="h-3.5 w-3.5 text-muted-foreground" />,
-                label: "Join Date",
-                value: new Date(memberFirm.joinDate).toLocaleDateString('en-US', { 
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })
-              }
-            ]}
-          />
-        </div>
-
-        {/* Review Actions */}
+        {/* Review Decision */}
         <ActionPanelFormSection
           title="Review Decision"
           icon={<Award className="h-5 w-5 text-primary" />}
