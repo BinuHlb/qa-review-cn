@@ -177,7 +177,7 @@ export function ReviewActionPanel({
               notesPlaceholder={showTechnicalDirectorRating 
                 ? "Add your technical assessment and feedback..."
                 : "Add your review comments and findings..."}
-              showAdditionalDocsRequest={true}
+              showAdditionalDocsRequest={!showTechnicalDirectorRating}
               submitButtonText={showTechnicalDirectorRating ? "Submit Technical Rating" : "Submit Rating"}
               onSubmit={async (grade, notes, additionalDocs) => {
                 if (showTechnicalDirectorRating && onTechnicalDirectorRating) {
