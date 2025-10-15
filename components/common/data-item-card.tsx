@@ -92,10 +92,10 @@ export function DataItemCard({
         <CardContent className="p-3">
           <div className="space-y-3">
             {/* Main Row */}
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2 min-w-0">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
               {/* Main Info - Clickable to expand/collapse */}
               <div 
-                className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer group"
+                className="flex items-center gap-3 min-w-0 cursor-pointer group flex-1"
                 onClick={(e) => {
                   if (hasExpandableContent) {
                     e.stopPropagation()
@@ -103,11 +103,11 @@ export function DataItemCard({
                   }
                 }}
               >
-                <div className="flex items-center gap-2 w-fit flex-1">
+                <div className="flex items-center gap-2 min-w-0 flex-1">
                   {avatar}
                   <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
-                      <h3 className={cn("font-semibold text-sm text-neutral-900 dark:text-neutral-100 truncate group-hover:text-primary transition-colors", titleClassName)} title={title}>
+                    <div className="flex items-center gap-2 min-w-0">
+                      <h3 className={cn("font-semibold text-sm text-neutral-900 dark:text-neutral-100 truncate flex-1 min-w-0 group-hover:text-primary transition-colors", titleClassName)} title={title}>
                         {title}
                       </h3>
                       {hasExpandableContent && (
@@ -129,64 +129,65 @@ export function DataItemCard({
                 </div>
               </div>
 
-              {/* Secondary Info - Desktop only */}
-              {secondaryInfo && (
-                <div className="hidden sm:flex items-center gap-3 flex-shrink-0">
-                  {secondaryInfo}
-                </div>
-              )}
-
-              {/* Quick Actions */}
-              <div className="flex items-center gap-1 flex-shrink-0">
-                {primaryAction && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      primaryAction.onClick()
-                    }}
-                    className="text-xs h-7 px-2"
-                  >
-                    {primaryAction.icon}
-                    <span className="hidden sm:inline ml-1">{primaryAction.label}</span>
-                  </Button>
+              {/* Secondary Info and Actions - Right aligned on desktop */}
+              <div className="flex items-center gap-3 flex-shrink-0">
+                {secondaryInfo && (
+                  <div className="hidden sm:flex items-center gap-3 flex-shrink-0">
+                    {secondaryInfo}
+                  </div>
                 )}
 
-                {quickActions}
+                {/* Quick Actions */}
+                <div className="flex items-center gap-1 flex-shrink-0">
+                  {primaryAction && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        primaryAction.onClick()
+                      }}
+                      className="text-xs h-7 px-2"
+                    >
+                      {primaryAction.icon}
+                      <span className="hidden sm:inline ml-1">{primaryAction.label}</span>
+                    </Button>
+                  )}
 
-                {dropdownActions.length > 0 && (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={(e) => e.stopPropagation()}
-                        className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 h-7 w-7 p-0"
-                      >
-                        <MoreHorizontal className="h-3 w-3" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-48">
-                      {dropdownActions.map((action, index) => (
-                        <DropdownMenuItem 
-                          key={index}
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            action.onClick()
-                          }}
-                          className={action.variant === "destructive" ? "text-red-600" : ""}
+                  {quickActions}
+
+                  {dropdownActions.length > 0 && (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 h-7 w-7 p-0"
                         >
-                          {action.icon}
-                          {action.label}
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                )}
+                          <MoreHorizontal className="h-3 w-3" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-48">
+                        {dropdownActions.map((action, index) => (
+                          <DropdownMenuItem 
+                            key={index}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              action.onClick()
+                            }}
+                            className={action.variant === "destructive" ? "text-red-600" : ""}
+                          >
+                            {action.icon}
+                            {action.label}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  )}
+                </div>
               </div>
             </div>
-
             {/* Mobile Info - Mobile only */}
             {mobileInfo && (
               <div className="flex sm:hidden items-center justify-between gap-2">
@@ -231,7 +232,7 @@ export function DataItemCard({
           >
             {avatar}
             <div className="min-w-0 flex-1">
-              <h3 className={cn("text-base font-semibold truncate group-hover:text-primary transition-colors", titleClassName)} title={title}>
+              <h3 className={cn("text-base font-semibold truncate min-w-0 group-hover:text-primary transition-colors", titleClassName)} title={title}>
                 {title}
               </h3>
               {subtitle && (
